@@ -1,6 +1,6 @@
 /**
- * Title of Project
- * Author Name
+ * Rectangle
+ * Malcolm Siné Tadonki
  * 
  * This is a template. You must fill in the title, author, 
  * and this description to match your project!
@@ -12,7 +12,8 @@
  * Description of preload
 */
 function preload() {
-
+createCanvas(750,900);
+background(200,255,80);
 }
 
 
