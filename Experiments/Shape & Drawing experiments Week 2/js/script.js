@@ -22,8 +22,11 @@ background(255,200,50);
 */
 function setup() {
 
+    stroke(100,100,100);
+    fill(46,255,200);
+
     point(450,450);
-    rect(0,0,250,250)
+    rect(0,0,250,250);
 }
 
 
