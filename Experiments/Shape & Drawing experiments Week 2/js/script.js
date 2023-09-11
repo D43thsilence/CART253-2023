@@ -1,27 +1,30 @@
 /**
  * Shape & Drawing experiments
- * Malcomlm Siné Tadonki
+ * Malcolm Siné Tadonki
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ * This is a drawing & color experiment in p5
+ * 
  */
 
 "use strict";
 
 /**
- * Description of preload
+ * Sets up the canvas
 */
 function preload() {
-createcanvas(900,900);
-background(255,200,50);
+
+    //set the background color
+    createcanvas(900,900);
+    background(255,200,50);
 }
 
 
 /**
- * Description of setup
+ * Draws different lines & shapes
 */
 function setup() {
 
+    //draw lines and shapes
     stroke(100,100,100);
     fill(46,255,200);
 
@@ -32,6 +35,7 @@ function setup() {
 
 /**
  * Description of draw()
+ * Does noting
 */
 function draw() {
 
