@@ -56,7 +56,7 @@ function setup() {
     ellipse(305,250,10);
     ellipse(335,250,10);
 
-    //Draws the mough
+    //Draws the mouth
     rectMode(CENTER)
     stroke(255,0,0)
     strokeWeight(3)
