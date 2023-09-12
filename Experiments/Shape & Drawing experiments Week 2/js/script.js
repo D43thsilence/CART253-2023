@@ -14,8 +14,8 @@
 function preload() {
 
     //set the background color
-    createcanvas(900,900);
-    background(255,200,50);
+    createCanvas(900,900);
+    background(255, 204, 0);
 }
 
 
