@@ -1,9 +1,8 @@
 /**
- * Title of Project
- * Author Name
+ * I like to move it!
+ * Malcolm Siné Tadonki
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ * This is my project for the I like to move it! exercise
  */
 
 "use strict";
@@ -15,14 +14,21 @@ function preload() {
 
 }
 
-let circleSize = 100;
+let elipseXPosition;
+let elipseYPosition;
+
+let rectXPosition;
+let rectYPosition;
+
+let hexXPosition;
+let hexYPosition;
 
 /**
  * Description of setup
 */
 function setup() {
-    createCanvas(500,500);
-    
+createCanvas(900,900);
+
 }
 
 
@@ -32,5 +38,5 @@ function setup() {
 function draw() {
     background(255,0,0);
     ellipse(250,250,circleSize);    
-       
+
 }
