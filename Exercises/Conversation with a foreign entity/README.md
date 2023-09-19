@@ -1,3 +1,3 @@
-# Template p5 project
+# Conversation with a foreign entity
 
-In this project I make several shapes and animations move.
+In this project I animate the colors and movement of multiple shapes.
