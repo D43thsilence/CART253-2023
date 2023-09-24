@@ -115,7 +115,7 @@ function draw() {
     ellipseXPosition = constrain (ellipseXPosition, 380,510)
     ellipse(ellipseXPosition, ellipseYPosition ,altEllipseSize,200);
 
-    // Draws the circle that follows your mouse and changes it<s color
+    // Draws the circle that follows your mouse and changes it's color
     circleFill =map(mouseX,width, 0,50,255)
     fill(lineData.lineFill)
     circleSize = map(mouseX,width,0,100,300);

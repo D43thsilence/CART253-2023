@@ -52,21 +52,58 @@ if (circle.x < 0) {
     circle.speed = -circle.speed;
 }
 
-if (mouseX < width/3){
-    fill (255,0,0);
-}
+fill (255,255,255);
+
+// && means and
+// if (circle.x > width/3 && circle.x < 2 * width/3){
+    // fill (255,0,0);
+// }
+
+// || means or
+// if (circle.x < width/3 || circle.x > 2 * width/3){
+    // fill (255,0,0);
+// }
+
+// !() means not
+// if (!(circle.x < width/3) && !(circle.x > 2 * width/3)){
+    // fill (255,0,0);
+// }
+
+
+// Stacking conditions within conditions
+// if (circle.x > width/3) {
+    // if (circle.x < 2 * width/3) {
+        // fill (255,0,0);
+    // }
+    
+    // else {
+        // fill (255,255,255);
+    // }
+// }
+// else {
+    // fill (255,255,255);
+// }
+
+
+// Ordinary conditionnal
+// if (mouseX < width/3){
+    // fill (255,0,0);
+// }
 // else {
     // fill(0,255,0);
 // }
 
-else if (mouseX < 2 * width/3) {
-    fill (0,255,0);
-}
-else{
-    fill (0,0,255);
-}
+
+// Ordinary conditionnal
+// else if (mouseX < 2 * width/3) {
+    // fill (0,255,0);
+// }
+// else{
+    // fill (0,0,255);
+// }
 
 
+// Ordinary conditionnal
 // if (mouseY > height/2){
     // fill (0,255,0);
 // }
