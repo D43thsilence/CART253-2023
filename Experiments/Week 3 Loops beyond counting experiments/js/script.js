@@ -57,7 +57,6 @@ ellipse (dangerZone.x, dangerZone.y,dangerZone.size)
 
 // Makes sure the circle doesn't enter the danger zone
 let d = dist(circle.x, circle.y, dangerZone.x, dangerZone.y);
-
 while (d < circle.size/2 + dangerZone.size/2){
     circle.x = random(0,width);
     circle.y = random(0,height);
