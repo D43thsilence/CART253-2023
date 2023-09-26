@@ -7,12 +7,14 @@
 
 "use strict";
 
+let spyImage
+
 /**
  * Description of preload
- * Does nothing
+ * Preloads an image
 */
 function preload() {
-
+    spyImage = loadImage('assets/images/Incognito_Mode_Current.svg')
 }
 
 // Sets up the BgColor javascript variable
@@ -62,6 +64,8 @@ function setup() {
     enemyAgent.x = random (0,windowWidth)
     enemyAgent.y = windowHeight
 
+
+    
     }
     
     
@@ -71,6 +75,7 @@ function setup() {
 */
 function draw() {
     noStroke()
+    imageMode = CENTER
 
 // Colors the background
     background (BgColor.R,BgColor.G,BgColor.B);
@@ -137,8 +142,6 @@ ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
 fill (enemyAgent.fillR,enemyAgent.fillG,enemyAgent.fillB);
 ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
 
-
-
 // Determines wether the agent has reached the player or not and when to stop the program
 
     distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y);
@@ -152,7 +155,7 @@ ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
         loop()
     }
 
-
+    image(spyImage, windowWidth/2, windowHeight/2,200,200);
 }
 
 // Moves the player character
