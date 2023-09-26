@@ -1,3 +1,3 @@
-# Template p5 project
+# Avoid the enemy!
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+This is a game where you play as an agent who must avoid an enemy who can get increasingly larger over time. To help you, you can reduce your size and the enemy's size using the mouse wheel. Try to last as long as you can!

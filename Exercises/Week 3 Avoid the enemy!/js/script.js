@@ -137,13 +137,13 @@ function draw() {
     distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y);
     console.log (distance.range)
 
-if (distance.range  < playerCharacter.size/2 + enemyAgent.size/2) {
-    noLoop()
-}
+    if (distance.range  < playerCharacter.size/2 + enemyAgent.size/2) {
+        noLoop()
+    }
 
-else{
-    loop()
-}
+    else{
+        loop()
+    }
 
 
 }
