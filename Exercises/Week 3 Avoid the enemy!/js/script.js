@@ -15,18 +15,21 @@ function preload() {
 
 }
 
+// Sets up the BgColor javascript variable
 let BgColor = {
     R: 0,
     G: 0,
     B: 0
 } 
 
+// Sets up the playerCharacter javascript variable
 let playerCharacter ={
     x:0,
     y:0,
     size:100
 }
 
+// Sets up the enemyAgent javascript variable
 let enemyAgent = {
     x:0,
     y:30,
@@ -38,11 +41,12 @@ let enemyAgent = {
     aY:0,
     acceleration:0.2,
     maxSpeed:10,
-    fillR:225,
+    fillR:180,
     fillG:0,
     fillB:0
 }
 
+// Sets up the distance javascript variable
 let distance = {
  range: 0 
 }
@@ -71,7 +75,7 @@ function draw() {
 // Colors the background
     background (BgColor.R,BgColor.G,BgColor.B);
     
-    BgColor.R = constrain (BgColor.R, 0, 225)
+    BgColor.R = constrain (BgColor.R, 0, 180)
     BgColor.G = constrain (BgColor.G, 0, 225)
     BgColor.B = constrain (BgColor.B, 0, 225)
     
@@ -88,26 +92,30 @@ function draw() {
     }
     
 // Draws the initial position of the player character
-fill (180,180,180)   
-playerCharacter.size = constrain (playerCharacter.size, 50, 100);
-ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
+    fill (180,180,180)   
+    playerCharacter.size = constrain (playerCharacter.size, 50, 100);
+    ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
 
 // Draws and animates the enemy agent
-    enemyAgent.size = constrain (enemyAgent.size, 150, 200);
+    enemyAgent.size = constrain (enemyAgent.size, 150, 800);
     fill (enemyAgent.fillR,enemyAgent.fillG,enemyAgent.fillB);
     ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
+    enemyAgent.size = enemyAgent.size + 0.5;
+    
 
-    // Calculates movement with the added acceleration
+// Calculates movement with the added acceleration
     enemyAgent.vX = enemyAgent.vX + enemyAgent.aX;
     enemyAgent.vY = enemyAgent.vY + enemyAgent.aY;
 
-    // Moves the enemy agent
+// Moves the enemy agent
     enemyAgent.x = enemyAgent.x + enemyAgent.vX;
     enemyAgent.y = enemyAgent.y + enemyAgent.vY;
     enemyAgent.vX = constrain (enemyAgent.vX, -enemyAgent.maxSpeed, enemyAgent.maxSpeed);
     enemyAgent.vY = constrain (enemyAgent.vY, -enemyAgent.maxSpeed, enemyAgent.maxSpeed);
+    enemyAgent.x = constrain (enemyAgent.x, 0,windowWidth);
+    enemyAgent.y = constrain (enemyAgent.y, 0,windowHeight);
 
-    // Adjusts the acceleration value
+// Adjusts the acceleration value
     if (mouseX < enemyAgent.x){
         enemyAgent.aX= -enemyAgent.acceleration;
     }
@@ -126,10 +134,10 @@ ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
 
 // Determines wether the agent has reached the player or not and when to stop the program
 
-distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y)
-// console.log (distance.range)
+    distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y);
+    console.log (distance.range)
 
-if (distance.range < enemyAgent.size/2) {
+if (distance.range  < playerCharacter.size/2 + enemyAgent.size/2) {
     noLoop()
 }
 
@@ -145,10 +153,26 @@ function mouseDragged() {
     playerCharacter.x = mouseX;
     playerCharacter.y = mouseY;
     playerCharacter.size = playerCharacter.size +5;
-    enemyAgent.size = enemyAgent.size + 5;
+    
 }
 
 function mouseWheel() {
     playerCharacter.size = playerCharacter.size - 5;
     enemyAgent.size = enemyAgent.size - 5;
 }
+
+// Transparency ver.A
+// let sinValue = (sin (square.AlphaAngle)
+// square.fill.a = map (sinValue, -1,1, 0,255)
+// square.alphaAngle +=1
+// fill (R,G,B,square.fill.a)
+// rect(x,y,size)
+
+// Transparence ver.B
+// square.fill.a += square.alphaChange
+// if (square.fill.a =>255) {
+// square.alphaChange = square.alphaChange -1
+// }
+// else if (square.fill.a <= 0) {
+    // square.alphaChange *=-1
+// }
