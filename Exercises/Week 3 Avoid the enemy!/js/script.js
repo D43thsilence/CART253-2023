@@ -7,6 +7,7 @@
 
 "use strict";
 
+// Sets up the spyImage javascript variable
 let spyImage
 
 /**
@@ -14,7 +15,7 @@ let spyImage
  * Preloads an image
 */
 function preload() {
-    spyImage = loadImage('assets/images/Incognito_Mode_Current.svg')
+    spyImage = loadImage('assets/images/Incognito_Mode_Current.png')
 }
 
 // Sets up the BgColor javascript variable
@@ -58,28 +59,25 @@ let distance = {
  * Draws the canvas and sets up the initial position of the enemy agent
 */
 function setup() {
+    // Creates the canvas
     createCanvas (windowWidth,windowHeight);
 
-    // let enemyAgent.y = enemyAgent.y = random (0,height)
+    // Sets up the initial position of the enemy agent
     enemyAgent.x = random (0,windowWidth)
     enemyAgent.y = windowHeight
-
-
-    
-    }
-    
+}
     
 /**
  * Description of draw()
- * Animates the enemy agent and adjusts the color of the background
+ * Draws the player character, animates the enemy agent and adjusts the color of the background
 */
 function draw() {
-    noStroke()
-    imageMode = CENTER
+
+// Eliminates strokes
+noStroke()
 
 // Colors the background
     background (BgColor.R,BgColor.G,BgColor.B);
-    
     BgColor.R = constrain (BgColor.R, 0, 180)
     BgColor.G = constrain (BgColor.G, 0, 180)
     BgColor.B = constrain (BgColor.B, 0, 180)
@@ -99,12 +97,10 @@ function draw() {
 // Adjusts the constraints of the player character
     playerCharacter.size = constrain (playerCharacter.size, 50, 100);
     
-
 // Adjusts the constraints and size of the enemy agent
     enemyAgent.size = constrain (enemyAgent.size, 150, 800);
     enemyAgent.size = enemyAgent.size + 0.5;
     
-
 // Calculates movement with the added acceleration
     enemyAgent.vX = enemyAgent.vX + enemyAgent.aX;
     enemyAgent.vY = enemyAgent.vY + enemyAgent.aY;
@@ -135,15 +131,15 @@ function draw() {
     }
 
 // Draws the player character
-fill (180,180,180)   
-ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
+    fill (180,180,180)   
+    ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
+    image(spyImage, playerCharacter.x,playerCharacter.y,playerCharacter.size,playerCharacter.size);
 
 // Draws the enemy agent
-fill (enemyAgent.fillR,enemyAgent.fillG,enemyAgent.fillB);
-ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
-
+    fill (enemyAgent.fillR,enemyAgent.fillG,enemyAgent.fillB);
+    ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
+    
 // Determines wether the agent has reached the player or not and when to stop the program
-
     distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y);
     console.log (distance.range)
 
@@ -154,35 +150,17 @@ ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
     else{
         loop()
     }
-
-    image(spyImage, windowWidth/2, windowHeight/2,200,200);
 }
 
 // Moves the player character
 function mouseDragged() {
     playerCharacter.x = mouseX;
     playerCharacter.y = mouseY;
-    playerCharacter.size = playerCharacter.size +5;
-    
+    playerCharacter.size = playerCharacter.size +5; 
 }
 
+// Adjusts the size of the player and the enemy agent
 function mouseWheel() {
     playerCharacter.size = playerCharacter.size - 5;
     enemyAgent.size = enemyAgent.size - 5;
 }
-
-// Transparency ver.A
-// let sinValue = (sin (square.AlphaAngle)
-// square.fill.a = map (sinValue, -1,1, 0,255)
-// square.alphaAngle +=1
-// fill (R,G,B,square.fill.a)
-// rect(x,y,size)
-
-// Transparence ver.B
-// square.fill.a += square.alphaChange
-// if (square.fill.a =>255) {
-// square.alphaChange = square.alphaChange -1
-// }
-// else if (square.fill.a <= 0) {
-    // square.alphaChange *=-1
-// }
