@@ -97,6 +97,7 @@ noStroke()
 // Adjusts the constraints of the player character
     playerCharacter.size = constrain (playerCharacter.size, 50, 100);
     
+
 // Adjusts the constraints and size of the enemy agent
     enemyAgent.size = constrain (enemyAgent.size, 150, 800);
     enemyAgent.size = enemyAgent.size + 0.5;
@@ -131,6 +132,7 @@ noStroke()
     }
 
 // Draws the player character
+    imageMode(CENTER)
     fill (180,180,180)   
     ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
     image(spyImage, playerCharacter.x,playerCharacter.y,playerCharacter.size,playerCharacter.size);
