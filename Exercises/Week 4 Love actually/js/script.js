@@ -25,11 +25,11 @@ function preload() {
     size:120
   }
 
-// Sets up the BgColor javascript variable
-  let BgColor = {
-    R: 0,
-    G: 0,
-    B: 0
+// Sets up the bgColor javascript variable
+  let bgColor = {
+    R: 255,
+    G: 255,
+    B: 255
   }
 
   // Sets up the range variable
@@ -48,7 +48,7 @@ let needyGirlfriend = {
   aX:0,
   aY:0,
   acceleration:0.2,
-  maxSpeed:10,
+  maxSpeed:7,
   fillR:180,
   fillG:0,
   fillB:0,
@@ -62,7 +62,6 @@ let needyGirlfriend = {
 */
 function setup() {
   createCanvas (windowWidth,windowHeight);
-  background (255,255,255);
   textAlign(CENTER,CENTER);
 
   // Sets up the initial position of the needy girlfriend
@@ -76,37 +75,55 @@ function setup() {
  * Description of draw()
 */
 function draw() {
+  
+// Colors the background
+  background (bgColor.R,bgColor.G,bgColor.B);
   backgroundColorVariation()
-
+  
+// calculates the distance between the player and the girlfriend
+  distance()
 // Draws the title screen
   if (state === `title`){
     titleScreen()
   }
   
 // Switches to the game's code
-  else if (state === `game`) {
+   if (state === `game`) {
     needyGirlfriendCharacter()
     playerCharacter()
     mouseDragged()
-    distance()
-
-    else if (state === `game`)
     state === `attraction`
+   }
 
     else if (state === `attraction`) {
       needyGirlfriendMovement()
+
+      if (range.distance > playerCharacter.size/2 + needyGirlfriend.size/2 + 10) {
+        state = `attraction`
     }
 
-    else if (state === `close`) {}
+    else if (range.distance > playerCharacter.size/2 + needyGirlfriend.size/2 + 100){
+      state = `close`
+
+    }
+
+    else{ 
+      state = `requiring attention`
+    }
+
+    if (state === `close`) {
+      needyGirlfriendSlowdown()
+    }
 
 
-    else if (state === `requiring attention`) {}
+    if (state === `requiring attention`) {
+      needyGrilfriendWalkAway()
+    }
 
-    else if
 
   }
 
-
+}
   
 
 
@@ -115,13 +132,12 @@ if (needyGirlfriend.alpha <= 0){
 }
   
 // Draws the end screen
-  else if (state === `endScreen`){
+  if (state === `endScreen`){
     gameOver()
     noloop()
 
 }  
 
-}
 
 
 function titleScreen(){
@@ -168,7 +184,7 @@ function needyGirlfriendMovement(){
   needyGirlfriend.x = constrain (needyGirlfriend.x, 0,windowWidth);
   needyGirlfriend.y = constrain (needyGirlfriend.y, 0,windowHeight);
 
-// Adjusts the acceleration value
+// Adjusts the acceleration value of the movement
   if (mouseX < needyGirlfriend.x){
   needyGirlfriend.aX= -needyGirlfriend.acceleration;
   }
@@ -186,31 +202,34 @@ function needyGirlfriendMovement(){
   }
 }
 
+function needyGirlfriendSlowdown() {
+
+// Adjusts the acceleration value differently
+  needyGirlfriend.aX= -needyGirlfriend.acceleration;
+  needyGirlfriend.aY= -needyGirlfriend.acceleration;
+  }
+
+function needyGrilfriendWalkAway() {
+  needyGirlfriend.aX +=-0,1;
+  needyGirlfriend.aY +=-0,1;
+  needyGirlfriend.alpha -=1;
+
+}
+
+
 function distance(){
   // Determines if the girlfriend is too far and switches states
     range.distance = dist (player.x, player.y, needyGirlfriend.x, needyGirlfriend.y);
     console.log (range.distance )
 
-    if (range.distance > playerCharacter.size/2 + needyGirlfriend.size/2 + 10) {
-        state = `attracted`
     }
-
-    else if (range.distance > playerCharacter.size/2 + needyGirlfriend.size/2 + 100){
-        state = `close`
-    }
-
-    else{ 
-      state = `requiring attention`
-    }
-
-}
 
 function backgroundColorVariation() {
   // Colors the background
-    background (BgColor.R,BgColor.G,BgColor.B);
-    BgColor.R = constrain (BgColor.R, 0, 180)
-    BgColor.G = constrain (BgColor.G, 0, 180)
-    BgColor.B = constrain (BgColor.B, 0, 180)
+    background (bgColor.R,bgColor.G,bgColor.B);
+    bgColor.R = constrain (bgColor.R, 0, 180)
+    bgColor.G = constrain (bgColor.G, 0, 180)
+    bgColor.B = constrain (bgColor.B, 0, 180)
 
 }
 
