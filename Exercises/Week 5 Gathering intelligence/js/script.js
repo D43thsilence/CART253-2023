@@ -153,6 +153,7 @@ function draw() {
 
     else if (state === `game`) {
         backgroundColor()
+        gameInfo()
         dangerDistance()
         intelligencePickup()
         holdUp()
@@ -167,6 +168,7 @@ function draw() {
 
     else if (state === `freeze`) {
         backgroundColor()
+        gameInfo()
         dangerDistance()
         gameEndConditions()
         holdUp()
@@ -195,8 +197,21 @@ function titleScreen() {
     backgroundColor()
     textSize(62);
     fill(0);
-    text(`Gather the intelligence!`, windowWidth / 2, windowHeight / 2);
+    text(`Gather the intelligence!`, windowWidth / 3.8, windowHeight / 2);
+    textSize(20)
+    text(`Use the F key to freeze the enemy and relocate yourself!`, windowWidth / 3.2, windowHeight / 2 + 100);
 
+    fill(100, 200, 50)
+    ellipse(windowWidth / 8, windowHeight / 2 - 90, 100)
+    textSize(20)
+    fill(0, 0, 0);
+    text(`This is intelligence`, windowWidth / 14, windowHeight / 2);
+
+
+    image(enemyAgentImage, windowWidth / 4 * 3, windowHeight / 2 - 150, 120, 120)
+    textSize(20)
+    fill(0, 0, 0);
+    text(`This is the enemy`, windowWidth / 4 * 2.95, windowHeight / 2);
 }
 
 
@@ -231,6 +246,12 @@ function freezeLimit() {
 
     freezeCount = constrain(freezeCount, 0, 100)
     console.log(freezeCount)
+}
+
+function gameInfo() {
+    textSize(32);
+    fill(100, 100, 100);
+    text(`freezeCount`, windowWidth / 4 * 3, windowHeight / 4);
 }
 
 function playerAgent() {
@@ -460,7 +481,7 @@ function gameOver() {
     background(BgColor.R, BgColor.G, BgColor.B)
     textSize(62);
     fill(100, 100, 100);
-    text(`Mission Failed...`, windowWidth / 2, windowHeight / 2);
+    text(`Mission Failed...`, windowWidth / 3.8, windowHeight / 2);
 }
 
 function gameComplete() {
@@ -468,5 +489,5 @@ function gameComplete() {
     background(BgColor.R, BgColor.G, BgColor.B)
     textSize(62);
     fill(100, 100, 100);
-    text(`Mission Complete!`, windowWidth / 2, windowHeight / 2);
+    text(`Mission Complete!`, windowWidth / 3.8, windowHeight / 2);
 }
