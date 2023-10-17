@@ -8,10 +8,10 @@
 "use strict";
 
 // Sets up the spyImage javascript variable
-let spyImage
+let spyImage;
 
 // Sets up the enemyAgentImage javascript variable
-let enemyAgentImage
+let enemyAgentImage;
 
 /**
  * Description of preload
@@ -27,9 +27,9 @@ let state = `title`;
 
 // Sets up the BgColor javascript variable
 let BgColor = {
-    R: 180,
-    G: 180,
-    B: 180
+    R: 120,
+    G: 120,
+    B: 80
 }
 
 // Sets up the playerCharacter javascript variable
@@ -40,17 +40,18 @@ let playerCharacter = {
 }
 
 // Sets up the intelligence count variable
-let intelligenceCount = 0
+let intelligenceCount = 0;
 
-// Sets up the freezeCount count variable
-let freezeCount = 0
+// Sets up the freeze related variables
+let freezeCount = 0;
+let roundOffFreezeCount;
 
 // Sets up the enemyAgent1 javascript variable
 let enemyAgent1 = {
     x: 0,
     y: 30,
     size: 120,
-    maxSpeed: 1,
+    maxSpeed: 2,
     vX: 0,
     vY: 0,
     aX: 0,
@@ -66,7 +67,7 @@ let enemyAgent2 = {
     x: 0,
     y: 30,
     size: 120,
-    maxSpeed: 2,
+    maxSpeed: 4,
     vX: 0,
     vY: 0,
     aX: 0,
@@ -132,14 +133,14 @@ function setup() {
     // Creates the canvas
     createCanvas(windowWidth, windowHeight);
 
-    // Sets up the initial position of the enemies, traps and intelligence
+    // Sets up the initial position of the enemies and intelligence
     enemySetup()
     intelligenceSetup()
 }
 
 /**
  * Description of draw()
- * Draws the player character, traps and animates the enemy agents.
+ * Draws the player character, intelligence and animates the enemy agents.
 */
 function draw() {
 
@@ -150,7 +151,7 @@ function draw() {
     if (state === `title`) {
         titleScreen()
     }
-
+// Runs the game state
     else if (state === `game`) {
         backgroundColor()
         gameInfo()
@@ -165,7 +166,7 @@ function draw() {
         enemyMovement()
         gameEndConditions()
     }
-
+// Runs the freeze state
     else if (state === `freeze`) {
         backgroundColor()
         gameInfo()
@@ -182,36 +183,44 @@ function draw() {
 
     // Draws the end screens
     else if (state === `endScreen`) {
-        backgroundColor()
-        gameOver()
+        gameOver();
     }
 
     else if (state === `winScreen`) {
-        gameComplete()
+        gameComplete();
     }
 }
 
 
 function titleScreen() {
-    // textFont(`Elsie`)
-    backgroundColor()
+    
+    // Draws the title screen
+    textFont(`Black Ops One`);
+    backgroundColor();
+    textAlign(CENTER);
     textSize(62);
     fill(0);
-    text(`Gather the intelligence!`, windowWidth / 3.8, windowHeight / 2);
-    textSize(20)
-    text(`Use the F key to freeze the enemy and relocate yourself!`, windowWidth / 3.2, windowHeight / 2 + 100);
+    text(`Gather the intelligence!`, windowWidth / 2, windowHeight / 2);
+    fill(150, 150, 255);
+    textAlign(CENTER);
+    textSize(25);
+    text(`Move with the arrow keys and use the F key to freeze the enemy and relocate yourself. But don't let the freeze count reach 100!`, windowWidth / 2, windowHeight / 2 + 100);
+    fill(0,0,0)
+    textSize(30)
+    text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
 
-    fill(100, 200, 50)
-    ellipse(windowWidth / 8, windowHeight / 2 - 90, 100)
-    textSize(20)
-    fill(0, 0, 0);
-    text(`This is intelligence`, windowWidth / 14, windowHeight / 2);
+    fill(100, 200, 50);
+    ellipse(windowWidth / 8, windowHeight / 2 - 90, 100);
+    textAlign(CENTER);
+    textSize(20);
+    fill(100, 200, 50);
+    text(`This is intelligence`, windowWidth / 8, windowHeight / 2);
 
-
-    image(enemyAgentImage, windowWidth / 4 * 3, windowHeight / 2 - 150, 120, 120)
-    textSize(20)
-    fill(0, 0, 0);
-    text(`This is the enemy`, windowWidth / 4 * 2.95, windowHeight / 2);
+    image(enemyAgentImage, windowWidth / 4 * 3.2, windowHeight / 2 - 150, 120, 120);
+    textAlign(CENTER);
+    textSize(20);
+    fill(150, 0, 0);
+    text(`This is the enemy`, windowWidth / 4 * 3.33, windowHeight / 2);
 }
 
 
@@ -223,41 +232,46 @@ function mouseClicked() {
 }
 
 function holdUp() {
-
-    // Allows the player to freeze the enemies and relocate the intelligence
+    // Allows the player to freeze the enemies and relocate the intelligence using the F key
     if (keyIsDown(70)) {
-        state = `freeze`
+        state = `freeze`;
     }
 
     else {
-        state = `game`
+        state = `game`;
     }
 }
 
 function freezeLimit() {
-
-    // Limits the freeze time and resets the time too
+    // Counts, limits, constrains and resets the freeze time
     if (state === `freeze`) {
-        freezeCount = freezeCount + 0.2
+        freezeCount = freezeCount + 0.3
     }
     else {
         freezeCount = freezeCount - 0.1
     }
-
-    freezeCount = constrain(freezeCount, 0, 100)
-    console.log(freezeCount)
+    roundOffFreezeCount = freezeCount.toFixed();
+    freezeCount = constrain(freezeCount, 0, 100);
+    roundOffFreezeCount = constrain(roundOffFreezeCount, 0, 100);
 }
 
 function gameInfo() {
-    textSize(32);
-    fill(100, 100, 100);
-    text(`freezeCount`, windowWidth / 4 * 3, windowHeight / 4);
+    // Writes the freezeCount and intelligenceCount on the screen
+    textAlign(CENTER)
+    textSize(62);
+    fill(150, 150, 255);
+    text(roundOffFreezeCount, windowWidth / 8 * 7, windowHeight / 8);
+
+    textAlign(CENTER)
+    textSize(62);
+    fill(100, 200, 50);
+    text(intelligenceCount, windowWidth / 10, windowHeight / 10);
 }
 
 function playerAgent() {
-    // Draws the player character
+    // Draws the player character and constrains their position
     imageMode(CENTER)
-    fill(180, 180, 180)
+    fill(180, 180, 180);
     ellipse(playerCharacter.x, playerCharacter.y, playerCharacter.size);
     image(spyImage, playerCharacter.x, playerCharacter.y, playerCharacter.size, playerCharacter.size);
 
@@ -267,33 +281,30 @@ function playerAgent() {
 
 
 function enemySetup() {
-
     // Sets up the initial position of the enemy agents
-    enemyAgent1.x = random(0, windowWidth)
-    enemyAgent1.y = windowHeight
+    enemyAgent1.x = random(0, windowWidth);
+    enemyAgent1.y = windowHeight;
 
-    enemyAgent2.x = random(0, windowWidth)
-    enemyAgent2.y = windowHeight
+    enemyAgent2.x = random(0, windowWidth);
+    enemyAgent2.y = windowHeight;
 
-    enemyAgent3.x = random(0, windowWidth)
-    enemyAgent3.y = windowHeight
+    enemyAgent3.x = random(0, windowWidth);
+    enemyAgent3.y = windowHeight;
 }
 
 function intelligenceSetup() {
-
     // Sets up the initial position of the enemy agents
-    intelligence01.x = random(windowWidth / 4, windowWidth / 4 * 3)
-    intelligence01.y = random(windowHeight / 4, windowHeight / 4 * 3)
+    intelligence01.x = random(windowWidth / 4, windowWidth / 4 * 3);
+    intelligence01.y = random(windowHeight / 4, windowHeight / 4 * 3);
 
-    intelligence02.x = random(windowWidth / 4, windowWidth / 4 * 3)
-    intelligence02.y = random(windowHeight / 4, windowHeight / 4 * 3)
+    intelligence02.x = random(windowWidth / 4, windowWidth / 4 * 3);
+    intelligence02.y = random(windowHeight / 4, windowHeight / 4 * 3);
 
-    intelligence03.x = random(windowWidth / 4, windowWidth / 4 * 3)
-    intelligence03.y = random(windowHeight / 4, windowHeight / 4 * 3)
+    intelligence03.x = random(windowWidth / 4, windowWidth / 4 * 3);
+    intelligence03.y = random(windowHeight / 4, windowHeight / 4 * 3);
 }
 
 function intelligence() {
-
     // Draws the intelligence
     fill(100, 200, 50);
     ellipse(intelligence01.x, intelligence01.y, intelligence01.size);
@@ -307,7 +318,6 @@ function intelligence() {
 }
 
 function enemies() {
-
     // Draws the enemy agents
     image(enemyAgentImage, enemyAgent1.x, enemyAgent1.y, enemyAgent1.size, enemyAgent1.size);
 
@@ -394,9 +404,7 @@ function enemyMovement() {
 
 }
 
-
 function dangerDistance() {
-
     // Determines the distance between the player and the enemy agents and traps
     distance.range1 = dist(playerCharacter.x, playerCharacter.y, enemyAgent1.x, enemyAgent1.y);
     distance.range2 = dist(playerCharacter.x, playerCharacter.y, enemyAgent2.x, enemyAgent2.y);
@@ -407,10 +415,8 @@ function dangerDistance() {
 
 }
 
-
-// Moves the player character
 function playerMovement() {
-
+    // Moves the player character
     if (keyIsDown(LEFT_ARROW)) {
         playerCharacter.x = playerCharacter.x - 5;
     }
@@ -431,13 +437,12 @@ function playerMovement() {
 
 
 function backgroundColor() {
-
-    // Colors the background
+// Colors the background
     background(BgColor.R, BgColor.G, BgColor.B);
 }
 
 function intelligencePickup() {
-
+// Increases the intelligence count when standing on intelligence 
     if (distance.range4 <= playerCharacter.size / 2 + intelligence01.size / 2) {
         intelligenceCount = intelligenceCount + 1
     }
@@ -449,7 +454,6 @@ function intelligencePickup() {
     else if (distance.range6 <= playerCharacter.size / 2 + intelligence03.size / 2) {
         intelligenceCount = intelligenceCount + 1
     }
-    console.log(intelligenceCount)
 }
 
 function gameEndConditions() {
@@ -466,7 +470,7 @@ function gameEndConditions() {
         state = `endScreen`
     }
 
-    else if (intelligenceCount >= 200) {
+    else if (intelligenceCount >= 400) {
         state = `winScreen`
     }
 
@@ -477,17 +481,18 @@ function gameEndConditions() {
 
 function gameOver() {
     // Draws the end screen
-    // textFont(`Elsie`)
     background(BgColor.R, BgColor.G, BgColor.B)
-    textSize(62);
-    fill(100, 100, 100);
-    text(`Mission Failed...`, windowWidth / 3.8, windowHeight / 2);
+    textAlign(CENTER)
+    textSize(100);
+    fill(255, 0, 0);
+    text(`Mission Failed`, windowWidth / 2, windowHeight / 2);
 }
 
 function gameComplete() {
     // Draws victory screen
     background(BgColor.R, BgColor.G, BgColor.B)
-    textSize(62);
-    fill(100, 100, 100);
-    text(`Mission Complete!`, windowWidth / 3.8, windowHeight / 2);
+    textAlign(CENTER)
+    textSize(100);
+    fill(100, 200, 100);
+    text(`Mission Complete!`, windowWidth / 2, windowHeight / 2);
 }
