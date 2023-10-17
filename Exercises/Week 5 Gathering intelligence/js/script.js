@@ -2,7 +2,7 @@
  * Avoid the Enemy
  * Malcolm Siné Tadonki
  * 
- * The code here draws the player character, the enemy character and animates the background's color and both characters.
+ * The code here draws the player character, the intelligence, the enemy characters and counts the freeze time and intelligence gathered.
  */
 
 "use strict";
@@ -10,159 +10,463 @@
 // Sets up the spyImage javascript variable
 let spyImage
 
+// Sets up the enemyAgentImage javascript variable
+let enemyAgentImage
+
 /**
  * Description of preload
  * Preloads an image
 */
 function preload() {
     spyImage = loadImage('assets/images/Incognito_Mode_Current.png')
+    enemyAgentImage = loadImage('assets/images/Incognito_Mode_Current_Enemy.png')
 }
+
+// Sets up the initial state
+let state = `title`;
 
 // Sets up the BgColor javascript variable
 let BgColor = {
-    R: 0,
-    G: 0,
-    B: 0
-} 
-
-// Sets up the playerCharacter javascript variable
-let playerCharacter ={
-    x:0,
-    y:0,
-    size:100
+    R: 180,
+    G: 180,
+    B: 180
 }
 
-// Sets up the enemyAgent javascript variable
-let enemyAgent = {
-    x:0,
-    y:30,
-    size:150,
-    speed:3,
+// Sets up the playerCharacter javascript variable
+let playerCharacter = {
+    x: 30,
+    y: 30,
+    size: 100
+}
+
+// Sets up the intelligence count variable
+let intelligenceCount = 0
+
+// Sets up the freezeCount count variable
+let freezeCount = 0
+
+// Sets up the enemyAgent1 javascript variable
+let enemyAgent1 = {
+    x: 0,
+    y: 30,
+    size: 120,
+    maxSpeed: 1,
     vX: 0,
-    vY:0,
-    aX:0,
-    aY:0,
-    acceleration:0.2,
-    maxSpeed:10,
-    fillR:180,
-    fillG:0,
-    fillB:0
+    vY: 0,
+    aX: 0,
+    aY: 0,
+    acceleration: 0.2,
+    fillR: 180,
+    fillG: 0,
+    fillB: 0
+}
+
+// Sets up the enemyAgent2 javascript variable
+let enemyAgent2 = {
+    x: 0,
+    y: 30,
+    size: 120,
+    maxSpeed: 2,
+    vX: 0,
+    vY: 0,
+    aX: 0,
+    aY: 0,
+    acceleration: 0.2,
+    fillR: 180,
+    fillG: 0,
+    fillB: 0
+}
+
+// Sets up the enemyAgent3 javascript variable
+let enemyAgent3 = {
+    x: 0,
+    y: 30,
+    size: 120,
+    maxSpeed: 3,
+    vX: 0,
+    vY: 0,
+    aX: 0,
+    aY: 0,
+    acceleration: 0.2,
+    fillR: 180,
+    fillG: 0,
+    fillB: 0
+}
+
+// Sets up the intelligence01 javascript variable
+let intelligence01 = {
+    x: 0,
+    y: 0,
+    size: 100
+}
+
+// Sets up the intelligence02 javascript variable
+let intelligence02 = {
+    x: 0,
+    y: 0,
+    size: 100
+}
+
+// Sets up the intelligence03 javascript variable
+let intelligence03 = {
+    x: 0,
+    y: 0,
+    size: 100
 }
 
 // Sets up the distance javascript variable
 let distance = {
- range: 0 
+    range1: 0,
+    range2: 0,
+    range3: 0,
+    range4: 0,
+    range5: 0,
+    range6: 0,
 }
 
 /**
  * Description of setup
- * Draws the canvas and sets up the initial position of the enemy agent
+ * Draws the canvas and sets up the initial position of the enemy agents and traps
 */
 function setup() {
     // Creates the canvas
-    createCanvas (windowWidth,windowHeight);
+    createCanvas(windowWidth, windowHeight);
 
-    // Sets up the initial position of the enemy agent
-    enemyAgent.x = random (0,windowWidth)
-    enemyAgent.y = windowHeight
+    // Sets up the initial position of the enemies, traps and intelligence
+    enemySetup()
+    intelligenceSetup()
 }
-    
+
 /**
  * Description of draw()
- * Draws the player character, animates the enemy agent and adjusts the color of the background
+ * Draws the player character, traps and animates the enemy agents.
 */
 function draw() {
 
-// Eliminates strokes
-noStroke()
+    // Eliminates strokes
+    noStroke()
 
-// Colors the background
-    background (BgColor.R,BgColor.G,BgColor.B);
-    BgColor.R = constrain (BgColor.R, 0, 180)
-    BgColor.G = constrain (BgColor.G, 0, 180)
-    BgColor.B = constrain (BgColor.B, 0, 180)
-    
-// Contains all conditions related to the mouseIsPressed variable coloring the background
-    if (mouseIsPressed === true) {
-        BgColor.R = BgColor.R + 5;
-        // BgColor.G = BgColor.G + 5;
-        // BgColor.B = BgColor.B + 5;
+    // Draws the title screen
+    if (state === `title`) {
+        titleScreen()
+    }
+
+    else if (state === `game`) {
+        backgroundColor()
+        dangerDistance()
+        intelligencePickup()
+        holdUp()
+        freezeLimit()
+        intelligence()
+        playerMovement()
+        playerAgent()
+        enemies()
+        enemyMovement()
+        gameEndConditions()
+    }
+
+    else if (state === `freeze`) {
+        backgroundColor()
+        dangerDistance()
+        gameEndConditions()
+        holdUp()
+        freezeLimit()
+        intelligenceSetup()
+        playerAgent()
+        enemies()
+        playerMovement()
+        gameEndConditions()
+    }
+
+    // Draws the end screens
+    else if (state === `endScreen`) {
+        backgroundColor()
+        gameOver()
+    }
+
+    else if (state === `winScreen`) {
+        gameComplete()
+    }
+}
+
+
+function titleScreen() {
+    // textFont(`Elsie`)
+    backgroundColor()
+    textSize(62);
+    fill(0);
+    text(`Gather the intelligence!`, windowWidth / 2, windowHeight / 2);
+
+}
+
+
+function mouseClicked() {
+    // Initiates the game
+    if (state === `title`) {
+        state = `game`;
+    }
+}
+
+function holdUp() {
+
+    // Allows the player to freeze the enemies and relocate the intelligence
+    if (keyIsDown(70)) {
+        state = `freeze`
+    }
+
+    else {
+        state = `game`
+    }
+}
+
+function freezeLimit() {
+
+    // Limits the freeze time and resets the time too
+    if (state === `freeze`) {
+        freezeCount = freezeCount + 0.2
     }
     else {
-        BgColor.R = BgColor.R - 1;
-        // BgColor.G = BgColor.G - 1;
-        // BgColor.B = BgColor.B - 1;
-    }
-    
-// Adjusts the constraints of the player character
-    playerCharacter.size = constrain (playerCharacter.size, 50, 100);
-    
-
-// Adjusts the constraints and size of the enemy agent
-    enemyAgent.size = constrain (enemyAgent.size, 150, 800);
-    enemyAgent.size = enemyAgent.size + 0.5;
-    
-// Calculates movement with the added acceleration
-    enemyAgent.vX = enemyAgent.vX + enemyAgent.aX;
-    enemyAgent.vY = enemyAgent.vY + enemyAgent.aY;
-
-// Moves the enemy agent
-    enemyAgent.x = enemyAgent.x + enemyAgent.vX;
-    enemyAgent.y = enemyAgent.y + enemyAgent.vY;
-    enemyAgent.vX = constrain (enemyAgent.vX, -enemyAgent.maxSpeed, enemyAgent.maxSpeed);
-    enemyAgent.vY = constrain (enemyAgent.vY, -enemyAgent.maxSpeed, enemyAgent.maxSpeed);
-    enemyAgent.x = constrain (enemyAgent.x, 0,windowWidth);
-    enemyAgent.y = constrain (enemyAgent.y, 0,windowHeight);
-
-// Adjusts the acceleration value
-    if (mouseX < enemyAgent.x){
-        enemyAgent.aX= -enemyAgent.acceleration;
+        freezeCount = freezeCount - 0.1
     }
 
-    else{
-        enemyAgent.aX=enemyAgent.acceleration;
-    }
-    
-    if (mouseY < enemyAgent.y){
-        enemyAgent.aY=-enemyAgent.acceleration;
-    }
-
-    else{
-        enemyAgent.aY=enemyAgent.acceleration;
-    }
-
-// Draws the player character
-    imageMode(CENTER)
-    fill (180,180,180)   
-    ellipse (playerCharacter.x,playerCharacter.y,playerCharacter.size);
-    image(spyImage, playerCharacter.x,playerCharacter.y,playerCharacter.size,playerCharacter.size);
-
-// Draws the enemy agent
-    fill (enemyAgent.fillR,enemyAgent.fillG,enemyAgent.fillB);
-    ellipse(enemyAgent.x,enemyAgent.y,enemyAgent.size);
-    
-// Determines wether the agent has reached the player or not and when to stop the program
-    distance.range = dist (playerCharacter.x, playerCharacter.y, enemyAgent.x, enemyAgent.y);
-    console.log (distance.range)
-
-    if (distance.range  < playerCharacter.size/2 + enemyAgent.size/2) {
-        noLoop()
-    }
-
-    else{
-        loop()
-    }
+    freezeCount = constrain(freezeCount, 0, 100)
+    console.log(freezeCount)
 }
+
+function playerAgent() {
+    // Draws the player character
+    imageMode(CENTER)
+    fill(180, 180, 180)
+    ellipse(playerCharacter.x, playerCharacter.y, playerCharacter.size);
+    image(spyImage, playerCharacter.x, playerCharacter.y, playerCharacter.size, playerCharacter.size);
+
+    playerCharacter.x = constrain(playerCharacter.x, 0, windowWidth);
+    playerCharacter.y = constrain(playerCharacter.y, 0, windowHeight);
+}
+
+
+function enemySetup() {
+
+    // Sets up the initial position of the enemy agents
+    enemyAgent1.x = random(0, windowWidth)
+    enemyAgent1.y = windowHeight
+
+    enemyAgent2.x = random(0, windowWidth)
+    enemyAgent2.y = windowHeight
+
+    enemyAgent3.x = random(0, windowWidth)
+    enemyAgent3.y = windowHeight
+}
+
+function intelligenceSetup() {
+
+    // Sets up the initial position of the enemy agents
+    intelligence01.x = random(windowWidth / 4, windowWidth / 4 * 3)
+    intelligence01.y = random(windowHeight / 4, windowHeight / 4 * 3)
+
+    intelligence02.x = random(windowWidth / 4, windowWidth / 4 * 3)
+    intelligence02.y = random(windowHeight / 4, windowHeight / 4 * 3)
+
+    intelligence03.x = random(windowWidth / 4, windowWidth / 4 * 3)
+    intelligence03.y = random(windowHeight / 4, windowHeight / 4 * 3)
+}
+
+function intelligence() {
+
+    // Draws the intelligence
+    fill(100, 200, 50);
+    ellipse(intelligence01.x, intelligence01.y, intelligence01.size);
+
+    fill(100, 200, 50);
+    ellipse(intelligence02.x, intelligence02.y, intelligence02.size);
+
+    fill(100, 200, 50);
+    ellipse(intelligence03.x, intelligence03.y, intelligence03.size);
+
+}
+
+function enemies() {
+
+    // Draws the enemy agents
+    image(enemyAgentImage, enemyAgent1.x, enemyAgent1.y, enemyAgent1.size, enemyAgent1.size);
+
+    image(enemyAgentImage, enemyAgent2.x, enemyAgent2.y, enemyAgent2.size, enemyAgent2.size);
+
+    image(enemyAgentImage, enemyAgent3.x, enemyAgent3.y, enemyAgent3.size, enemyAgent3.size);
+}
+
+function enemyMovement() {
+    // Moves the enemy agents
+    enemyAgent1.x = enemyAgent1.x + enemyAgent1.vX
+    enemyAgent1.y = enemyAgent1.y + enemyAgent1.vY
+    enemyAgent1.vX = enemyAgent1.vX + enemyAgent1.aX
+    enemyAgent1.vY = enemyAgent1.vY + enemyAgent1.aY
+    enemyAgent1.vX = constrain(enemyAgent1.vX, -enemyAgent1.maxSpeed, enemyAgent1.maxSpeed);
+    enemyAgent1.vY = constrain(enemyAgent1.vY, -enemyAgent1.maxSpeed, enemyAgent1.maxSpeed);
+
+
+    enemyAgent2.x = enemyAgent2.x + enemyAgent2.vX
+    enemyAgent2.y = enemyAgent2.y + enemyAgent2.vY
+    enemyAgent2.vX = enemyAgent2.vX + enemyAgent2.aX
+    enemyAgent2.vY = enemyAgent2.vY + enemyAgent2.aY
+    enemyAgent2.vX = constrain(enemyAgent2.vX, -enemyAgent2.maxSpeed, enemyAgent2.maxSpeed);
+    enemyAgent2.vY = constrain(enemyAgent2.vY, -enemyAgent2.maxSpeed, enemyAgent2.maxSpeed);
+
+    enemyAgent3.x = enemyAgent3.x + enemyAgent3.vX
+    enemyAgent3.y = enemyAgent3.y + enemyAgent3.vY
+    enemyAgent3.vX = enemyAgent3.vX + enemyAgent3.aX
+    enemyAgent3.vY = enemyAgent3.vY + enemyAgent3.aY
+    enemyAgent3.vX = constrain(enemyAgent3.vX, -enemyAgent3.maxSpeed, enemyAgent3.maxSpeed);
+    enemyAgent3.vY = constrain(enemyAgent3.vY, -enemyAgent3.maxSpeed, enemyAgent3.maxSpeed);
+
+
+    // Adjusts the movement (acceleration) of the enemy agents
+    if (playerCharacter.x < enemyAgent1.x) {
+        enemyAgent1.aX = -enemyAgent1.acceleration;
+    }
+
+    else {
+        enemyAgent1.aX = enemyAgent1.acceleration;
+    }
+
+    if (playerCharacter.y < enemyAgent1.y) {
+        enemyAgent1.aY = -enemyAgent1.acceleration;
+    }
+
+    else {
+        enemyAgent1.aY = enemyAgent1.acceleration;
+    }
+
+
+    if (playerCharacter.x < enemyAgent2.x) {
+        enemyAgent2.aX = -enemyAgent2.acceleration;
+    }
+
+    else {
+        enemyAgent2.aX = enemyAgent2.acceleration;
+    }
+
+    if (playerCharacter.y < enemyAgent2.y) {
+        enemyAgent2.aY = -enemyAgent2.acceleration;
+    }
+
+    else {
+        enemyAgent2.aY = enemyAgent2.acceleration;
+    }
+
+
+    if (playerCharacter.x < enemyAgent3.x) {
+        enemyAgent3.aX = -enemyAgent3.acceleration;
+    }
+
+    else {
+        enemyAgent3.aX = enemyAgent3.acceleration;
+    }
+
+    if (playerCharacter.y < enemyAgent3.y) {
+        enemyAgent3.aY = -enemyAgent3.acceleration;
+    }
+
+    else {
+        enemyAgent3.aY = enemyAgent3.acceleration;
+    }
+
+}
+
+
+function dangerDistance() {
+
+    // Determines the distance between the player and the enemy agents and traps
+    distance.range1 = dist(playerCharacter.x, playerCharacter.y, enemyAgent1.x, enemyAgent1.y);
+    distance.range2 = dist(playerCharacter.x, playerCharacter.y, enemyAgent2.x, enemyAgent2.y);
+    distance.range3 = dist(playerCharacter.x, playerCharacter.y, enemyAgent3.x, enemyAgent3.y);
+    distance.range4 = dist(playerCharacter.x, playerCharacter.y, intelligence01.x, intelligence01.y);
+    distance.range5 = dist(playerCharacter.x, playerCharacter.y, intelligence02.x, intelligence02.y);
+    distance.range6 = dist(playerCharacter.x, playerCharacter.y, intelligence03.x, intelligence03.y);
+
+}
+
 
 // Moves the player character
-function mouseDragged() {
-    playerCharacter.x = mouseX;
-    playerCharacter.y = mouseY;
-    playerCharacter.size = playerCharacter.size +5; 
+function playerMovement() {
+
+    if (keyIsDown(LEFT_ARROW)) {
+        playerCharacter.x = playerCharacter.x - 5;
+    }
+
+    else if (keyIsDown(RIGHT_ARROW)) {
+        playerCharacter.x = playerCharacter.x + 5;
+    }
+
+    else if (keyIsDown(38)) {
+        playerCharacter.y = playerCharacter.y - 5
+    }
+
+    else if (keyIsDown(40)) {
+        playerCharacter.y = playerCharacter.y + 5
+    }
+
 }
 
-// Adjusts the size of the player and the enemy agent
-function mouseWheel() {
-    playerCharacter.size = playerCharacter.size - 5;
-    enemyAgent.size = enemyAgent.size - 5;
+
+function backgroundColor() {
+
+    // Colors the background
+    background(BgColor.R, BgColor.G, BgColor.B);
+}
+
+function intelligencePickup() {
+
+    if (distance.range4 <= playerCharacter.size / 2 + intelligence01.size / 2) {
+        intelligenceCount = intelligenceCount + 1
+    }
+
+    else if (distance.range5 <= playerCharacter.size / 2 + intelligence02.size / 2) {
+        intelligenceCount = intelligenceCount + 1
+    }
+
+    else if (distance.range6 <= playerCharacter.size / 2 + intelligence03.size / 2) {
+        intelligenceCount = intelligenceCount + 1
+    }
+    console.log(intelligenceCount)
+}
+
+function gameEndConditions() {
+    // Checks if the any game end condition has been met and changes the state accordingly
+    if (distance.range1 <= playerCharacter.size / 2 + enemyAgent1.size / 2) {
+        state = `endScreen`
+    }
+
+    else if (distance.range2 <= playerCharacter.size / 2 + enemyAgent2.size / 2) {
+        state = `endScreen`
+    }
+
+    else if (distance.range3 <= playerCharacter.size / 2 + enemyAgent3.size / 2) {
+        state = `endScreen`
+    }
+
+    else if (intelligenceCount >= 200) {
+        state = `winScreen`
+    }
+
+    else if (freezeCount >= 100) {
+        state = `endScreen`
+    }
+}
+
+function gameOver() {
+    // Draws the end screen
+    // textFont(`Elsie`)
+    background(BgColor.R, BgColor.G, BgColor.B)
+    textSize(62);
+    fill(100, 100, 100);
+    text(`Mission Failed...`, windowWidth / 2, windowHeight / 2);
+}
+
+function gameComplete() {
+    // Draws victory screen
+    background(BgColor.R, BgColor.G, BgColor.B)
+    textSize(62);
+    fill(100, 100, 100);
+    text(`Mission Complete!`, windowWidth / 2, windowHeight / 2);
 }
