@@ -36,7 +36,7 @@ let BgColor = {
 let playerCharacter = {
     x: 30,
     y: 30,
-    size: 150
+    size: 100
 }
 
 // Sets up the intelligence count variable
