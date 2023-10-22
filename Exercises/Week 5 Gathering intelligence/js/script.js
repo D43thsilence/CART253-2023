@@ -36,7 +36,7 @@ let BgColor = {
 let playerCharacter = {
     x: 30,
     y: 30,
-    size: 100
+    size: 150
 }
 
 // Sets up the intelligence count variable
@@ -151,7 +151,7 @@ function draw() {
     if (state === `title`) {
         titleScreen()
     }
-// Runs the game state
+    // Runs the game state
     else if (state === `game`) {
         backgroundColor()
         gameInfo()
@@ -166,7 +166,7 @@ function draw() {
         enemyMovement()
         gameEndConditions()
     }
-// Runs the freeze state
+    // Runs the freeze state
     else if (state === `freeze`) {
         backgroundColor()
         gameInfo()
@@ -193,7 +193,7 @@ function draw() {
 
 
 function titleScreen() {
-    
+
     // Draws the title screen
     textFont(`Black Ops One`);
     backgroundColor();
@@ -205,7 +205,7 @@ function titleScreen() {
     textAlign(CENTER);
     textSize(25);
     text(`Move with the arrow keys and use the F key to freeze the enemy and relocate yourself. But don't let the freeze count reach 100!`, windowWidth / 2, windowHeight / 2 + 100);
-    fill(0,0,0)
+    fill(0, 0, 0)
     textSize(30)
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
 
@@ -437,12 +437,12 @@ function playerMovement() {
 
 
 function backgroundColor() {
-// Colors the background
+    // Colors the background
     background(BgColor.R, BgColor.G, BgColor.B);
 }
 
 function intelligencePickup() {
-// Increases the intelligence count when standing on intelligence 
+    // Increases the intelligence count when standing on intelligence 
     if (distance.range4 <= playerCharacter.size / 2 + intelligence01.size / 2) {
         intelligenceCount = intelligenceCount + 1
     }
