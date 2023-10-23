@@ -9,8 +9,8 @@
 
 // Sets up the playerBoat variable
 let playerBoat = {
-    x: 0,
-    y: 0,
+    x: 80,
+    y: 80,
     size: 150
 }
 
@@ -38,122 +38,31 @@ let proximityRange = 90
 // Sets up the detectionRange variable
 let detectionRange = 370
 
+// Sets up the x and y variable
+let x;
+let y;
+
 
 // Sets up the various fish variables
-let fish1 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish2 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish3 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish4 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-let fish5 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish6 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish7 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
-
-let fish8 = {
-    x: 0,
-    y: 0,
-    size: 120,
-    fished: false,
-    maxSpeed: 2,
-    vX: 0,
-    vY: 0,
-    aX: 0,
-    aY: 0,
-    acceleration: 0.2
-}
+let fish1;
+let fish2;
+let fish3;
+let fish4;
+let fish5;
+let fish6;
+let fish7;
+let fish8;
 
 // Sets up the distance javascript variable
-let distance = {
-    range1: 0,
-    range2: 0,
-    range3: 0,
-    range4: 0,
-    range5: 0,
-    range6: 0,
-    range7: 0,
-    range8: 0
-}
+let distance;
+let distance2;
+let distance3;
+let distance4;
+let distance5;
+let distance6;
+let distance7;
+let distance8;
+
 
 // Sets up the initial state
 let state = `title`;
@@ -176,7 +85,15 @@ function preload() {
 */
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    fishSetup()
+
+    fish1 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish2 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish3 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish4 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish5 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish6 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish7 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
+    fish8 = createFish(random(windowWidth / 2, windowWidth / 10 * 9), random(windowHeight / 9, windowHeight / 9 * 8))
 
 }
 
@@ -195,64 +112,118 @@ function draw() {
 
     // Runs the different game states
     else if (state === 'ignore') {
-        distanceCalculate()
-        stateSwitch()
+        distanceCalculate(distance, fish1)
+        stateSwitch(distance, fish1)
         gameInfo()
-        fishPickup()
+        fishPickup(distance, fish1)
+        fishPickup(distance2, fish2)
+        fishPickup(distance3, fish3)
+        fishPickup(distance4, fish4)
+        fishPickup(distance5, fish5)
+        fishPickup(distance6, fish6)
+        fishPickup(distance7, fish7)
+        fishPickup(distance8, fish8)
         bait()
         fishDraw(fish1)
         fishDraw(fish2)
         fishDraw(fish3)
-        fishMovement()
+        fishDraw(fish4)
+        fishDrawAlternative(fish5)
+        fishDrawAlternative(fish6)
+        fishDrawAlternative(fish7)
+        fishDrawAlternative(fish8)
+        fishMovement(fish1)
         fishermanBoat()
         boatMovement()
     }
 
     else if (state === 'detected') {
-        distanceCalculate()
-        stateSwitch()
+        distanceCalculate(distance, fish1)
+        stateSwitch(distance, fish1)
         gameInfo()
-        fishPickup()
+        fishPickup(distance, fish1)
+        fishPickup(distance2, fish2)
+        fishPickup(distance3, fish3)
+        fishPickup(distance4, fish4)
+        fishPickup(distance5, fish5)
+        fishPickup(distance6, fish6)
+        fishPickup(distance7, fish7)
+        fishPickup(distance8, fish8)
         bait()
-        fishDraw()
-        fishMovement()
+        fishDraw(fish1)
+        fishDraw(fish2)
+        fishDraw(fish3)
+        fishDraw(fish4)
+        fishDrawAlternative(fish5)
+        fishDrawAlternative(fish6)
+        fishDrawAlternative(fish7)
+        fishDrawAlternative(fish8)
+        fishMovement(fish1)
         fishermanBoat()
         boatMovement()
     }
 
     else if (state === 'close') {
-        distanceCalculate()
-        stateSwitch()
+        distanceCalculate(distance, fish1)
+        stateSwitch(distance, fish1)
         gameInfo()
-        fishPickup()
+        fishPickup(distance, fish1)
+        fishPickup(distance2, fish2)
+        fishPickup(distance3, fish3)
+        fishPickup(distance4, fish4)
+        fishPickup(distance5, fish5)
+        fishPickup(distance6, fish6)
+        fishPickup(distance7, fish7)
+        fishPickup(distance8, fish8)
         bait()
-        fishDraw()
-        fishMovement()
+        fishDraw(fish1)
+        fishDraw(fish2)
+        fishDraw(fish3)
+        fishDraw(fish4)
+        fishDrawAlternative(fish5)
+        fishDrawAlternative(fish6)
+        fishDrawAlternative(fish7)
+        fishDrawAlternative(fish8)
+        fishMovement(fish1)
         fishermanBoat()
         boatMovement()
     }
 
     else if (state === 'baited') {
-        distanceCalculate()
-        stateSwitch()
+        distanceCalculate(distance, fish1)
+        stateSwitch(distance, fish1)
         gameInfo()
-        fishPickup()
+        fishPickup(distance, fish1)
+        fishPickup(distance2, fish2)
+        fishPickup(distance3, fish3)
+        fishPickup(distance4, fish4)
+        fishPickup(distance5, fish5)
+        fishPickup(distance6, fish6)
+        fishPickup(distance7, fish7)
+        fishPickup(distance8, fish8)
         bait()
-        fishDraw()
-        fishMovement()
+        fishDraw(fish1)
+        fishDraw(fish2)
+        fishDraw(fish3)
+        fishDraw(fish4)
+        fishDrawAlternative(fish5)
+        fishDrawAlternative(fish6)
+        fishDrawAlternative(fish7)
+        fishDrawAlternative(fish8)
+        fishMovement(fish1)
         fishermanBoat()
         boatMovement()
     }
 
 
-    // // Draws the end screens
-    // else if (state === `endScreen`) {
-    //     gameOver();
-    // }
+    // Draws the end screens
+    if (state === `endScreen`) {
+        gameOver();
+    }
 
-    // else if (state === `winScreen`) {
-    //     gameComplete();
-    // }
+    else if (state === `winScreen`) {
+        gameComplete();
+    }
 }
 
 
@@ -293,16 +264,20 @@ function mouseClicked() {
     }
 }
 
-function fishSetup() {
-    // Sets up the initial position of the fish
-    fish1.x = random(0, windowWidth);
-    fish1.y = windowHeight;
-
-    fish2.x = random(0, windowWidth);
-    fish2.y = windowHeight;
-
-    fish3.x = random(0, windowWidth);
-    fish3.y = windowHeight;
+function createFish(x, y) {
+    let fish = {
+        x: x,
+        y: y,
+        size: 120,
+        fished: false,
+        maxSpeed: 2,
+        vX: 0,
+        vY: 0,
+        aX: 0,
+        aY: 0,
+        acceleration: 0.2
+    };
+    return fish
 }
 
 // function baitSetup() {
@@ -334,40 +309,45 @@ function fishDraw(fish) {
     // Draws the various fish. If the fish is caught, it no longer is drawn
     if (!fish.fished) {
         push();
-        image(fishImage, fish1.x, fish1.y, fish1.size, fish1.size);
+        image(fishImage, fish.x, fish.y, fish.size, fish.size);
         pop();
     }
+}
 
-    // image(fishImage2, fish2.x, fish2.y, fish2.size, fish2.size);
-
-    // image(fishImage, fish3.x, fish3.y, fish3.size, fish3.size);
+function fishDrawAlternative(fish) {
+    // Draws a different type of fish fish. If the fish is caught, it no longer is drawn
+    if (!fish.fished) {
+        push();
+        image(fishImage2, fish.x, fish.y, fish.size, fish.size);
+        pop();
+    }
 
 }
 
 
-function fishMovement() {
+function fishMovement(fish) {
     // Moves the fish
-    fish1.x = fish1.x + fish1.vX;
-    fish1.y = fish1.y + fish1.vY;
-    fish1.vX = fish1.vX + fish1.aX;
-    fish1.vY = fish1.vY + fish1.aY;
-    fish1.vX = constrain(fish1.vX, -fish1.maxSpeed, fish1.maxSpeed);
-    fish1.vY = constrain(fish1.vY, -fish1.maxSpeed, fish1.maxSpeed);
+    fish.x = fish.x + fish.vX;
+    fish.y = fish.y + fish.vY;
+    fish.vX = fish.vX + fish.aX;
+    fish.vY = fish.vY + fish.aY;
+    fish.vX = constrain(fish.vX, -fish.maxSpeed, fish.maxSpeed);
+    fish.vY = constrain(fish.vY, -fish1.maxSpeed, fish.maxSpeed);
 
-    if (fish1.x >= windowWidth / 10 * 9) {
-        fish1.acceleration = -fish1.acceleration;
+    if (fish.x >= windowWidth / 10 * 9) {
+        fish.acceleration = -fish.acceleration;
     }
 
-    else if (fish1.x <= windowWidth / 10) {
-        fish1.acceleration = -fish1.acceleration;
+    else if (fish.x <= windowWidth / 10) {
+        fish.acceleration = -fish.acceleration;
     }
 
-    if (fish1.y >= windowHeight / 10 * 9) {
-        fish1.acceleration = -fish1.acceleration;
+    if (fish.y >= windowHeight / 10 * 9) {
+        fish.acceleration = -fish.acceleration;
     }
 
-    if (fish1.y <= windowHeight / 10) {
-        fish1.acceleration = -fish1.acceleration;
+    if (fish.y <= windowHeight / 10) {
+        fish.acceleration = -fish.acceleration;
     }
 }
 
@@ -401,25 +381,20 @@ function boatMovement() {
 }
 
 
-function distanceCalculate() {
+function distanceCalculate(distance, fish) {
     // Determines the distance between the player and the fish
-    distance.range1 = dist(playerBoat.x, playerBoat.y, fish1.x, fish1.y);
-    distance.range2 = dist(playerBoat.x, playerBoat.y, fish2.x, fish2.y);
-    distance.range3 = dist(playerBoat.x, playerBoat.y, fish3.x, fish3.y);
-    distance.range4 = dist(playerBoat.x, playerBoat.y, fish4.x, fish4.y);
-    distance.range5 = dist(playerBoat.x, playerBoat.y, fish5.x, fish5.y);
-    distance.range6 = dist(playerBoat.x, playerBoat.y, fish6.x, fish6.y);
+    distance = dist(playerBoat.x, playerBoat.y, fish.x, fish.y)
 
 }
 
-function stateSwitch(range) {
-    console.log(distance.range1)
+function stateSwitch(distance, fish) {
+    console.log(distance)
     //Determines whether to change state based on the distance
-    if (distance.range < playerBoat.size / 2 + fish.size / 2 + proximityRange) {
+    if (distance < playerBoat.size / 2 + fish.size / 2 + proximityRange) {
         state = `close`
     }
 
-    else if (distance.range <= playerBoat.size / 2 + fish.size / 2 + detectionRange) {
+    else if (distance <= playerBoat.size / 2 + fish.size / 2 + detectionRange) {
         state = `detected`
     }
 
@@ -441,11 +416,12 @@ function gameInfo() {
     text(fishCount, windowWidth / 10, windowHeight / 10);
 }
 
-function fishPickup(fish) {
+function fishPickup(distance, fish) {
     // Increases the fish count when fishing every single fish
-    if (!fish.eaten) {
-        if (distance.range1 <= playerBoat.size / 2 + fish.size / 2) {
-            fish.eaten = true;
+    if (!fish.fished) {
+        distance = dist(playerBoat.x, playerBoat.y, fish.x, fish.y)
+        if (distance <= playerBoat.size / 2 + fish.size / 2) {
+            fish.fished = true;
             fishCount = fishCount + 1;
         }
     }
@@ -460,4 +436,32 @@ function bait() {
     else {
         state = `ignore`;
     }
+}
+
+function gameEndConditions() {
+    // Checks if the any game end condition has been met and changes the state accordingly
+
+    if (fishCount >= 8) {
+        state = `winScreen`
+    }
+
+    else if (baitCount <= 0) {
+        state = `endScreen`
+    }
+}
+
+function gameOver() {
+    // Draws the end screen
+    textAlign(CENTER)
+    textSize(100);
+    fill(0, 0, 0);
+    text(`You didn't catch all of the fish...`, windowWidth / 2, windowHeight / 2);
+}
+
+function gameComplete() {
+    // Draws victory screen
+    textAlign(CENTER)
+    textSize(100);
+    fill(0, 0, 0);
+    text(`You caught all of the fish!`, windowWidth / 2, windowHeight / 2);
 }
