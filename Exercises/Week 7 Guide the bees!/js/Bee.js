@@ -8,6 +8,9 @@ class Bee {
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
+        this.aX = 0;
+        this.aY = 0;
+        this.acceleration = 2;
         this.jitteriness = 0.1; // How likely the bee is to change direction
         this.alive = true;
     }
@@ -22,14 +25,36 @@ class Bee {
             this.vy = random(-this.speed, this.speed);
         }
 
-        // Update position with velocity to actually move
+        // Update the bee's position with the velocity values
         this.x = this.x + this.vx;
         this.y = this.y + this.vy;
+        this.vx = this.vx + this.aX
+        this.vy = this.vy + this.aY
 
-        // Constrain to the canvas (guess it's a walled garden!)
+        // Constrain the bees to the canvas and constrain the acceleration
         this.x = constrain(this.x, 0, width);
         this.y = constrain(this.y, 0, height);
+        // this.aX = constrain(this.acceleration, -this.acceleration, -this.acceleration);
+        // this.aY = constrain(this.acceleration, -this.acceleration, -this.acceleration);
     };
+
+    acceleration(queenBee) {
+        if (queenBee.x < this.x) {
+            this.aX = -this.acceleration;
+        }
+
+        else {
+            this.aX = this.acceleration;
+        }
+
+        if (queenBee.y < this.y) {
+            this.aY = -this.acceleration;
+        }
+
+        else {
+            this.aY = this.acceleration;
+        }
+    }
 
     // display() draws our bee onto the canvas
     display() {
@@ -57,13 +82,11 @@ class Bee {
         pop();
     };
 
-    WaspCatch(wasp) {
-        //Calcuates the distance between the wasp and the bee.
-        let d = dist(this.x, this.y, wasp.x, wasp.y);
-        // If they overlap, the bee gets caught.
-        if (d < this.size / 2 + wasp.size / 2) {
-            this.alive = false;
-        };
+    // Makes the bee dissapear if caught by the wasp
+    BeeCaught() {
+        if (this.alive === true) {
+            this.alive = false
+        }
     };
 
     CollectNectar(flower) {
