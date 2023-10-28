@@ -27,6 +27,10 @@ class QueenBee {
         else if (keyIsDown(40)) {
             this.y = this.y + 5;
         }
+
+        // Constrain the Queen bee to the canvas
+        this.x = constrain(this.x, 0, width);
+        this.y = constrain(this.y, 0, height);
     }
 
     // display() draws the Queen Bee on the canvas
@@ -63,6 +67,12 @@ class QueenBee {
         if (d < this.size / 2 + wasp.size / 2) {
             this.alive = false;
         };
+    };
+
+    BeeCaught() {
+        if (this.alive === true) {
+            this.alive = false
+        }
     };
 
 }

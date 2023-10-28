@@ -38,7 +38,7 @@ let garden = {
 let time = 720
 
 // Sets up the initial game state
-let state = `game`
+let state = `title`
 
 // Sets up the nectarCount variable
 let nectarCount = 0
@@ -104,6 +104,8 @@ function setup() {
 // draw()
 // Displays our flowers
 function draw() {
+    // Draws the title screen
+    titleScreen()
 
     if (state === `game`) {
         // Display the grass
@@ -130,12 +132,10 @@ function draw() {
             if (bee.alive) {
                 // Moves the bees
                 bee.move();
-                // bee.acceleration(queenBee)
 
-                //Go through the entire wasp array and allows the bees to be caught by the wasp
-                // for (let w = 0; w <= garden.wasps.length; w++) {
-                //     let wasp = garden.wasps[w];
-                //     // bee.BeeCaught(wasp)
+                // for (let q = 0; i < garden.queenBee.length; q++) {
+                //     let queenBee = garden.queenBee[q];
+                //     bee.followTheQueen(queenBee);
                 // }
 
                 //Go through the entire flower array and allows the bees to collect the nectar of the flowers
@@ -160,15 +160,23 @@ function draw() {
                 wasp.WaspChase(bee)
                 wasp.WaspCatch(bee)
             }
+            // for (let q = 0; i < garden.queenBee.length; q++) {
+            //     let queenBee = garden.queenBee[q];
+            //     wasp.WaspCatch(queenBee)
+            // }
+
         }
+
 
         for (let i = 0; i < garden.queenBee.length; i++) {
             let queenBee = garden.queenBee[i];
-            // Draws and moves the Queen bee
-            queenBee.display();
-            queenBee.QueenBeeMovement();
-            // Allows the wasp to catch the Queen bee
-            // queenBee.WaspCatch();
+            if (queenBee.alive) {
+                // Draws and moves the Queen bee
+                queenBee.display();
+                queenBee.QueenBeeMovement();
+                // Allows the wasp to catch the Queen bee
+                // queenBee.WaspCatch();
+            }
         }
 
         // Call all of the extra functions that do not rely on for loops
@@ -194,11 +202,47 @@ function draw() {
 };
 
 
+function titleScreen() {
+    // Draws the title screen
+    background(0, 200, 225)
+    // textFont(`Playpen Sans`);
+    textAlign(CENTER);
+    textSize(62);
+    fill(0);
+    text(`Collect the nectar of all 20 flowers`, windowWidth / 2, windowHeight / 2);
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    textSize(20);
+    text(`Move with the arrow keys and guide your fellow bees to collect the nectar without losing them all to the evil wasp. `, windowWidth / 2, windowHeight / 2 + 100);
+    fill(0, 0, 0);
+    textSize(30);
+    text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
 
+    // image(fishImage, windowWidth / 13, windowHeight / 3.5, 120, 120);
+    // textAlign(CENTER);
+    // textSize(20);
+    // fill(0, 0, 0);
+    // text(`This is a fish.`, windowWidth / 8, windowHeight / 2);
+
+    // image(fishImage2, windowWidth / 4 * 3.2, windowHeight / 2 - 150, 120, 120);
+    // textAlign(CENTER);
+    // textSize(20);
+    // fill(0, 0, 0);
+    // text(`This is another fish.`, windowWidth / 4 * 3.33, windowHeight / 2);
+}
+
+function mouseClicked() {
+    // Initiates the game
+    if (state === `title`) {
+        state = `game`;
+        // gameStartSFX.play();
+    }
+}
 
 function nectarCollect() {
-    for (let i = 0; i < garden.numFlowers; i++) {
-        if (garden.flowers.nectarDry === true) {
+    for (let i = 0; i < garden.flowers.length; i++) {
+        let flower = garden.flowers[i];
+        if (flower.nectarDry === true) {
             nectarCount = nectarCount + 1
             console.log(nectarCount)
         }
@@ -231,11 +275,11 @@ function gameInfo() {
 function gameEndConditions() {
     // Checks if the any game end condition has been met and changes the game state accordingly
     if (nectarCount >= garden.numFlowers) {
-        state = `endScreen`;
+        state = `winScreen`;
     }
 
     else if (garden.bees <= 0) {
-        state = `winScreen`;
+        state = `endScreen`;
     }
 
     else if (time <= 0) {
@@ -248,7 +292,7 @@ function gameOver() {
     textAlign(CENTER);
     textSize(65);
     fill(0, 0, 0);
-    text(`You didn't collect all of the nectar`, windowWidth / 2, windowHeight / 2);
+    text(`You ran out of bees.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
     // noLoop();
 }
@@ -258,7 +302,7 @@ function outOfTime() {
     textAlign(CENTER);
     textSize(65);
     fill(0, 0, 0);
-    text(`You ran out of time`, windowWidth / 2, windowHeight / 2);
+    text(`You ran out of time.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
     // noLoop();
 }
