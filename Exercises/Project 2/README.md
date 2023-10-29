@@ -1,3 +1,3 @@
-# Template p5 project
+# Battle simulator
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+This project features a battle between two characters, use your character's skils optimally to win against your opponent!
