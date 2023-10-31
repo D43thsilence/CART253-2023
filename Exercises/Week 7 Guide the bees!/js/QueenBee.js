@@ -59,20 +59,4 @@ class QueenBee {
         pop();
     };
 
-
-    WaspCatch(wasp) {
-        //Calcuates the distance between the wasp and the bee.
-        let d = dist(this.x, this.y, wasp.x, wasp.y);
-        // If they overlap, the bee gets caught.
-        if (d < this.size / 2 + wasp.size / 2) {
-            this.alive = false;
-        };
-    };
-
-    BeeCaught() {
-        if (this.alive === true) {
-            this.alive = false
-        }
-    };
-
 }

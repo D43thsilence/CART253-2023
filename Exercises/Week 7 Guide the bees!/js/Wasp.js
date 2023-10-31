@@ -8,8 +8,8 @@ class Wasp {
         this.vy = 0;
         this.aX = 0;
         this.aY = 0;
-        this.speed = 2;
-        this.acceleration = 2;
+        this.speed = 1;
+        this.acceleration = 0.2;
     }
 
     // move() moves the bee by potentially changing direction
@@ -21,8 +21,6 @@ class Wasp {
         //     this.vx = random(-this.speed, this.speed);
         //     this.vy = random(-this.speed, this.speed);
         // }
-        this.vx = constrain(this.vx, -this.speed, this.speed);
-        this.vy = constrain(this.vy, -this.speed, this.speed);
 
         // Update the wasp's position with the velocity values
         this.x = this.x + this.vx;
@@ -36,7 +34,7 @@ class Wasp {
         this.x = constrain(this.x, 0, width);
         this.y = constrain(this.y, 0, height);
         this.vx = constrain(this.vx, -this.speed, this.speed);
-        this.vy = constrain(this.vx, -this.speed, this.speed);
+        this.vy = constrain(this.vy, -this.speed, this.speed);
         this.aX = constrain(this.aX, -this.acceleration, this.acceleration);
         this.aY = constrain(this.aY, -this.acceleration, this.acceleration);
     }
@@ -69,7 +67,7 @@ class Wasp {
 
     WaspChase(bee) {
         // Adjusts the wasp's acceleration to move towards the bees.
-        if (this.x < bee.x) {
+        if (this.x > bee.x) {
             this.aX = -this.acceleration;
         }
 
@@ -77,7 +75,7 @@ class Wasp {
             this.aX = this.acceleration;
         }
 
-        if (this.y < bee.y) {
+        if (this.y > bee.y) {
             this.aY = -this.acceleration;
         }
 
@@ -97,9 +95,9 @@ class Wasp {
 
     WaspCatch(queenBee) {
         //Calcuates the distance between the wasp and the bee.
-        let d = dist(this.x, this.y, queenBee.x, queenBee.y);
+        let r = dist(this.x, this.y, queenBee.x, queenBee.y);
         // If the wasp and the bee overlap, the bee gets caught.
-        if (d < this.size / 2 + queenBee.size / 2) {
+        if (r < this.size / 2 + queenBee.size / 2) {
             queenBee.BeeCaught()
         };
     }

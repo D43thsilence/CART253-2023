@@ -35,13 +35,14 @@ let garden = {
 };
 
 // Sets up the time variable
-let time = 720
+let time = 1800
 
 // Sets up the initial game state
 let state = `title`
 
 // Sets up the nectarCount variable
 let nectarCount = 0
+let beeCaptureCount = 0
 
 
 function setup() {
@@ -69,8 +70,8 @@ function setup() {
     // Create our bees by counting up to the number of bees
     for (let i = 0; i < garden.numBees; i++) {
         // Create variables for our arguments for clarity
-        let x = random(0, width);
-        let y = random(0, height);
+        let x = random(0, width / 2);
+        let y = random(0, height / 2);
         // Create a new bee using the arguments
         let bee = new Bee(x, y);
         // Add the bee to the array of bees
@@ -80,8 +81,8 @@ function setup() {
     // Create our wasp
     for (let i = 0; i < garden.numWasp; i++) {
         // Create variables for our arguments for clarity
-        let x = random(0, width);
-        let y = random(0, height);
+        let x = random(width / 10 * 9, width);
+        let y = random(height / 10 * 9, height);
         // Create a new bee using the arguments
         let wasp = new Wasp(x, y);
         // Add the bee to the array of bees
@@ -91,8 +92,8 @@ function setup() {
     // Create our Queen bee
     for (let i = 0; i < garden.numQueenBee; i++) {
         // Create variables for our arguments for clarity
-        let x = random(0, width);
-        let y = random(0, height);
+        let x = random(0, width / 2);
+        let y = random(0, height) / 2;
         // Create a new bee using the arguments
         let queenBee = new QueenBee(x, y);
         // Add the bee to the array of bees
@@ -116,37 +117,42 @@ function draw() {
         // Loop through all the flowers in the array and display them
         for (let i = 0; i < garden.flowers.length; i++) {
             let flower = garden.flowers[i];
-            // Check if this flower still has nectar and color it appropriately
+            // Check if this flower still has nectar and colors it appropriately
             if (!flower.nectarDry) {
                 flower.display();
+
             }
             else {
                 flower.display();
-                flower.nectarTaken()
             }
-
         }
 
         // Loop through all the bees in the array and display them
         for (let i = 0; i < garden.bees.length; i++) {
             let bee = garden.bees[i];
-            // Check if this flower is alive
+            // Check if the bee is still alive
             if (bee.alive) {
                 // Moves the bees
-                bee.move();
-
-                // for (let q = 0; i < garden.queenBee.length; q++) {
-                //     let queenBee = garden.queenBee[q];
-                //     bee.followTheQueen(queenBee);
-                // }
+                for (let q = 0; q < garden.queenBee.length; q++) {
+                    let queenBee = garden.queenBee[q];
+                    bee.followTheQueen(queenBee);
+                    bee.move();
+                }
 
                 //Go through the entire flower array and allows the bees to collect the nectar of the flowers
                 // Note that we use j in our for-loop here because we're already inside a for-loop using i!
                 for (let j = 0; j < garden.flowers.length; j++) {
                     let flower = garden.flowers[j];
-                    bee.CollectNectar(flower)
-                }
+                    if (flower.nectarDry === false) {
+                        bee.CollectNectar(flower);
+                        let d = dist(bee.x, bee.y, flower.x, flower.y);
+                        if (d < bee.size / 2 + flower.size / 2 + flower.petalThickness) {
+                            nectarCount = nectarCount + 1
+                        }
 
+                    }
+
+                }
                 // Display the bee
                 bee.display();
             }
@@ -156,33 +162,37 @@ function draw() {
             let wasp = garden.wasps[i];
             // Draws and moves the wasp
             wasp.display();
-            wasp.move();
+
             for (let b = 0; b < garden.bees.length; b++) {
                 let bee = garden.bees[b];
                 wasp.WaspChase(bee)
                 wasp.WaspCatch(bee)
+                wasp.move();
+                console.log(beeCaptureCount)
+                for (let b = 0; b < garden.bees.length; b++) {
+                    let bee = garden.bees[b];
+                    if (bee.alive) {
+                        let d = dist(wasp.x, wasp.y, bee.x, bee.y);
+                        // If the wasp and the bee overlap, the bee gets caught.
+                        if (d < wasp.size / 2 + bee.size / 2) {
+                            beeCaptureCount = beeCaptureCount + 1
+                        };
+                    }
+                }
             }
-            for (let q = 0; i < garden.queenBee.length; q++) {
-                let queenBee = garden.queenBee[q];
-                wasp.WaspCatch(queenBee)
-            }
-
         }
 
 
         for (let i = 0; i < garden.queenBee.length; i++) {
             let queenBee = garden.queenBee[i];
             if (queenBee.alive) {
-                // Draws and moves the Queen bee
+                // Draws and allows the Queen bee to move
                 queenBee.display();
                 queenBee.QueenBeeMovement();
-                // Allows the wasp to catch the Queen bee
-                // queenBee.WaspCatch();
             }
         }
 
         // Call all of the extra functions that do not rely on for loops
-        nectarCollect()
         timeLimit()
         gameEndConditions()
         gameInfo()
@@ -219,18 +229,6 @@ function titleScreen() {
     fill(0, 0, 0);
     textSize(30);
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
-
-    // image(fishImage, windowWidth / 13, windowHeight / 3.5, 120, 120);
-    // textAlign(CENTER);
-    // textSize(20);
-    // fill(0, 0, 0);
-    // text(`This is a fish.`, windowWidth / 8, windowHeight / 2);
-
-    // image(fishImage2, windowWidth / 4 * 3.2, windowHeight / 2 - 150, 120, 120);
-    // textAlign(CENTER);
-    // textSize(20);
-    // fill(0, 0, 0);
-    // text(`This is another fish.`, windowWidth / 4 * 3.33, windowHeight / 2);
 }
 
 function mouseClicked() {
@@ -238,16 +236,6 @@ function mouseClicked() {
     if (state === `title`) {
         state = `game`;
         // gameStartSFX.play();
-    }
-}
-
-function nectarCollect() {
-    for (let i = 0; i < garden.flowers.length; i++) {
-        let flower = garden.flowers[i];
-        if (flower.nectarDry === true) {
-            nectarCount = nectarCount + 1
-            console.log(nectarCount)
-        }
     }
 }
 
@@ -260,17 +248,12 @@ function gameInfo() {
     // Writes the nectarCount, fishCount and time on the screen
     textAlign(CENTER)
     textSize(62);
-    fill(0, 0, 0);
-    text(nectarCount, windowWidth / 8 * 7, windowHeight / 8);
-
-    // textAlign(CENTER)
-    // textSize(62);
-    // fill(100, 200, 50);
-    // text(fishCount, windowWidth / 10, windowHeight / 10);
+    fill(225, 225, 0);
+    text(nectarCount, windowWidth / 8, windowHeight / 8);
 
     textAlign(CENTER)
     textSize(62);
-    fill(0, 0, 0);
+    fill(255, 255, 255);
     text(time, windowWidth / 2, windowHeight / 10);
 }
 
@@ -280,11 +263,11 @@ function gameEndConditions() {
         state = `winScreen`;
     }
 
-    else if (garden.bees <= 0) {
+    if (beeCaptureCount >= garden.numBees) {
         state = `endScreen`;
     }
 
-    else if (time <= 0) {
+    if (time <= 0) {
         state = `timeoutScreen`;
     }
 }
@@ -293,7 +276,7 @@ function gameOver() {
     // Draws the end screen
     textAlign(CENTER);
     textSize(65);
-    fill(0, 0, 0);
+    fill(255, 255, 255);
     text(`You ran out of bees.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
     // noLoop();
@@ -303,7 +286,7 @@ function outOfTime() {
     // Draws the end screen
     textAlign(CENTER);
     textSize(65);
-    fill(0, 0, 0);
+    fill(255, 255, 255);
     text(`You ran out of time.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
     // noLoop();

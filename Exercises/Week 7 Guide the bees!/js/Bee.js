@@ -10,7 +10,7 @@ class Bee {
         this.speed = 5;
         this.aX = 0;
         this.aY = 0;
-        this.acceleration = 2;
+        this.acceleration = 0.3;
         this.jitteriness = 0.1; // How likely the bee is to change direction
         this.alive = true;
     }
@@ -18,26 +18,19 @@ class Bee {
     // move() moves the bee by potentially changing direction
     // and then changing position based on velocity
     move() {
-        // First check if we should change direction
-        // let r = random(0, 1);
-        // if (r < this.jitteriness) {
-        //     this.vx = random(-this.speed, this.speed);
-        //     this.vy = random(-this.speed, this.speed);
-        // }
-
         // Update the bee's position with the velocity values
         this.x = this.x + this.vx;
         this.y = this.y + this.vy;
-        this.vx = this.vx + this.aX
-        this.vy = this.vy + this.aY
-        // this.aX = this.aX + this.acceleration
-        // this.aY = this.aY + this.acceleration
+        this.vx = this.vx + this.aX;
+        this.vy = this.vy + this.aY;
+        this.aX = this.aX + this.acceleration;
+        this.aY = this.aY + this.acceleration;
 
         // Constrain the bees to the canvas and constrain the speed and acceleration
         this.x = constrain(this.x, 0, width);
         this.y = constrain(this.y, 0, height);
-        // this.vx = constrain(this.vx, -this.speed, this.speed);
-        // this.vy = constrain(this.vx, -this.speed, this.speed);
+        this.vx = constrain(this.vx, -this.speed, this.speed);
+        this.vy = constrain(this.vy, -this.speed, this.speed);
         this.aX = constrain(this.aX, -this.acceleration, this.acceleration);
         this.aY = constrain(this.aY, -this.acceleration, this.acceleration);
     };
