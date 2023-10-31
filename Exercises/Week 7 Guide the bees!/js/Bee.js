@@ -19,11 +19,11 @@ class Bee {
     // and then changing position based on velocity
     move() {
         // First check if we should change direction
-        let r = random(0, 1);
-        if (r < this.jitteriness) {
-            this.vx = random(-this.speed, this.speed);
-            this.vy = random(-this.speed, this.speed);
-        }
+        // let r = random(0, 1);
+        // if (r < this.jitteriness) {
+        //     this.vx = random(-this.speed, this.speed);
+        //     this.vy = random(-this.speed, this.speed);
+        // }
 
         // Update the bee's position with the velocity values
         this.x = this.x + this.vx;

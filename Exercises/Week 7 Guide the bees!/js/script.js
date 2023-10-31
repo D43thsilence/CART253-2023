@@ -105,7 +105,9 @@ function setup() {
 // Displays our flowers
 function draw() {
     // Draws the title screen
-    titleScreen()
+    if (state === `title`) {
+        titleScreen()
+    }
 
     if (state === `game`) {
         // Display the grass
@@ -160,10 +162,10 @@ function draw() {
                 wasp.WaspChase(bee)
                 wasp.WaspCatch(bee)
             }
-            // for (let q = 0; i < garden.queenBee.length; q++) {
-            //     let queenBee = garden.queenBee[q];
-            //     wasp.WaspCatch(queenBee)
-            // }
+            for (let q = 0; i < garden.queenBee.length; q++) {
+                let queenBee = garden.queenBee[q];
+                wasp.WaspCatch(queenBee)
+            }
 
         }
 
