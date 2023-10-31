@@ -2,8 +2,7 @@
  * Title of Project
  * Author Name
  * 
- * This is a template. You must fill in the title, author, 
- * and this description to match your project!
+ * This program draws bees, a Queen bee, a wasp and flowers. The bees follow the Queen bee and collect nectar. The wasp chases the bees and captures them. This program works through the use of arrays.
  */
 
 "use strict";
@@ -34,13 +33,13 @@ let garden = {
     }
 };
 
-// Sets up the time variable
+// Sets up the time variable which will be used as a timer
 let time = 1800
 
 // Sets up the initial game state
 let state = `title`
 
-// Sets up the nectarCount variable
+// Sets up the nectarCount variable for counting the nectar taken from the flowers and the beeCaptureCount for the amount of bees caught by the wasp.
 let nectarCount = 0
 let beeCaptureCount = 0
 
@@ -49,9 +48,9 @@ function setup() {
     // Creates the canvas and sets up the initial position of the flowers in the garden
     createCanvas(windowWidth, windowHeight);
 
-    // Create our flowers by counting up to the number of the flowers
+    // Create our flowers by counting up to the numFlowers variable
     for (let i = 0; i < garden.numFlowers; i++) {
-        // Create variables for our arguments for clarity
+        // Gives values to the variables of the flower constructor
         let x = random(0, width);
         let y = random(0, height);
         let size = random(50, 80);
@@ -61,49 +60,49 @@ function setup() {
             g: random(100, 255),
             b: random(100, 255)
         }
-        // Create a new flower using the arguments
+        // Creates a new flower using the values
         let flower = new Flower(x, y, size, stemLength, petalColor);
-        // Add the flower to the array of flowers
+        // Adds the flower to the array of flowers
         garden.flowers.push(flower);
     }
 
     // Create our bees by counting up to the number of bees
     for (let i = 0; i < garden.numBees; i++) {
-        // Create variables for our arguments for clarity
+        // Gives values to the variables of the bee constructor
         let x = random(0, width / 2);
         let y = random(0, height / 2);
-        // Create a new bee using the arguments
+        // Creates a new bee using the values
         let bee = new Bee(x, y);
         // Add the bee to the array of bees
         garden.bees.push(bee);
     }
 
-    // Create our wasp
+    // Create the wasp
     for (let i = 0; i < garden.numWasp; i++) {
-        // Create variables for our arguments for clarity
+        // Gives values to the variables of the wasp constructor
         let x = random(width / 10 * 9, width);
         let y = random(height / 10 * 9, height);
-        // Create a new bee using the arguments
+        // Creates a new wasp using the values
         let wasp = new Wasp(x, y);
-        // Add the bee to the array of bees
+        // Add the wasp to the array of wasps
         garden.wasps.push(wasp);
     }
 
-    // Create our Queen bee
+    // Create the Queen bee
     for (let i = 0; i < garden.numQueenBee; i++) {
-        // Create variables for our arguments for clarity
+        // Gives values to the variables of the Queen bee constructor
         let x = random(0, width / 2);
         let y = random(0, height) / 2;
-        // Create a new bee using the arguments
+        // Creates a new Queen bee using the values
         let queenBee = new QueenBee(x, y);
-        // Add the bee to the array of bees
+        // Add the Queen bee to the array of Queen bees
         garden.queenBee.push(queenBee);
     }
 
 }
 
-// draw()
-// Displays our flowers
+
+
 function draw() {
     // Draws the title screen
     if (state === `title`) {
@@ -127,10 +126,10 @@ function draw() {
             }
         }
 
-        // Loop through all the bees in the array and display them
+        // Loops through all the bees in the array and displays them
         for (let i = 0; i < garden.bees.length; i++) {
             let bee = garden.bees[i];
-            // Check if the bee is still alive
+            // Checks if the bees is still alive
             if (bee.alive) {
                 // Moves the bees
                 for (let q = 0; q < garden.queenBee.length; q++) {
@@ -139,8 +138,7 @@ function draw() {
                     bee.move();
                 }
 
-                //Go through the entire flower array and allows the bees to collect the nectar of the flowers
-                // Note that we use j in our for-loop here because we're already inside a for-loop using i!
+                //Goes through the entire flower array and allows the bees to collect the nectar of the flowers
                 for (let j = 0; j < garden.flowers.length; j++) {
                     let flower = garden.flowers[j];
                     if (flower.nectarDry === false) {
@@ -149,9 +147,7 @@ function draw() {
                         if (d < bee.size / 2 + flower.size / 2 + flower.petalThickness) {
                             nectarCount = nectarCount + 1
                         }
-
                     }
-
                 }
                 // Display the bee
                 bee.display();
@@ -160,24 +156,21 @@ function draw() {
 
         for (let i = 0; i < garden.wasps.length; i++) {
             let wasp = garden.wasps[i];
-            // Draws and moves the wasp
+            // Draws and moves the wasp towards the bees
             wasp.display();
-
             for (let b = 0; b < garden.bees.length; b++) {
                 let bee = garden.bees[b];
-                wasp.WaspChase(bee)
-                wasp.WaspCatch(bee)
-                wasp.move();
-                console.log(beeCaptureCount)
-                for (let b = 0; b < garden.bees.length; b++) {
-                    let bee = garden.bees[b];
-                    if (bee.alive) {
-                        let d = dist(wasp.x, wasp.y, bee.x, bee.y);
-                        // If the wasp and the bee overlap, the bee gets caught.
-                        if (d < wasp.size / 2 + bee.size / 2) {
-                            beeCaptureCount = beeCaptureCount + 1
-                        };
-                    }
+                if (bee.alive === true) {
+                    wasp.WaspChase(bee)
+                    wasp.WaspCatch(bee)
+                    wasp.move();
+                    console.log(beeCaptureCount)
+
+                    let d = dist(wasp.x, wasp.y, bee.x, bee.y);
+                    // If the wasp and the bee overlap, the bee gets caught.
+                    if (d < wasp.size / 2 + bee.size / 2) {
+                        beeCaptureCount = beeCaptureCount + 1
+                    };
                 }
             }
         }
@@ -194,8 +187,8 @@ function draw() {
 
         // Call all of the extra functions that do not rely on for loops
         timeLimit()
-        gameEndConditions()
         gameInfo()
+        gameEndConditions()
 
     }
 
@@ -217,7 +210,7 @@ function draw() {
 function titleScreen() {
     // Draws the title screen
     background(0, 200, 225)
-    // textFont(`Playpen Sans`);
+    textFont(`Agbalumo`);
     textAlign(CENTER);
     textSize(62);
     fill(0);
@@ -231,21 +224,13 @@ function titleScreen() {
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
 }
 
-function mouseClicked() {
-    // Initiates the game
-    if (state === `title`) {
-        state = `game`;
-        // gameStartSFX.play();
-    }
-}
-
 function timeLimit() {
     // Counts down the time
     time = time - 1;
 }
 
 function gameInfo() {
-    // Writes the nectarCount, fishCount and time on the screen
+    // Writes the nectarCount and time on the screen
     textAlign(CENTER)
     textSize(62);
     fill(225, 225, 0);
@@ -279,7 +264,6 @@ function gameOver() {
     fill(255, 255, 255);
     text(`You ran out of bees.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
-    // noLoop();
 }
 
 function outOfTime() {
@@ -289,7 +273,6 @@ function outOfTime() {
     fill(255, 255, 255);
     text(`You ran out of time.`, windowWidth / 2, windowHeight / 2);
     // gameLoseSFX.play();
-    // noLoop();
 }
 
 function gameComplete() {
@@ -301,4 +284,12 @@ function gameComplete() {
     text(`You collected all of the nectar!`, windowWidth / 2, windowHeight / 2);
     // gameWinSFX.play();
     // noLoop();
+}
+
+function mouseClicked() {
+    // Initiates the game by switching states
+    if (state === `title`) {
+        state = `game`;
+        // gameStartSFX.play();
+    }
 }
