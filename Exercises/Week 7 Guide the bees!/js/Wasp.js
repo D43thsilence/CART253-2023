@@ -92,15 +92,5 @@ class Wasp {
             bee.BeeCaught()
         };
     }
-
-    WaspCatch(queenBee) {
-        //Calcuates the distance between the wasp and the bee.
-        let r = dist(this.x, this.y, queenBee.x, queenBee.y);
-        // If the wasp and the bee overlap, the bee gets caught.
-        if (r < this.size / 2 + queenBee.size / 2) {
-            queenBee.BeeCaught()
-        };
-    }
-
 }
 

@@ -27,9 +27,9 @@ let garden = {
     numQueenBee: 1,
     // The color of the grass (background)
     grassColor: {
-        r: 120,
-        g: 180,
-        b: 120
+        r: 0,
+        g: 190,
+        b: 50
     }
 };
 
@@ -209,7 +209,7 @@ function draw() {
 
 function titleScreen() {
     // Draws the title screen
-    background(0, 200, 225)
+    background(0, 190, 50)
     textFont(`Agbalumo`);
     textAlign(CENTER);
     textSize(62);
@@ -283,7 +283,6 @@ function gameComplete() {
     fill(0, 0, 0);
     text(`You collected all of the nectar!`, windowWidth / 2, windowHeight / 2);
     // gameWinSFX.play();
-    // noLoop();
 }
 
 function mouseClicked() {

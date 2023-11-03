@@ -59,4 +59,10 @@ class QueenBee {
         pop();
     };
 
+    BeeCaught() {
+        if (this.alive === true) {
+            this.alive = false
+        }
+    };
+
 }
