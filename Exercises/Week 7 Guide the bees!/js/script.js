@@ -63,8 +63,8 @@ function setup() {
     // Create our flowers by counting up to the numFlowers variable
     for (let i = 0; i < garden.numFlowers; i++) {
         // Gives values to the variables of the flower constructor
-        let x = random(0, width);
-        let y = random(0, height);
+        let x = random(width / 10, width / 10 * 9);
+        let y = random(height / 10, height / 10 * 9);
         let size = random(50, 80);
         let stemLength = random(50, 100);
         let petalColor = {
