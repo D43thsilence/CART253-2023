@@ -1,6 +1,6 @@
 /**
- * Title of Project
- * Author Name
+ * Guide the bees!
+ * Malcolm Siné Tadonki
  * 
  * This program draws bees, a Queen bee, a wasp and flowers. The bees follow the Queen bee and collect nectar. The wasp chases the bees and captures them. This program works through the use of arrays.
  */
@@ -42,6 +42,18 @@ let state = `title`
 // Sets up the nectarCount variable for counting the nectar taken from the flowers and the beeCaptureCount for the amount of bees caught by the wasp.
 let nectarCount = 0
 let beeCaptureCount = 0
+
+// Sets up the variables used for sound
+let gameStartSFX
+let gameWinSFX
+let gameLoseSFX
+
+// This function preloads the sounds and assigns them to variables
+function preload() {
+    gameStartSFX = loadSound(`assets/sounds/SE_MENU_SYS_GameStart.ogg`);
+    gameWinSFX = loadSound(`assets/sounds/SE_SYS_Lobby_Fishing_Guaranteed.ogg`);
+    gameLoseSFX = loadSound(`assets/sounds/SE_SYS_Misson_Falled.ogg`);
+}
 
 
 function setup() {
@@ -110,10 +122,10 @@ function draw() {
     }
 
     if (state === `game`) {
-        // Display the grass
+        // Displays the grass
         background(garden.grassColor.r, garden.grassColor.g, garden.grassColor.b);
 
-        // Loop through all the flowers in the array and display them
+        // Loops through all the flowers in the array and displays them
         for (let i = 0; i < garden.flowers.length; i++) {
             let flower = garden.flowers[i];
             // Check if this flower still has nectar and colors it appropriately
@@ -123,6 +135,28 @@ function draw() {
             }
             else {
                 flower.display();
+            }
+        }
+
+
+        for (let i = 0; i < garden.wasps.length; i++) {
+            let wasp = garden.wasps[i];
+            // Draws and moves the wasp towards the bees
+            wasp.display();
+            for (let b = 0; b < garden.bees.length; b++) {
+                let bee = garden.bees[b];
+                if (bee.alive === true) {
+                    wasp.WaspChase(bee)
+                    wasp.WaspCatch(bee)
+                    wasp.move();
+                    console.log(beeCaptureCount)
+
+                    let d = dist(wasp.x, wasp.y, bee.x, bee.y);
+                    // If the wasp and the bee overlap, the bee gets caught.
+                    if (d < wasp.size / 2 + bee.size / 2) {
+                        beeCaptureCount = beeCaptureCount + 1
+                    };
+                }
             }
         }
 
@@ -151,27 +185,6 @@ function draw() {
                 }
                 // Display the bee
                 bee.display();
-            }
-        }
-
-        for (let i = 0; i < garden.wasps.length; i++) {
-            let wasp = garden.wasps[i];
-            // Draws and moves the wasp towards the bees
-            wasp.display();
-            for (let b = 0; b < garden.bees.length; b++) {
-                let bee = garden.bees[b];
-                if (bee.alive === true) {
-                    wasp.WaspChase(bee)
-                    wasp.WaspCatch(bee)
-                    wasp.move();
-                    console.log(beeCaptureCount)
-
-                    let d = dist(wasp.x, wasp.y, bee.x, bee.y);
-                    // If the wasp and the bee overlap, the bee gets caught.
-                    if (d < wasp.size / 2 + bee.size / 2) {
-                        beeCaptureCount = beeCaptureCount + 1
-                    };
-                }
             }
         }
 
@@ -263,7 +276,8 @@ function gameOver() {
     textSize(65);
     fill(255, 255, 255);
     text(`You ran out of bees.`, windowWidth / 2, windowHeight / 2);
-    // gameLoseSFX.play();
+    gameLoseSFX.play();
+    noloop()
 }
 
 function outOfTime() {
@@ -272,23 +286,25 @@ function outOfTime() {
     textSize(65);
     fill(255, 255, 255);
     text(`You ran out of time.`, windowWidth / 2, windowHeight / 2);
-    // gameLoseSFX.play();
+    gameLoseSFX.play();
+    noloop()
 }
 
 function gameComplete() {
     // Draws victory screen
-    background(0, 200, 225);
+    background(0, 190, 50);
     textAlign(CENTER);
     textSize(65);
     fill(0, 0, 0);
     text(`You collected all of the nectar!`, windowWidth / 2, windowHeight / 2);
-    // gameWinSFX.play();
+    gameWinSFX.play();
+    noloop()
 }
 
 function mouseClicked() {
     // Initiates the game by switching states
     if (state === `title`) {
         state = `game`;
-        // gameStartSFX.play();
+        gameStartSFX.play();
     }
 }
