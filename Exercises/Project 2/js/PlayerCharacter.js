@@ -11,6 +11,7 @@ class PlayerCharacter {
         this.aY = 0;
         this.acceleration = 2;
         this.alive = true;
+        this.lifeCount = 100
     }
 
     // display() draws the enemy onto the canvas
@@ -75,4 +76,10 @@ class PlayerCharacter {
         }
     }
 
+    defeated() {
+        if (this.lifeCount <= 0) {
+            this.alive === false
+        }
+        console.log(this.alive)
+    }
 }

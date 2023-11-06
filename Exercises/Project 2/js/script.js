@@ -113,8 +113,6 @@ function draw() {
                 enemyCharacter.neutralPosition();
                 enemyCharacter.defeated();
             }
-
-            console.log(enemyCharacter.alive)
         }
 
         chargeIncrease()
@@ -136,6 +134,7 @@ function draw() {
             if (playerCharacter.alive) {
                 playerCharacter.display();
                 playerCharacter.neutralPosition();
+                playerCharacter.defeated();
             }
         }
 
@@ -158,11 +157,11 @@ function draw() {
 
 
     // Draws the end screens
-    else if (state === `endScreen`) {
+    if (state === `endScreen`) {
         gameOver();
     }
 
-    else if (state === `winScreen`) {
+    if (state === `winScreen`) {
         gameComplete();
     }
 }
@@ -199,7 +198,7 @@ function titleScreen() {
 function mouseClicked() {
     // Initiates the game
     if (state === `title`) {
-        state = `playerTurn`;
+        state = `enemyTurn`;
         // gameStartSFX.play();
     }
 }
@@ -210,14 +209,13 @@ function chargeIncrease() {
         if (playerCharacter.alive === true) {
             chargeCount = chargeCount + random(5, 50)
             chargeCount = constrain(chargeCount, 0, 200)
-            console.log(chargeCount);
         }
     }
 }
 
 
 function gameInfo() {
-    // Writes the nectarCount, fishCount and time on the screen
+    // Writes the lifeCount of the player, the enemy and the player's chargeCount
     textAlign(CENTER)
     textSize(62);
     fill(240, 240, 150);
@@ -231,15 +229,13 @@ function gameInfo() {
         text(enemyCharacter.lifeCount, windowWidth / 8 * 7, windowHeight / 8);
     }
 
-    // textAlign(CENTER)
-    // textSize(62);
-    // fill(225, 0, 0);
-    // text(enemyLifeCount, windowWidth / 8 * 7, windowHeight / 8);
-
-    textAlign(CENTER)
-    textSize(62);
-    fill(100, 200, 50);
-    text(playerLifeCount, windowWidth / 8, windowHeight / 8);
+    for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+        let playerCharacter = playerCharacterTeam.characters[i];
+        textAlign(CENTER)
+        textSize(62);
+        fill(100, 200, 50);
+        text(playerCharacter.lifeCount, windowWidth / 8, windowHeight / 8);
+    }
 }
 
 function gameEndConditions() {
@@ -255,10 +251,16 @@ function gameEndConditions() {
         }
     }
 
+    for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+        let playerCharacter = playerCharacterTeam.characters[i];
+        if (playerCharacter.alive === false) {
+            state = `endScreen`;
+        }
 
-    // else if (playerCharacterTeam.playerCharacter.alive === false) {
-    //     state = `endScreen`;
-    // }
+        if (playerCharacter.lifeCount <= 0) {
+            state = `endScreen`;
+        }
+    }
 }
 
 function gameOver() {
