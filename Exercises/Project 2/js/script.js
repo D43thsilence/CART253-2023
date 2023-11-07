@@ -1,5 +1,5 @@
 /**
- * Project 2
+ * Fateful Encounter
  * Malcolm Siné Tadonki
  * 
  * This project is a battle simulator, use your skills appropriately in order to defeat a powerful foe!
@@ -20,14 +20,16 @@ let enemyTeam = {
     numEnemies: 1
 }
 
-// Sets up the chargeCount variable
+// Sets up the chargeCount and roundOffChargeCount variable used to mesure the player's charge level
 let chargeCount = 0
+let roundOffChargeCount = 0
 
-// Sets up the playerLifeCount variable
+// Sets up the playerLifeCount variable used to display the player's life points
 let playerLifeCount = 100
 
-// Sets up the enemyLifeCount variable
+// Sets up the enemyLifeCount and roundOffEnemyLifeCount variable used to display the enemy's life points
 let enemyLifeCount = 100
+let roundOffEnemyLifeCount = 0
 
 // Sets up the initial game state
 let state = `title`
@@ -42,6 +44,7 @@ function preload() {
 
 /**
  * Description of setup
+ * Creates the canvas, creates the player character and the enemy character.
 */
 function setup() {
     // Creates the canvas
@@ -95,13 +98,15 @@ function draw() {
 
             if (playerCharacter.alive) {
                 playerCharacter.display();
-                playerCharacter.attackSelection();
-                playerCharacter.neutralPosition();
+                let attacked = playerCharacter.attackSelection();
+                if (attacked) {
+                    state = `enemyTurn`
+                }
+                setTimeout(enemyTurnSwitch, 2000)
+                setTimeout(playerCharacter.neutralPosition, 2000);
             }
 
-            else if (playerCharacter.simpleSwing()) {
-                state === `enemyTurn`
-            }
+
         }
 
         // Draws the enemy character
@@ -115,7 +120,7 @@ function draw() {
             }
         }
 
-        chargeIncrease()
+        // chargeIncrease()
         gameInfo()
         gameEndConditions()
 
@@ -125,7 +130,7 @@ function draw() {
 
     else if (state === `enemyTurn`) {
 
-        background(225, 225, 225)
+        background(225, 225, 150)
 
         // Draws the player's character
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
@@ -143,8 +148,11 @@ function draw() {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
                 enemyCharacter.display();
-                enemyCharacter.attackSelection()
-                enemyCharacter.neutralPosition();
+                let attacked = enemyCharacter.attackSelection();
+                if (!attacked) {
+                    state = `playerTurn`
+                }
+                setTimeout(enemyCharacter.neutralPosition(), 2000);
             }
         }
 
@@ -198,7 +206,7 @@ function titleScreen() {
 function mouseClicked() {
     // Initiates the game
     if (state === `title`) {
-        state = `enemyTurn`;
+        state = `playerTurn`;
         // gameStartSFX.play();
     }
 }
@@ -209,6 +217,20 @@ function chargeIncrease() {
         if (playerCharacter.alive === true) {
             chargeCount = chargeCount + random(5, 50)
             chargeCount = constrain(chargeCount, 0, 200)
+            roundOffChargeCount = chargeCount.toFixed();
+            roundOffChargeCount = constrain(roundOffChargeCount, 0, 200)
+        }
+    }
+}
+
+function enemyTurnSwitch() {
+    for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+        let playerCharacter = playerCharacterTeam.characters[i];
+        if (playerCharacter.alive) {
+            let attacked = playerCharacter.attackSelection();
+            if (attacked) {
+                state = `enemyTurn`
+            }
         }
     }
 }
@@ -219,14 +241,16 @@ function gameInfo() {
     textAlign(CENTER)
     textSize(62);
     fill(240, 240, 150);
-    text(chargeCount, windowWidth / 8 * 3, windowHeight / 8);
+    text(roundOffChargeCount, windowWidth / 8 * 3, windowHeight / 8);
 
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
-        textAlign(CENTER)
+        roundOffEnemyLifeCount = enemyCharacter.lifeCount.toFixed();
+        roundOffEnemyLifeCount = constrain(roundOffEnemyLifeCount, 0, 100)
+        textAlign(CENTER);
         textSize(62);
         fill(225, 0, 0);
-        text(enemyCharacter.lifeCount, windowWidth / 8 * 7, windowHeight / 8);
+        text(roundOffEnemyLifeCount, windowWidth / 8 * 7, windowHeight / 8);
     }
 
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {

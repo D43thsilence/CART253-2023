@@ -58,7 +58,7 @@ class Enemy {
         if (this.lifeCount <= 0) {
             this.alive === false
         }
-        console.log(this.alive)
+        // console.log(this.alive)
     }
 
 

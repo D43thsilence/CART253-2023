@@ -27,10 +27,11 @@ class PlayerCharacter {
     }
 
 
-    attackSelection() {
+    attackSelection(attacked) {
         // Uses key presses to select which attack to use
         if (keyIsDown(LEFT_ARROW)) {
             this.simpleSwing()
+            return true
         }
 
         else if (keyIsDown(RIGHT_ARROW)) {
@@ -44,6 +45,10 @@ class PlayerCharacter {
         else if (keyIsDown(40)) {
             this.chargeSkill()
         }
+        else {
+            return false
+        }
+
     }
 
     simpleSwing() {
@@ -52,9 +57,9 @@ class PlayerCharacter {
             if (enemyCharacter.alive) {
                 this.x = enemyCharacter.x - 20
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
+                chargeCount + 10
             }
         }
-        console.log(`hello`)
     }
 
     powerfulSwing() {
@@ -80,6 +85,6 @@ class PlayerCharacter {
         if (this.lifeCount <= 0) {
             this.alive === false
         }
-        console.log(this.alive)
+        // console.log(this.alive)
     }
 }
