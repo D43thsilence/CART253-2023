@@ -31,6 +31,9 @@ let playerLifeCount = 100
 let enemyLifeCount = 100
 let roundOffEnemyLifeCount = 0
 
+let playerAttackCheck = false
+let enemyAttackCheck = false
+
 // Sets up the initial game state
 let state = `title`
 
@@ -86,41 +89,47 @@ function draw() {
     // Draws the title screen
     titleScreen();
 
-    console.log(state)
-
     if (state === `playerTurn`) {
 
-        background(225, 225, 225)
+        // Draws the background
+        background(225, 225, 225);
 
-        // Draws the player's character
-        for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
-            let playerCharacter = playerCharacterTeam.characters[i];
-
-            if (playerCharacter.alive) {
-                playerCharacter.display();
-                let attacked = playerCharacter.attackSelection();
-                if (attacked) {
-                    state = `enemyTurn`
-                }
-                setTimeout(enemyTurnSwitch, 2000)
-                setTimeout(playerCharacter.neutralPosition, 2000);
-            }
+        // Resets the enemyAttackCheck value to allow the enemy to attack agan once it will be their turn
+        enemyAttackCheck = false;
 
 
-        }
 
         // Draws the enemy character
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
 
             if (enemyCharacter.alive) {
-                enemyCharacter.display()
+                enemyCharacter.display();
                 enemyCharacter.neutralPosition();
                 enemyCharacter.defeated();
             }
         }
 
-        // chargeIncrease()
+        // Draws the player's character and allows them to attack
+        for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+            let playerCharacter = playerCharacterTeam.characters[i];
+
+            if (playerCharacter.alive) {
+                playerCharacter.display();
+
+                if (playerAttackCheck === false) {
+                    let attacked = playerCharacter.attackSelection();
+
+                    if (attacked) {
+                        setTimeout(enemyTurnSwitch, 2000);
+                        setTimeout(playerCharacter.neutralPosition, 2000);
+                        playerAttackCheck = true;
+                    }
+                }
+
+            }
+        }
+        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches stat if one of the game's end conditions are met
         gameInfo()
         gameEndConditions()
 
@@ -130,7 +139,11 @@ function draw() {
 
     else if (state === `enemyTurn`) {
 
-        background(225, 225, 150)
+        // Draws the background
+        background(150, 225, 225);
+
+        // Resets the playerAttackCheck value to allow the player to attack once it will be their turn
+        playerAttackCheck = false;
 
         // Draws the player's character
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
@@ -143,23 +156,27 @@ function draw() {
             }
         }
 
-        // Draws the enemy character
+        // Draws the enemy character and allows them to attack
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
-                enemyCharacter.display();
-                let attacked = enemyCharacter.attackSelection();
-                if (!attacked) {
-                    state = `playerTurn`
+                if (enemyAttackCheck === false) {
+                    let attacked = enemyCharacter.attackSelection();
+
+                    if (attacked) {
+                        setTimeout(playerTurnSwitch, 2000);
+                        enemyAttackCheck = true;
+                        // Increases the player's charge count
+                        chargeIncrease();
+                    }
                 }
-                setTimeout(enemyCharacter.neutralPosition(), 2000);
+                enemyCharacter.display();
             }
         }
 
-
-        chargeIncrease()
-        gameInfo()
-        gameEndConditions()
+        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches stat if one of the game's end conditions are met
+        gameInfo();
+        gameEndConditions();
     }
 
 
@@ -185,7 +202,7 @@ function titleScreen() {
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
-    text(`Use (insert buttons) to execute attacks  `, windowWidth / 2, windowHeight / 2 + 100);
+    text(`Use the arrow keys to execute attacks: left for a simple swing, right for a powerful swing, up for an ultimate attack and down for a skill that consumes the yellow charge count. `, windowWidth / 2, windowHeight / 2 + 100);
     fill(0, 0, 0);
     textSize(30);
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
@@ -224,15 +241,11 @@ function chargeIncrease() {
 }
 
 function enemyTurnSwitch() {
-    for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
-        let playerCharacter = playerCharacterTeam.characters[i];
-        if (playerCharacter.alive) {
-            let attacked = playerCharacter.attackSelection();
-            if (attacked) {
-                state = `enemyTurn`
-            }
-        }
-    }
+    state = `enemyTurn`
+}
+
+function playerTurnSwitch() {
+    state = `playerTurn`
 }
 
 
@@ -299,7 +312,6 @@ function gameOver() {
 
 function gameComplete() {
     // Draws victory screen
-    background(0, 200, 225);
     textAlign(CENTER);
     textSize(65);
     fill(0, 0, 0);

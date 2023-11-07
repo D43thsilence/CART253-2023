@@ -16,7 +16,7 @@ class PlayerCharacter {
 
     // display() draws the enemy onto the canvas
     display() {
-        fill(225, 225, 50);
+        fill(150, 225, 50);
         noStroke();
         ellipse(this.x, this.y, this.size);
     }
@@ -27,7 +27,7 @@ class PlayerCharacter {
     }
 
 
-    attackSelection(attacked) {
+    attackSelection() {
         // Uses key presses to select which attack to use
         if (keyIsDown(LEFT_ARROW)) {
             this.simpleSwing()
@@ -36,14 +36,17 @@ class PlayerCharacter {
 
         else if (keyIsDown(RIGHT_ARROW)) {
             this.powerfulSwing()
+            return true
         }
 
         else if (keyIsDown(38)) {
             this.ultimateSwing()
+            return true
         }
 
         else if (keyIsDown(40)) {
             this.chargeSkill()
+            return true
         }
         else {
             return false
@@ -57,7 +60,7 @@ class PlayerCharacter {
             if (enemyCharacter.alive) {
                 this.x = enemyCharacter.x - 20
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
-                chargeCount + 10
+                chargeIncrease()
             }
         }
     }

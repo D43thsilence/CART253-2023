@@ -35,10 +35,11 @@ class Enemy {
 
 
     attackSelection() {
-        // Generates a random number and from that number the program decides what attack to use
-        let r = random(0, 1);
+        // Generates a random number and from that number the function decides what attack to use
+        let r = random(0, 0.3);
         if (r >= 0, r <= this.weakAttack) {
             this.simpleSwing()
+            return true
         }
 
         else if (r > this.weakAttack, r <= this.strongAttack) {
@@ -51,6 +52,10 @@ class Enemy {
 
         else if (r > this.powerfulAttack, r <= this.ultimateAttack) {
 
+        }
+
+        else {
+            return false
         }
     }
 
@@ -65,8 +70,10 @@ class Enemy {
     simpleSwing() {
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
+
             if (playerCharacter.alive) {
                 this.x = playerCharacter.x + 20
+                console.log(this.x)
                 playerCharacter.lifeCount = playerCharacter.lifeCount - 5
             }
         }
