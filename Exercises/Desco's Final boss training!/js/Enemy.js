@@ -4,7 +4,9 @@ class Enemy {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 120;
+        this.neutralX = x;
+        this.neutralY = y;
+        this.size = 400;
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -22,15 +24,24 @@ class Enemy {
 
     // display() draws the enemy onto the canvas
     display() {
-        fill(225, 225, 50);
-        noStroke();
-        ellipse(this.x, this.y, this.size);
+        for (let i = 0; i < enemyTeam.enemies.length; i++) {
+            if (i === 0) {
+                imageMode(CENTER)
+                image(ValvatorezIdle, this.x, this.y, this.size, this.size);
+            }
+
+            // else if (i > 0) {
+            //     fill(225, 225, 50);
+            //     noStroke();
+            //     ellipse(this.x, this.y, this.size)
+            // }
+        }
     }
 
 
     neutralPosition() {
-        this.x = windowWidth / 4 * 3;
-        this.y = windowHeight / 4 * 3;
+        this.x = this.neutralX;
+        this.y = this.neutralY;
     }
 
 
@@ -73,7 +84,6 @@ class Enemy {
 
             if (playerCharacter.alive) {
                 this.x = playerCharacter.x + 20
-                console.log(this.x)
                 playerCharacter.lifeCount = playerCharacter.lifeCount - 5
             }
         }

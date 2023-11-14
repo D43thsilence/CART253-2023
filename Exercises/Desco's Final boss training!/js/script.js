@@ -1,8 +1,8 @@
 /**
- * Fateful Encounter
+ * Desco's final boss training
  * Malcolm Siné Tadonki
  * 
- * This project is a battle simulator, use your skills appropriately in order to defeat a powerful foe!
+ * This project is a battle simulator, use your skills appropriately in order to defeat many enemies.
  */
 
 "use strict";
@@ -17,7 +17,7 @@ let playerCharacterTeam = {
 // Creates an array for the enemy character
 let enemyTeam = {
     enemies: [],
-    numEnemies: 1
+    numEnemies: 4
 }
 
 // Sets up the chargeCount and roundOffChargeCount variable used to mesure the player's charge level
@@ -31,17 +31,29 @@ let playerLifeCount = 100
 let enemyLifeCount = 100
 let roundOffEnemyLifeCount = 0
 
+// Sets up the playerAttackCheck and enemyAttackCheck variables used to limit the actions of both sides when it is their turn
 let playerAttackCheck = false
 let enemyAttackCheck = false
+
+// Sets up the variables required for Desco's animations
+let DescoIdle
+let DescoSwing
+
+// Sets up the variables required for Valvatorez's animations
+let ValvatorezIdle
 
 // Sets up the initial game state
 let state = `title`
 
 /**
- * Description of preload
+ * Preloads all images required for the program
 */
 function preload() {
-
+    // Desco's images
+    DescoIdle = loadImage('assets/images/Desco/Desco Idle.gif');
+    DescoSwing = loadImage('assets/images/Desco/Desco Swing.gif')
+    // Valvatorez's images
+    ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
 }
 
 
@@ -68,12 +80,12 @@ function setup() {
     // Sets the variables for the enemy character's creation
     for (let i = 0; i < enemyTeam.numEnemies; i++) {
         // Assign variables for the arguments
-        let x = windowWidth / 4 * 3;
-        let y = windowHeight / 4 * 3;
+        let x = windowWidth / 4 * 3 + i * 80;
+        let y = windowHeight / 4 * 3 - i * 20;
 
         // Create the player character 
         let enemyCharacter = new Enemy(x, y);
-        // Add the player's character to the array of player characters
+        // Add the enemy's character to the array of player characters
         enemyTeam.enemies.push(enemyCharacter);
     }
 
@@ -202,7 +214,8 @@ function titleScreen() {
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
-    text(`Use the arrow keys to execute attacks: left for a simple swing, right for a powerful swing, up for an ultimate attack and down for a skill that consumes the yellow charge count. `, windowWidth / 2, windowHeight / 2 + 100);
+    text(`Use the arrow keys to execute attacks.`, windowWidth / 2, windowHeight / 2 + 100);
+    text(` Left for a simple swing, right for a powerful swing, up for an ultimate attack and down for a skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 2 + 130)
     fill(0, 0, 0);
     textSize(30);
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);

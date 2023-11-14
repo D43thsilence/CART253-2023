@@ -3,7 +3,7 @@ class PlayerCharacter {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 120;
+        this.size = 400;
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -14,11 +14,11 @@ class PlayerCharacter {
         this.lifeCount = 100
     }
 
-    // display() draws the enemy onto the canvas
+    // display() draws the player onto the canvas
     display() {
         fill(150, 225, 50);
         noStroke();
-        ellipse(this.x, this.y, this.size);
+        image(DescoIdle, this.x, this.y, this.size, this.size);
     }
 
     neutralPosition() {
@@ -57,8 +57,9 @@ class PlayerCharacter {
     simpleSwing() {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
-            if (enemyCharacter.alive) {
-                this.x = enemyCharacter.x - 20
+            if (enemyCharacter.alive, i === 0) {
+                image(DescoSwing, this.x, this.y, this.size, this.size)
+                this.x = enemyCharacter.neutralX - 20
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
                 chargeIncrease()
             }
