@@ -6,7 +6,8 @@ class Enemy {
         this.y = y;
         this.neutralX = x;
         this.neutralY = y;
-        this.size = 400;
+        this.sizeX = 150;
+        this.sizeY = 180
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -27,14 +28,20 @@ class Enemy {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             if (i === 0) {
                 imageMode(CENTER)
-                image(ValvatorezIdle, this.x, this.y, this.size, this.size);
+                image(ValvatorezIdle, this.x, this.y, this.sizeX, this.sizeY);
             }
 
-            // else if (i > 0) {
-            //     fill(225, 225, 50);
-            //     noStroke();
-            //     ellipse(this.x, this.y, this.size)
-            // }
+            if (i === 1) {
+                image(FenrichIdle, this.x, this.y, this.sizeX, this.sizeY);
+            }
+
+            if (i === 2) {
+                image(ArtinaIdle, this.x, this.y, this.sizeX, this.sizeY);
+            }
+
+            if (i === 3) {
+                image(EmizelIdle, this.x, this.y, this.sizeX, this.sizeY);
+            }
         }
     }
 

@@ -35,17 +35,22 @@ class PlayerCharacter {
         }
 
         else if (keyIsDown(RIGHT_ARROW)) {
-            this.powerfulSwing()
+            this.bladeSwipe()
             return true
         }
 
         else if (keyIsDown(38)) {
-            this.ultimateSwing()
+            this.finalBossArises()
+            return true
+        }
+
+        else if (keyIsDown(50)) {
+            this.trueGodlyWeapon()
             return true
         }
 
         else if (keyIsDown(40)) {
-            this.chargeSkill()
+            this.trueDarkRelease()
             return true
         }
         else {
@@ -66,15 +71,27 @@ class PlayerCharacter {
         }
     }
 
-    powerfulSwing() {
+    bladeSwipe() {
+        for (let i = 0; i < enemyTeam.enemies.length; i++) {
+            let enemyCharacter = enemyTeam.enemies[i];
+            if (enemyCharacter.alive, i === 0) {
+                image(DescoBlade, this.x, windowHeight / 2, this.size, this.size)
+                this.x = enemyCharacter.neutralX - 20
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
+                chargeIncrease()
+            }
+        }
+    }
+
+    finalBossArises() {
 
     }
 
-    ultimateSwing() {
+    trueGodlyWeapon() {
 
     }
 
-    chargeSkill() {
+    trueDarkRelease() {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {

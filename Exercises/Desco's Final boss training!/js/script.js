@@ -38,9 +38,22 @@ let enemyAttackCheck = false
 // Sets up the variables required for Desco's animations
 let DescoIdle
 let DescoSwing
+let DescoBlade
 
 // Sets up the variables required for Valvatorez's animations
 let ValvatorezIdle
+
+// Sets up the variables required for Artina's animations
+let ArtinaIdle
+
+// Sets up the variables required for Fenrich's animations
+let FenrichIdle
+
+// Sets up the variables required for Emizel's animations
+let EmizelIdle
+
+// Sets up the variable required for the background
+let backgroundImage
 
 // Sets up the initial game state
 let state = `title`
@@ -52,8 +65,17 @@ function preload() {
     // Desco's images
     DescoIdle = loadImage('assets/images/Desco/Desco Idle.gif');
     DescoSwing = loadImage('assets/images/Desco/Desco Swing.gif')
+    DescoBlade = loadImage('assets/images/Desco/Desco Blade.png')
     // Valvatorez's images
     ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
+    // Artina's images
+    ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif')
+    // Fenrich's images
+    FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Bow.gif')
+    // Emizel's images
+    EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif')
+    // background image
+    backgroundImage = loadImage('assets/images/Forest Path.png')
 }
 
 
@@ -104,7 +126,8 @@ function draw() {
     if (state === `playerTurn`) {
 
         // Draws the background
-        background(225, 225, 225);
+        imageMode(CENTER);
+        image(backgroundImage, width / 2, height / 2, width, height);
 
         // Resets the enemyAttackCheck value to allow the enemy to attack agan once it will be their turn
         enemyAttackCheck = false;
@@ -152,7 +175,8 @@ function draw() {
     else if (state === `enemyTurn`) {
 
         // Draws the background
-        background(150, 225, 225);
+        imageMode(CENTER);
+        image(backgroundImage, width / 2, height / 2, width, height);
 
         // Resets the playerAttackCheck value to allow the player to attack once it will be their turn
         playerAttackCheck = false;
