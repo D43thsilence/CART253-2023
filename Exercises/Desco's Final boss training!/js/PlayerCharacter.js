@@ -11,24 +11,28 @@ class PlayerCharacter {
         this.aY = 0;
         this.acceleration = 2;
         this.alive = true;
-        this.lifeCount = 100
+        this.lifeCount = 100;
+        this.idleImage = DescoIdle;
+        this.simpleSwingImage = DescoSwing;
+        this.image = this.idleImage;
     }
 
     // display() draws the player onto the canvas
     display() {
-        if (playerAttackCheck === false) {
-            image(DescoIdle, this.x, this.y, this.size, this.size);
-        }
+        image(this.image, this.x, this.y, this.size, this.size);
 
-        if (playerAttackCheck === true) {
-            image(DescoSwing, this.x, this.y, this.size, this.size);
+        if (DescoSwing.getCurrentFrame() === descoSwingFrames - 1) {
+            DescoSwing.pause();
+            setTimeout(() => {
+                DescoSwing.setFrame(0)
+            }, 2000);
         }
-
     }
 
     neutralPosition() {
         this.x = windowWidth / 4;
         this.y = windowHeight / 4 * 3;
+        this.image = this.idleImage
     }
 
 
@@ -36,47 +40,50 @@ class PlayerCharacter {
         // Uses key presses to select which attack to use
         if (keyIsDown(LEFT_ARROW)) {
             this.simpleSwing()
-            return true
+            return `simpleSwing`
         }
 
         else if (keyIsDown(RIGHT_ARROW)) {
-            this.bladeSwipe()
-            return true
-        }
-
-        else if (keyIsDown(38)) {
             this.finalBossArises()
             return true
         }
 
-        else if (keyIsDown(50)) {
+        else if (keyIsDown(38)) {
             this.trueGodlyWeapon()
             return true
         }
 
-        else if (keyIsDown(40)) {
+        else if (keyIsDown(50)) {
             this.trueDarkRelease()
             return true
         }
+
         else {
-            return false
+            return `none`
         }
 
     }
 
     simpleSwing() {
+
+        this.image = this.simpleSwingImage
+        DescoSwing.play()
+
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
                 this.x = enemyCharacter.neutralX - 20
-                image(DescoSwing, this.x, this.y, this.size, this.size)
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
                 chargeIncrease()
             }
         }
     }
 
-    bladeSwipe() {
+    finalBossArises() {
+
+    }
+
+    trueGodlyWeapon() {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
@@ -87,14 +94,6 @@ class PlayerCharacter {
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 10
             }
         }
-    }
-
-    finalBossArises() {
-
-    }
-
-    trueGodlyWeapon() {
-
     }
 
     trueDarkRelease() {

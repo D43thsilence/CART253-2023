@@ -32,19 +32,21 @@ let enemyLifeCount = 100;
 let roundOffEnemyLifeCount = 0;
 
 // Sets up the playerAttackCheck and enemyAttackCheck variables used to limit the actions of both sides when it is their turn
-let playerAttackCheck = false;
+let playerAttackCheck = `none`;
 let descoSimpleSwingCheck = false;
 let enemyAttackCheck = false;
 
 // Sets up the variables required for Desco's animations
 let DescoIdle;
 let DescoSwing;
+let descoSwingFrames;
 let DescoBlade;
 let DescoBladePrepare;
 
 
 // Sets up the variables required for Valvatorez's animations
 let ValvatorezIdle;
+let ValvatorezStrike;
 
 // Sets up the variables required for Artina's animations
 let ArtinaIdle;
@@ -62,6 +64,7 @@ let backgroundImage;
 let enemyImages = [];
 let enemyImagesX = [];
 let enemyImagesY = [];
+let enemyAttackImages = [];
 
 // Sets up the initial game state
 let state = `title`;
@@ -79,6 +82,7 @@ function preload() {
     DescoBladePrepare = loadImage('assets/images/Desco/Desco Blade Cast Prepare.png');
     // Valvatorez's images
     ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
+    ValvatorezStrike = loadImage('assets/images/Valvatorez/Valvatorez Strike.gif');
     // Artina's images
     ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif');
     // Fenrich's images
@@ -92,6 +96,11 @@ function preload() {
     enemyImages = [ValvatorezIdle, ArtinaIdle, FenrichIdle, EmizelIdle];
     enemyImagesX = [450, 450, 450, 450];
     enemyImagesY = [450, 450, 450, 450];
+    enemyAttackImages = [ValvatorezStrike, ValvatorezStrike, ValvatorezStrike, ValvatorezStrike]
+
+
+
+
 }
 
 
@@ -122,11 +131,13 @@ function setup() {
         let y = windowHeight / 4 * 3 - i * 20;
 
         // Create the player character 
-        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i]);
+        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i], enemyAttackImages[i]);
         // Add the enemy's character to the array of player characters
         enemyTeam.enemies.push(enemyCharacter);
     }
 
+    // Frame count for Desco's attacks
+    descoSwingFrames = DescoSwing.numFrames();
 
 }
 
@@ -139,7 +150,7 @@ function draw() {
     // Draws the title screen
     titleScreen();
 
-    console.log(descoSimpleSwingCheck)
+    console.log(descoSwingFrames)
 
     if (state === `playerTurn`) {
 
@@ -148,8 +159,8 @@ function draw() {
         image(backgroundImage, width / 2, height / 2, width, height);
 
         // Resets the enemyAttackCheck value to allow the enemy to attack agan once it will be their turn
-        enemyAttackCheck = false;
-        descoSimpleSwingCheck = false;
+        enemyAttackCheck = `none`;
+
 
 
         // Draws the enemy character
@@ -170,13 +181,15 @@ function draw() {
             if (playerCharacter.alive) {
                 playerCharacter.display();
 
-                if (playerAttackCheck === false) {
-                    let attacked = playerCharacter.attackSelection();
+                if (playerAttackCheck === `none`) {
+                    let attackType = playerCharacter.attackSelection();
 
-                    if (attacked) {
-                        setTimeout(enemyTurnSwitch, 2000);
-                        setTimeout(playerCharacter.neutralPosition, 2000);
-                        playerAttackCheck = true;
+                    if (attackType !== `none`) {
+                        setTimeout(enemyTurnSwitch, 4000);
+                        setTimeout(() => {
+                            playerCharacter.neutralPosition()
+                        }, 2000);
+                        playerAttackCheck = attackType;
                     }
                 }
 
@@ -195,7 +208,7 @@ function draw() {
         image(backgroundImage, width / 2, height / 2, width, height);
 
         // Resets the playerAttackCheck value to allow the player to attack once it will be their turn
-        playerAttackCheck = false;
+        playerAttackCheck = `none`;
         descoSimpleSwingCheck = false;
 
         // Draws the player's character
@@ -213,14 +226,15 @@ function draw() {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
-                if (enemyAttackCheck === false) {
-                    let attacked = enemyCharacter.attackSelection();
+                if (enemyAttackCheck === `none`) {
+                    let attackType = enemyCharacter.attackSelection();
 
-                    if (attacked) {
+                    if (attackType !== `none`) {
                         setTimeout(playerTurnSwitch, 2000);
                         enemyAttackCheck = true;
                         // Increases the player's charge count
                         chargeIncrease();
+                        enemyAttackCheck = `attackType`
                     }
                 }
                 enemyCharacter.display();

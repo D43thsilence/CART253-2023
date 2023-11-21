@@ -1,7 +1,7 @@
 class Enemy {
 
     // The constructor sets up the enemy's starting properties
-    constructor(x, y, enemyImagesX, enemyImagesY, enemyImage) {
+    constructor(x, y, enemyImagesX, enemyImagesY, enemyIdleImage, enemyAttackImage) {
         this.x = x;
         this.y = y;
         this.neutralX = x;
@@ -21,23 +21,23 @@ class Enemy {
         this.ultimateAttack = 1;
         this.lifeCount = 100
         this.alive = true;
-        this.image = enemyImage
+        this.idleImage = enemyIdleImage
+        this.attackImage = enemyAttackImage
+        this.image = this.idleImage
+
     }
 
     // display() draws the enemy onto the canvas
     display() {
         imageMode(CENTER)
         image(this.image, this.x, this.y, this.sizeX, this.sizeY);
-
-        if (enemyAttackCheck === true) {
-            (this.image, this.x, this.y, this.size, this.size);
-        }
     }
 
 
     neutralPosition() {
         this.x = this.neutralX;
         this.y = this.neutralY;
+        this.image = this.idleImage
     }
 
 
@@ -45,8 +45,8 @@ class Enemy {
         // Generates a random number and from that number the function decides what attack to use
         let r = random(0, 0.3);
         if (r >= 0, r <= this.weakAttack) {
-            this.simpleSwing()
-            return true
+            this.simpleStrike()
+            return `simpleStrike`
         }
 
         else if (r > this.weakAttack, r <= this.strongAttack) {
@@ -74,7 +74,8 @@ class Enemy {
     }
 
 
-    simpleSwing() {
+    simpleStrike() {
+        this.image = this.attackImage
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
