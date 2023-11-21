@@ -1,13 +1,13 @@
 class Enemy {
 
     // The constructor sets up the enemy's starting properties
-    constructor(x, y) {
+    constructor(x, y, enemyImagesX, enemyImagesY, enemyImage) {
         this.x = x;
         this.y = y;
         this.neutralX = x;
         this.neutralY = y;
-        this.sizeX = 150;
-        this.sizeY = 180
+        this.sizeX = enemyImagesX;
+        this.sizeY = enemyImagesY;
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -21,27 +21,16 @@ class Enemy {
         this.ultimateAttack = 1;
         this.lifeCount = 100
         this.alive = true;
+        this.image = enemyImage
     }
 
     // display() draws the enemy onto the canvas
     display() {
-        for (let i = 0; i < enemyTeam.enemies.length; i++) {
-            if (i === 0) {
-                imageMode(CENTER)
-                image(ValvatorezIdle, this.x, this.y, this.sizeX, this.sizeY);
-            }
+        imageMode(CENTER)
+        image(this.image, this.x, this.y, this.sizeX, this.sizeY);
 
-            if (i === 1) {
-                image(FenrichIdle, this.x, this.y, this.sizeX, this.sizeY);
-            }
-
-            if (i === 2) {
-                image(ArtinaIdle, this.x, this.y, this.sizeX, this.sizeY);
-            }
-
-            if (i === 3) {
-                image(EmizelIdle, this.x, this.y, this.sizeX, this.sizeY);
-            }
+        if (enemyAttackCheck === true) {
+            (this.image, this.x, this.y, this.size, this.size);
         }
     }
 

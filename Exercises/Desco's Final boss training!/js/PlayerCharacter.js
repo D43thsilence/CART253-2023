@@ -16,9 +16,14 @@ class PlayerCharacter {
 
     // display() draws the player onto the canvas
     display() {
-        fill(150, 225, 50);
-        noStroke();
-        image(DescoIdle, this.x, this.y, this.size, this.size);
+        if (playerAttackCheck === false) {
+            image(DescoIdle, this.x, this.y, this.size, this.size);
+        }
+
+        if (playerAttackCheck === true) {
+            image(DescoSwing, this.x, this.y, this.size, this.size);
+        }
+
     }
 
     neutralPosition() {
@@ -63,8 +68,8 @@ class PlayerCharacter {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
-                image(DescoSwing, this.x, this.y, this.size, this.size)
                 this.x = enemyCharacter.neutralX - 20
+                image(DescoSwing, this.x, this.y, this.size, this.size)
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
                 chargeIncrease()
             }
@@ -76,9 +81,10 @@ class PlayerCharacter {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
                 image(DescoBlade, this.x, windowHeight / 2, this.size, this.size)
-                this.x = enemyCharacter.neutralX - 20
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
-                chargeIncrease()
+                image(DescoBladePrepare, this.x, this.y, this.size, this.size)
+                // Used to manipulate the shape of the blade and animate it
+                applyMatrix()
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 10
             }
         }
     }

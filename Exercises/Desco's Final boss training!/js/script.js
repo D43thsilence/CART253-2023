@@ -21,42 +21,52 @@ let enemyTeam = {
 }
 
 // Sets up the chargeCount and roundOffChargeCount variable used to mesure the player's charge level
-let chargeCount = 0
-let roundOffChargeCount = 0
+let chargeCount = 0;
+let roundOffChargeCount = 0;
 
 // Sets up the playerLifeCount variable used to display the player's life points
-let playerLifeCount = 100
+let playerLifeCount = 100;
 
 // Sets up the enemyLifeCount and roundOffEnemyLifeCount variable used to display the enemy's life points
-let enemyLifeCount = 100
-let roundOffEnemyLifeCount = 0
+let enemyLifeCount = 100;
+let roundOffEnemyLifeCount = 0;
 
 // Sets up the playerAttackCheck and enemyAttackCheck variables used to limit the actions of both sides when it is their turn
-let playerAttackCheck = false
-let enemyAttackCheck = false
+let playerAttackCheck = false;
+let descoSimpleSwingCheck = false;
+let enemyAttackCheck = false;
 
 // Sets up the variables required for Desco's animations
-let DescoIdle
-let DescoSwing
-let DescoBlade
+let DescoIdle;
+let DescoSwing;
+let DescoBlade;
+let DescoBladePrepare;
+
 
 // Sets up the variables required for Valvatorez's animations
-let ValvatorezIdle
+let ValvatorezIdle;
 
 // Sets up the variables required for Artina's animations
-let ArtinaIdle
+let ArtinaIdle;
 
 // Sets up the variables required for Fenrich's animations
-let FenrichIdle
+let FenrichIdle;
 
 // Sets up the variables required for Emizel's animations
-let EmizelIdle
+let EmizelIdle;
 
 // Sets up the variable required for the background
-let backgroundImage
+let backgroundImage;
+
+// Sets up the variables used to assign the images and the appropriate sizes for the enemies
+let enemyImages = [];
+let enemyImagesX = [];
+let enemyImagesY = [];
 
 // Sets up the initial game state
-let state = `title`
+let state = `title`;
+
+
 
 /**
  * Preloads all images required for the program
@@ -64,18 +74,24 @@ let state = `title`
 function preload() {
     // Desco's images
     DescoIdle = loadImage('assets/images/Desco/Desco Idle.gif');
-    DescoSwing = loadImage('assets/images/Desco/Desco Swing.gif')
-    DescoBlade = loadImage('assets/images/Desco/Desco Blade.png')
+    DescoSwing = loadImage('assets/images/Desco/Desco Swing.gif');
+    DescoBlade = loadImage('assets/images/Desco/Desco Blade.png');
+    DescoBladePrepare = loadImage('assets/images/Desco/Desco Blade Cast Prepare.png');
     // Valvatorez's images
     ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
     // Artina's images
-    ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif')
+    ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif');
     // Fenrich's images
-    FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Bow.gif')
+    FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Idle.gif');
     // Emizel's images
-    EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif')
+    EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif');
     // background image
-    backgroundImage = loadImage('assets/images/Forest Path.png')
+    backgroundImage = loadImage('assets/images/Forest Path.png');
+
+    // Enemy Images and their size values
+    enemyImages = [ValvatorezIdle, ArtinaIdle, FenrichIdle, EmizelIdle];
+    enemyImagesX = [450, 450, 450, 450];
+    enemyImagesY = [450, 450, 450, 450];
 }
 
 
@@ -106,7 +122,7 @@ function setup() {
         let y = windowHeight / 4 * 3 - i * 20;
 
         // Create the player character 
-        let enemyCharacter = new Enemy(x, y);
+        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i]);
         // Add the enemy's character to the array of player characters
         enemyTeam.enemies.push(enemyCharacter);
     }
@@ -123,6 +139,8 @@ function draw() {
     // Draws the title screen
     titleScreen();
 
+    console.log(descoSimpleSwingCheck)
+
     if (state === `playerTurn`) {
 
         // Draws the background
@@ -131,7 +149,7 @@ function draw() {
 
         // Resets the enemyAttackCheck value to allow the enemy to attack agan once it will be their turn
         enemyAttackCheck = false;
-
+        descoSimpleSwingCheck = false;
 
 
         // Draws the enemy character
@@ -170,8 +188,6 @@ function draw() {
 
     }
 
-
-
     else if (state === `enemyTurn`) {
 
         // Draws the background
@@ -180,6 +196,7 @@ function draw() {
 
         // Resets the playerAttackCheck value to allow the player to attack once it will be their turn
         playerAttackCheck = false;
+        descoSimpleSwingCheck = false;
 
         // Draws the player's character
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
