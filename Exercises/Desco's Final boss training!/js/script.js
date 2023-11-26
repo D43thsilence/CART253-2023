@@ -17,7 +17,7 @@ let playerCharacterTeam = {
 // Creates an array for the enemy character
 let enemyTeam = {
     enemies: [],
-    numEnemies: 4
+    numEnemies: 5
 }
 
 // Sets up the chargeCount and roundOffChargeCount variable used to mesure the player's charge level
@@ -40,22 +40,38 @@ let enemyAttackCheck = false;
 let DescoIdle;
 let DescoSwing;
 let descoSwingFrames;
-let DescoBlade;
-let DescoBladePrepare;
+let DescoBladeSwing;
+let descoBladeSwingFrames;
+let DescoBeamCast;
+let descoBeamCastFrames;
+let DescoTrueDarkRelease;
+let descoTrueDarkReleaseFrames;
+let DescoHurt;
+let descoHurtFrames;
 
 
 // Sets up the variables required for Valvatorez's animations
 let ValvatorezIdle;
 let ValvatorezStrike;
+let valvatorezStrikeFrames;
+let ValvatorezDamaged;
+let valvatorezDamagedFrames;
 
 // Sets up the variables required for Artina's animations
 let ArtinaIdle;
+let ArtinaAngelicRay;
+let artinaAngelicRayFrames;
 
 // Sets up the variables required for Fenrich's animations
 let FenrichIdle;
+let FenrichBow;
+let fenrichBowFrames;
 
 // Sets up the variables required for Emizel's animations
 let EmizelIdle;
+
+// Sets up the variables required for Fuka's animations
+let FukaIdle;
 
 // Sets up the variable required for the background
 let backgroundImage;
@@ -65,6 +81,7 @@ let enemyImages = [];
 let enemyImagesX = [];
 let enemyImagesY = [];
 let enemyAttackImages = [];
+let enemyDamagedImages = [];
 
 // Sets up the initial game state
 let state = `title`;
@@ -78,28 +95,33 @@ function preload() {
     // Desco's images
     DescoIdle = loadImage('assets/images/Desco/Desco Idle.gif');
     DescoSwing = loadImage('assets/images/Desco/Desco Swing.gif');
-    DescoBlade = loadImage('assets/images/Desco/Desco Blade.png');
-    DescoBladePrepare = loadImage('assets/images/Desco/Desco Blade Cast Prepare.png');
+    DescoBladeSwing = loadImage('assets/images/Desco/Desco Blade Strike.gif');
+    DescoBeamCast = loadImage('assets/images/Desco/Desco Beam Cast.gif')
+    DescoTrueDarkRelease = loadImage('assets/images/Desco/Desco True Dark Release.gif')
+    DescoHurt = loadImage('assets/images/Desco/Desco Hurt.gif');
     // Valvatorez's images
     ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
     ValvatorezStrike = loadImage('assets/images/Valvatorez/Valvatorez Strike.gif');
+    ValvatorezDamaged = loadImage('assets/images/Valvatorez/Valvatorez Damaged.png');
     // Artina's images
     ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif');
+    ArtinaAngelicRay = loadImage('assets/images/Artina/Artina Angelic Ray.gif')
     // Fenrich's images
     FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Idle.gif');
+    FenrichBow = loadImage('assets/images/Fenrich/Fenrich Bow.gif');
     // Emizel's images
     EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif');
+    // Fuka's images
+    FukaIdle = loadImage('assets/images/Fuka/Fuka Idle.gif')
     // background image
     backgroundImage = loadImage('assets/images/Forest Path.png');
 
     // Enemy Images and their size values
-    enemyImages = [ValvatorezIdle, ArtinaIdle, FenrichIdle, EmizelIdle];
-    enemyImagesX = [450, 450, 450, 450];
-    enemyImagesY = [450, 450, 450, 450];
-    enemyAttackImages = [ValvatorezStrike, ValvatorezStrike, ValvatorezStrike, ValvatorezStrike]
-
-
-
+    enemyImages = [ValvatorezIdle, ArtinaIdle, EmizelIdle, FenrichIdle, FukaIdle];
+    enemyImagesX = [550, 550, 550, 550, 550];
+    enemyImagesY = [550, 550, 550, 550, 550];
+    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, ValvatorezStrike, FenrichBow, ValvatorezStrike]
+    enemyDamagedImages = [ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged]
 
 }
 
@@ -127,17 +149,33 @@ function setup() {
     // Sets the variables for the enemy character's creation
     for (let i = 0; i < enemyTeam.numEnemies; i++) {
         // Assign variables for the arguments
-        let x = windowWidth / 4 * 3 + i * 80;
+        let x = windowWidth / 4 * 2.5 + i * 120;
         let y = windowHeight / 4 * 3 - i * 20;
 
         // Create the player character 
-        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i], enemyAttackImages[i]);
+        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i]);
         // Add the enemy's character to the array of player characters
         enemyTeam.enemies.push(enemyCharacter);
     }
 
-    // Frame count for Desco's attacks
+    // Frame count for Desco's animations
     descoSwingFrames = DescoSwing.numFrames();
+    descoHurtFrames = DescoHurt.numFrames();
+    descoBladeSwingFrames = DescoBladeSwing.numFrames();
+    descoBeamCastFrames = DescoBeamCast.numFrames();
+    descoTrueDarkReleaseFrames = DescoTrueDarkRelease.numFrames();
+
+    // Frame count for Valvatorez's animations
+    valvatorezStrikeFrames = ValvatorezStrike.numFrames();
+    valvatorezDamagedFrames = ValvatorezDamaged.numFrames();
+
+    // Frame count for Artina's animations
+    artinaAngelicRayFrames = ArtinaAngelicRay.numFrames();
+
+    // fenrichBowFrames = FenrichBow.numframes();
+    // fenrichDamagedFrames = FenrichDamaged.numframes()
+
+
 
 }
 
@@ -149,8 +187,6 @@ function draw() {
 
     // Draws the title screen
     titleScreen();
-
-    console.log(descoSwingFrames)
 
     if (state === `playerTurn`) {
 
@@ -169,7 +205,7 @@ function draw() {
 
             if (enemyCharacter.alive) {
                 enemyCharacter.display();
-                enemyCharacter.neutralPosition();
+                // enemyCharacter.neutralPosition();
                 enemyCharacter.defeated();
             }
         }
@@ -179,17 +215,44 @@ function draw() {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
+                // playerCharacter.neutralPosition()
                 playerCharacter.display();
 
                 if (playerAttackCheck === `none`) {
                     let attackType = playerCharacter.attackSelection();
 
-                    if (attackType !== `none`) {
-                        setTimeout(enemyTurnSwitch, 4000);
+                    // The following "if" statements time the turn switch in order to let the player's attack animation play out completely
+                    if (attackType == `simpleSwing`) {
+                        setTimeout(enemyTurnSwitch, 2000);
                         setTimeout(() => {
                             playerCharacter.neutralPosition()
                         }, 2000);
-                        playerAttackCheck = attackType;
+                        playerAttackCheck = `attackType`;
+                    }
+
+                    if (attackType == `finalBossArises`) {
+                        setTimeout(enemyTurnSwitch, 2000);
+                        setTimeout(() => {
+                            playerCharacter.neutralPosition()
+                        }, 2000);
+                        playerAttackCheck = `attackType`;
+                    }
+
+                    if (attackType == `trueGodlyWeapon`) {
+                        setTimeout(enemyTurnSwitch, 2000);
+                        setTimeout(() => {
+                            playerCharacter.neutralPosition()
+                        }, 2000);
+                        playerAttackCheck = `attackType`;
+                    }
+
+                    if (attackType == `trueDarkRelease`) {
+                        console.log(`hello`)
+                        setTimeout(enemyTurnSwitch, 6500);
+                        setTimeout(() => {
+                            playerCharacter.neutralPosition()
+                        }, 5280);
+                        playerAttackCheck = `attackType`;
                     }
                 }
 
@@ -209,7 +272,6 @@ function draw() {
 
         // Resets the playerAttackCheck value to allow the player to attack once it will be their turn
         playerAttackCheck = `none`;
-        descoSimpleSwingCheck = false;
 
         // Draws the player's character
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
@@ -217,7 +279,7 @@ function draw() {
 
             if (playerCharacter.alive) {
                 playerCharacter.display();
-                playerCharacter.neutralPosition();
+                // playerCharacter.neutralPosition();
                 playerCharacter.defeated();
             }
         }
@@ -231,6 +293,9 @@ function draw() {
 
                     if (attackType !== `none`) {
                         setTimeout(playerTurnSwitch, 2000);
+                        setTimeout(() => {
+                            enemyCharacter.neutralPosition()
+                        }, 2000);
                         enemyAttackCheck = true;
                         // Increases the player's charge count
                         chargeIncrease();
@@ -265,12 +330,12 @@ function titleScreen() {
     textAlign(CENTER);
     textSize(62);
     fill(0);
-    text(`Defeat your enemy`, windowWidth / 2, windowHeight / 2);
+    text(`Desco's Final Boss Training!`, windowWidth / 2, windowHeight / 2);
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
     text(`Use the arrow keys to execute attacks.`, windowWidth / 2, windowHeight / 2 + 100);
-    text(` Left for a simple swing, right for a powerful swing, up for an ultimate attack and down for a skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 2 + 130)
+    text(` Left for a simple strike, right for a beam attack, up for a crushing blade strike and down for a powerful skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 2 + 130)
     fill(0, 0, 0);
     textSize(30);
     text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
