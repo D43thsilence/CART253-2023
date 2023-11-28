@@ -27,14 +27,12 @@ let roundOffChargeCount = 0;
 // Sets up the playerLifeCount variable used to display the player's life points
 let playerLifeCount = 100;
 
-// Sets up the enemyLifeCount and roundOffEnemyLifeCount variable used to display the enemy's life points
-let enemyLifeCount = 100;
+// Sets up the roundOffEnemyLifeCount variable used to display the enemies life points
 let roundOffEnemyLifeCount = 0;
 
 // Sets up the playerAttackCheck and enemyAttackCheck variables used to limit the actions of both sides when it is their turn
 let playerAttackCheck = `none`;
-let descoSimpleSwingCheck = false;
-let enemyAttackCheck = false;
+let enemyAttackCheck = `none`;
 
 // Sets up the variables required for Desco's animations
 let DescoIdle;
@@ -64,8 +62,8 @@ let artinaAngelicRayFrames;
 
 // Sets up the variables required for Fenrich's animations
 let FenrichIdle;
-let FenrichBow;
-let fenrichBowFrames;
+let FenrichAssasination;
+let fenrichAssasinationFrames;
 
 // Sets up the variables required for Emizel's animations
 let EmizelIdle;
@@ -78,10 +76,15 @@ let backgroundImage;
 
 // Sets up the variables used to assign the images and the appropriate sizes for the enemies
 let enemyImages = [];
-let enemyImagesX = [];
-let enemyImagesY = [];
+// let enemyImagesX = [];
+// let enemyImagesY = [];
+let enemyImagesSizeX = [];
+let enemyImagesSizeY = [];
 let enemyAttackImages = [];
 let enemyDamagedImages = [];
+
+// Sets up the variables used for the sounds
+let beamSFX;
 
 // Sets up the initial game state
 let state = `title`;
@@ -89,7 +92,7 @@ let state = `title`;
 
 
 /**
- * Preloads all images required for the program
+ * Preloads all images and sounds required for the program
 */
 function preload() {
     // Desco's images
@@ -108,7 +111,7 @@ function preload() {
     ArtinaAngelicRay = loadImage('assets/images/Artina/Artina Angelic Ray.gif')
     // Fenrich's images
     FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Idle.gif');
-    FenrichBow = loadImage('assets/images/Fenrich/Fenrich Bow.gif');
+    FenrichAssasination = loadImage('assets/images/Fenrich/Fenrich How to kill a Netherworld President.gif')
     // Emizel's images
     EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif');
     // Fuka's images
@@ -118,10 +121,14 @@ function preload() {
 
     // Enemy Images and their size values
     enemyImages = [ValvatorezIdle, ArtinaIdle, EmizelIdle, FenrichIdle, FukaIdle];
-    enemyImagesX = [550, 550, 550, 550, 550];
-    enemyImagesY = [550, 550, 550, 550, 550];
-    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, ValvatorezStrike, FenrichBow, ValvatorezStrike]
+    enemyImagesSizeX = [550, 550, 550, 550, 550];
+    enemyImagesSizeY = [550, 550, 550, 550, 550];
+    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, FenrichAssasination, ValvatorezStrike, , ValvatorezStrike]
     enemyDamagedImages = [ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged]
+
+
+    // All sounds
+    beamSFX = loadSound('assets/sounds/BeamShot.wav')
 
 }
 
@@ -153,7 +160,7 @@ function setup() {
         let y = windowHeight / 4 * 3 - i * 20;
 
         // Create the player character 
-        let enemyCharacter = new Enemy(x, y, enemyImagesX[i], enemyImagesY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i]);
+        let enemyCharacter = new Enemy(x, y, enemyImagesSizeX[i], enemyImagesSizeY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i]);
         // Add the enemy's character to the array of player characters
         enemyTeam.enemies.push(enemyCharacter);
     }
@@ -172,8 +179,8 @@ function setup() {
     // Frame count for Artina's animations
     artinaAngelicRayFrames = ArtinaAngelicRay.numFrames();
 
-    // fenrichBowFrames = FenrichBow.numframes();
-    // fenrichDamagedFrames = FenrichDamaged.numframes()
+    fenrichAssasinationFrames = FenrichAssasination.numFrames();
+    // fenrichDamagedFrames = FenrichDamaged.numFrames()
 
 
 
@@ -184,7 +191,7 @@ function setup() {
  * Description of draw()
 */
 function draw() {
-
+    console.log(state)
     // Draws the title screen
     titleScreen();
 
@@ -288,10 +295,12 @@ function draw() {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
+                enemyCharacter.display();
+
                 if (enemyAttackCheck === `none`) {
                     let attackType = enemyCharacter.attackSelection();
 
-                    if (attackType !== `none`) {
+                    if (attackType == `simpleStrike`) {
                         setTimeout(playerTurnSwitch, 2000);
                         setTimeout(() => {
                             enemyCharacter.neutralPosition()
@@ -301,8 +310,30 @@ function draw() {
                         chargeIncrease();
                         enemyAttackCheck = `attackType`
                     }
+
+                    if (attackType == `angelicRay`) {
+                        setTimeout(playerTurnSwitch, 3500);
+                        setTimeout(() => {
+                            enemyCharacter.neutralPosition()
+                        }, 2700);
+                        enemyAttackCheck = true;
+                        // Increases the player's charge count
+                        chargeIncrease();
+                        enemyAttackCheck = `attackType`
+                    }
+
+                    if (attackType == `howToKillANetherworldPresident`) {
+                        setTimeout(playerTurnSwitch, 5000);
+                        setTimeout(() => {
+                            enemyCharacter.neutralPosition()
+                        }, 4050);
+                        enemyAttackCheck = true;
+                        // Increases the player's charge count
+                        chargeIncrease();
+                        enemyAttackCheck = `attackType`
+                        console.log(`hello`)
+                    }
                 }
-                enemyCharacter.display();
             }
         }
 
@@ -392,7 +423,7 @@ function gameInfo() {
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
         roundOffEnemyLifeCount = enemyCharacter.lifeCount.toFixed();
-        roundOffEnemyLifeCount = constrain(roundOffEnemyLifeCount, 0, 100)
+        roundOffEnemyLifeCount = constrain(roundOffEnemyLifeCount, 0, 600)
         textAlign(CENTER);
         textSize(62);
         fill(225, 0, 0);

@@ -12,7 +12,7 @@ class PlayerCharacter {
         this.aY = 0;
         this.acceleration = 2;
         this.alive = true;
-        this.lifeCount = 100;
+        this.lifeCount = 400;
         this.idleImage = DescoIdle;
         this.simpleSwingImage = DescoSwing;
         this.bladeStrikeImage = DescoBladeSwing;
@@ -111,9 +111,9 @@ class PlayerCharacter {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
-                this.x = enemyCharacter.neutralX - 20
+                this.x = enemyCharacter.neutralX - 120
                 enemyCharacter.damaged()
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 5
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
                 chargeIncrease()
             }
         }
@@ -122,10 +122,12 @@ class PlayerCharacter {
     finalBossArises() {
         DescoBeamCast.play()
         this.x = windowWidth / 2
-        this.y = windowHeight / 2
+        this.y = windowHeight / 3
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.castImage
+
+        beamSFX.play()
 
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
@@ -140,7 +142,7 @@ class PlayerCharacter {
     trueGodlyWeapon() {
         DescoBladeSwing.play()
         this.x = windowWidth / 2
-        this.y = windowHeight / 2
+        this.y = windowHeight / 3
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.bladeStrikeImage

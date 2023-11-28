@@ -1,13 +1,13 @@
 class Enemy {
 
     // The constructor sets up the enemy's starting properties
-    constructor(x, y, enemyImagesX, enemyImagesY, enemyIdleImage, enemyAttackImage, enemyDamagedImage) {
+    constructor(x, y, enemyImagesSizeX, enemyImagesSizeY, enemyIdleImage, enemyAttackImage, enemyDamagedImage) {
         this.x = x;
         this.y = y;
         this.neutralX = x;
         this.neutralY = y;
-        this.sizeX = enemyImagesX;
-        this.sizeY = enemyImagesY;
+        this.sizeX = enemyImagesSizeX;
+        this.sizeY = enemyImagesSizeY;
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -19,11 +19,13 @@ class Enemy {
         this.strongAttack = 0.6;
         this.powerfulAttack = 0.9;
         this.ultimateAttack = 1;
-        this.lifeCount = 100
+        this.lifeCount = 600
         this.alive = true;
         this.idleImage = enemyIdleImage
         this.attackImage = enemyAttackImage
         this.damagedImage = enemyDamagedImage
+        this.ArtinaAttack = ArtinaAngelicRay
+        this.FenrichAttack = FenrichAssasination
         this.image = this.idleImage
 
     }
@@ -40,17 +42,17 @@ class Enemy {
             }, 2000);
         }
 
-        // if (FenrichBow.getCurrentFrame() === fenrichBowFrames - 1) {
-        //     FenrichBow.pause();
-        //     setTimeout(() => {
-        //         FenrichBow.setFrame(0)
-        //     }, 2000);
-        // }
-
         if (ArtinaAngelicRay.getCurrentFrame() === artinaAngelicRayFrames - 1) {
             ArtinaAngelicRay.pause();
             setTimeout(() => {
                 ArtinaAngelicRay.setFrame(0)
+            }, 2000);
+        }
+
+        if (FenrichAssasination.getCurrentFrame() === fenrichAssasinationFrames - 1) {
+            FenrichAssasination.pause();
+            setTimeout(() => {
+                FenrichAssasination.setFrame(0)
             }, 2000);
         }
     }
@@ -60,12 +62,14 @@ class Enemy {
         this.x = this.neutralX;
         this.y = this.neutralY;
         this.image = this.idleImage
+        this.sizeX = enemyImagesSizeX;
+        this.sizeY = enemyImagesSizeY;
     }
 
 
     attackSelection() {
         // Generates a random number and from that number the function decides what attack to use
-        let r = random(0.3, 0.6);
+        let r = random(0, 0.9);
         if (r >= 0, r <= this.weakAttack) {
             this.simpleStrike()
             return `simpleStrike`
@@ -87,7 +91,7 @@ class Enemy {
         }
 
         else {
-            return false
+            return `none`
         }
     }
 
@@ -102,14 +106,13 @@ class Enemy {
         if (this.lifeCount <= 0) {
             this.alive === false
         }
-        // console.log(this.alive)
     }
 
 
     simpleStrike() {
         // Plays Valvatorez's strike animation
         this.image = this.attackImage
-        ValvatorezStrike.play()
+        ValvatorezStrike.play();
 
         // Moves Valvatorez towards Desco and reduces Desco's life points
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
@@ -119,51 +122,55 @@ class Enemy {
                 playerCharacter.damaged()
                 this.x = playerCharacter.x + 100
                 this.y = playerCharacter.y - 30
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 5
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 20
             }
         }
     }
 
     angelicRay() {
 
-        for (let i = 1; i < enemyTeam.enemies.length; i++) {
-            let enemyCharacter = enemyTeam.enemies[i];
-            if (enemyCharacter.alive) {
-                this.image = this.attackImage
-                ArtinaAngelicRay.play()
-            }
-        }
+        // this.image = this.attackImage.ArtinaAngelicRay
+        // ArtinaAngelicRay.play()
+        this.x = windowWidth / 2
+        this.y = windowHeight / 3
+        this.sizeX = 1600
+        this.sizeY = 900
+        this.image = this.ArtinaAttack
+        ArtinaAngelicRay.play()
+
+
 
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
                 playerCharacter.damaged()
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 20
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 50
             }
         }
     }
 
     howToKillANetherworldPresident() {
-        // for (let e = 4; e < enemyTeam.enemies.length; e++) {
-        //     let enemyCharacter = enemyTeam.enemies[e];
-        //     if (enemyCharacter.alive) {
-        //         this.image = this.attackImage
-        //         FenrichBow.play()
-        //     }
-        // }
 
-        this.image = this.attackImage
+        // this.image = this.attackImage.FenrichAssasination
+        // FenrichAssasination.play()
+
+        this.x = windowWidth / 2
+        this.y = windowHeight / 2
+        this.sizeX = 1600
+        this.sizeY = 900
+        this.image = this.FenrichAttack
+        FenrichAssasination.play()
+
 
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
                 playerCharacter.damaged()
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 30
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 70
             }
         }
-        console.log(`hello`)
     }
 
 }
