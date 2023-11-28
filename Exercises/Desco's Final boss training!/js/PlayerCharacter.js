@@ -116,6 +116,10 @@ class PlayerCharacter {
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
                 chargeIncrease()
             }
+            if (enemyCharacter.alive) {
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
+                chargeIncrease()
+            }
         }
     }
 
@@ -131,7 +135,7 @@ class PlayerCharacter {
 
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
-            if (enemyCharacter.alive, i === 0) {
+            if (enemyCharacter.alive) {
                 enemyCharacter.damaged()
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 40
             }
@@ -149,7 +153,8 @@ class PlayerCharacter {
 
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
-            if (enemyCharacter.alive, i === 0) {
+            if (enemyCharacter.alive) {
+                enemyCharacter.damaged()
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 70
             }
         }

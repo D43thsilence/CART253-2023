@@ -17,7 +17,8 @@ let playerCharacterTeam = {
 // Creates an array for the enemy character
 let enemyTeam = {
     enemies: [],
-    numEnemies: 5
+    numEnemies: 5,
+    attacker: undefined
 }
 
 // Sets up the chargeCount and roundOffChargeCount variable used to mesure the player's charge level
@@ -115,7 +116,7 @@ function preload() {
     // Emizel's images
     EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif');
     // Fuka's images
-    FukaIdle = loadImage('assets/images/Fuka/Fuka Idle.gif')
+    FukaIdle = loadImage('assets/images/Fuka/Fuka Idle.gif');
     // background image
     backgroundImage = loadImage('assets/images/Forest Path.png');
 
@@ -123,7 +124,7 @@ function preload() {
     enemyImages = [ValvatorezIdle, ArtinaIdle, EmizelIdle, FenrichIdle, FukaIdle];
     enemyImagesSizeX = [550, 550, 550, 550, 550];
     enemyImagesSizeY = [550, 550, 550, 550, 550];
-    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, FenrichAssasination, ValvatorezStrike, , ValvatorezStrike]
+    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, ValvatorezStrike, FenrichAssasination, FenrichAssasination]
     enemyDamagedImages = [ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged]
 
 
@@ -159,9 +160,9 @@ function setup() {
         let x = windowWidth / 4 * 2.5 + i * 120;
         let y = windowHeight / 4 * 3 - i * 20;
 
-        // Create the player character 
-        let enemyCharacter = new Enemy(x, y, enemyImagesSizeX[i], enemyImagesSizeY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i]);
-        // Add the enemy's character to the array of player characters
+        // Create the enemy characters 
+        let enemyCharacter = new Enemy(x, y, enemyImagesSizeX[i], enemyImagesSizeY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i], `enemy${i + 1}`);
+        // Add the enemy's character to the array of enemy characters
         enemyTeam.enemies.push(enemyCharacter);
     }
 
@@ -191,7 +192,10 @@ function setup() {
  * Description of draw()
 */
 function draw() {
+
     console.log(state)
+    console.log(enemyTeam.attacker)
+
     // Draws the title screen
     titleScreen();
 
@@ -212,7 +216,6 @@ function draw() {
 
             if (enemyCharacter.alive) {
                 enemyCharacter.display();
-                // enemyCharacter.neutralPosition();
                 enemyCharacter.defeated();
             }
         }
@@ -222,7 +225,6 @@ function draw() {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
-                // playerCharacter.neutralPosition()
                 playerCharacter.display();
 
                 if (playerAttackCheck === `none`) {
@@ -286,61 +288,147 @@ function draw() {
 
             if (playerCharacter.alive) {
                 playerCharacter.display();
-                // playerCharacter.neutralPosition();
                 playerCharacter.defeated();
             }
         }
 
         // Draws the enemy character and allows them to attack
-        for (let i = 0; i < enemyTeam.enemies.length; i++) {
-            let enemyCharacter = enemyTeam.enemies[i];
-            if (enemyCharacter.alive) {
-                enemyCharacter.display();
+        // for (let i = 0; i < enemyTeam.enemies.length; i++) {
+        let enemyCharacter = enemyTeam.attacker;
+        if (enemyCharacter.alive) {
+            // enemyCharacter.display();
 
-                if (enemyAttackCheck === `none`) {
-                    let attackType = enemyCharacter.attackSelection();
+            if (enemyAttackCheck === `none`) {
+                let attackType = enemyCharacter.attackSelection();
 
-                    if (attackType == `simpleStrike`) {
-                        setTimeout(playerTurnSwitch, 2000);
-                        setTimeout(() => {
-                            enemyCharacter.neutralPosition()
-                        }, 2000);
-                        enemyAttackCheck = true;
-                        // Increases the player's charge count
-                        chargeIncrease();
-                        enemyAttackCheck = `attackType`
-                    }
+                // if (attackType === `simpleStrike`) {
+                //     enemyCharacter.simpleStrike()
+                //     setTimeout(playerTurnSwitch, 2000);
+                //     setTimeout(() => {
+                //         enemyCharacter.neutralPosition()
+                //     }, 2000);;
+                //     // Increases the player's charge count
+                //     chargeIncrease();
+                //     enemyAttackCheck = `attackType`
+                // }
 
-                    if (attackType == `angelicRay`) {
-                        setTimeout(playerTurnSwitch, 3500);
-                        setTimeout(() => {
-                            enemyCharacter.neutralPosition()
-                        }, 2700);
-                        enemyAttackCheck = true;
-                        // Increases the player's charge count
-                        chargeIncrease();
-                        enemyAttackCheck = `attackType`
-                    }
+                // if (attackType === `angelicRay`) {
+                //     enemyCharacter.angelicRay()
+                //     setTimeout(playerTurnSwitch, 3500);
+                //     setTimeout(() => {
+                //         enemyCharacter.neutralPosition()
+                //     }, 3000);
+                //     // Increases the player's charge count
+                //     chargeIncrease();
+                //     enemyAttackCheck = `attackType`
+                // }
 
-                    if (attackType == `howToKillANetherworldPresident`) {
-                        setTimeout(playerTurnSwitch, 5000);
-                        setTimeout(() => {
-                            enemyCharacter.neutralPosition()
-                        }, 4050);
-                        enemyAttackCheck = true;
-                        // Increases the player's charge count
-                        chargeIncrease();
-                        enemyAttackCheck = `attackType`
-                        console.log(`hello`)
-                    }
+                if (attackType === `howToKillANetherworldPresident`) {
+                    enemyCharacter.howToKillANetherworldPresident()
+                    setTimeout(playerTurnSwitch, 5200);
+                    setTimeout(() => {
+                        enemyCharacter.neutralPosition()
+                    }, 4900);
+                    // Increases the player's charge count
+                    chargeIncrease();
+                    enemyAttackCheck = `attackType`
+                    console.log(`hello`)
                 }
             }
         }
 
+        // if (enemyCharacter.alive, enemyName === `enemy2`) {
+
+        //     if (enemyAttackCheck === `none`) {
+        //         let attackType = enemyCharacter.attackSelection();
+
+        //         if (attackType === `simpleStrike`) {
+        //             enemyCharacter.simpleStrike()
+        //             setTimeout(playerTurnSwitch, 3500);
+        //             setTimeout(() => {
+        //                 enemyCharacter.neutralPosition()
+        //             }, 3000);
+        //             // Increases the player's charge count
+        //             chargeIncrease();
+        //             enemyAttackCheck = `attackType`
+        //         }
+        //     }
+        // }
+
+        // if (enemyCharacter.alive, enemyName === `enemy3`) {
+
+        //     if (enemyAttackCheck === `none`) {
+        //         let attackType = enemyCharacter.attackSelection();
+
+        //         if (attackType === `simpleStrike`) {
+        //             enemyCharacter.simpleStrike()
+        //             setTimeout(playerTurnSwitch, 2000);
+        //             setTimeout(() => {
+        //                 enemyCharacter.neutralPosition()
+        //             }, 2000);
+        //             // Increases the player's charge count
+        //             chargeIncrease();
+        //             enemyAttackCheck = `attackType`
+        //         }
+        //     }
+        // }
+
+        // if (enemyCharacter.alive, enemyName === `enemy4`) {
+
+        //     if (enemyAttackCheck === `none`) {
+        //         let attackType = enemyCharacter.attackSelection();
+
+        //         if (attackType === `simpleStrike`) {
+        //             enemyCharacter.simpleStrike()
+        //             setTimeout(playerTurnSwitch, 5200);
+        //             setTimeout(() => {
+        //                 enemyCharacter.neutralPosition()
+        //             }, 4900);
+        //             // Increases the player's charge count
+        //             chargeIncrease();
+        //             enemyAttackCheck = `attackType`
+        //             console.log(`hello`)
+        //         }
+        //     }
+        // }
+
+        // if (enemyCharacter.alive, enemyName === `enemy5`) {
+
+        //     if (enemyAttackCheck === `none`) {
+        //         let attackType = enemyCharacter.attackSelection();
+
+        //         if (attackType === `simpleStrike`) {
+        //             enemyCharacter.simpleStrike()
+        //             setTimeout(playerTurnSwitch, 2000);
+        //             setTimeout(() => {
+        //                 enemyCharacter.neutralPosition()
+        //             }, 2000);
+        //             // Increases the player's charge count
+        //             chargeIncrease();
+        //             enemyAttackCheck = `attackType`
+        //         }
+        //     }
+        // }
+
+
+
+        // }
+
+        for (let i = 0; i < enemyTeam.enemies.length; i++) {
+            let enemyCharacter = enemyTeam.enemies[i];
+
+            if (enemyCharacter.alive) {
+                enemyCharacter.display();
+            }
+        }
+
+
         // Displays the information relevant to the game such as health on both sides and the player's charge count and switches stat if one of the game's end conditions are met
         gameInfo();
         gameEndConditions();
+
     }
+
 
 
 
@@ -365,23 +453,35 @@ function titleScreen() {
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
-    text(`Use the arrow keys to execute attacks.`, windowWidth / 2, windowHeight / 2 + 100);
-    text(` Left for a simple strike, right for a beam attack, up for a crushing blade strike and down for a powerful skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 2 + 130)
+    text(`Use the arrow keys to execute attacks.`, windowWidth / 2, windowHeight / 1.6);
+    text(` Left for a simple strike, right for a beam attack, up for a crushing blade strike and down for a powerful skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 1.5)
     fill(0, 0, 0);
     textSize(30);
-    text(`Click to start!`, windowWidth / 2, windowHeight / 2 + 180);
+    text(`Click to start!`, windowWidth / 2, windowHeight / 1.4);
+    textSize(10);
+    text(`All characters and sprites belong to NIS America/Japan. Animations done by me (Malcolm).`, windowWidth / 2, windowHeight / 1.3);
 
-    // image(fishImage, windowWidth / 13, windowHeight / 3.5, 120, 120);
-    // textAlign(CENTER);
-    // textSize(20);
-    // fill(0, 0, 0);
-    // text(`This is a fish.`, windowWidth / 8, windowHeight / 2);
+    // Displays Desco on the title screen
+    imageMode(CENTER)
+    image(DescoIdle, windowWidth / 7.5, windowHeight / 3.1, 500, 500);
+    textAlign(CENTER);
+    textSize(20);
+    fill(0, 0, 0);
+    text(`This is Desco.`, windowWidth / 7, windowHeight / 2);
 
-    // image(fishImage2, windowWidth / 4 * 3.2, windowHeight / 2 - 150, 120, 120);
-    // textAlign(CENTER);
-    // textSize(20);
-    // fill(0, 0, 0);
-    // text(`This is another fish.`, windowWidth / 4 * 3.33, windowHeight / 2);
+    // Displays Valvatorez on the title screen
+    image(ValvatorezIdle, windowWidth / 4 * 3.3, windowHeight / 2.3, 550, 550);
+    textAlign(CENTER);
+    textSize(20);
+    fill(0, 0, 0);
+    text(`These are your opponents.`, windowWidth / 4 * 3.33, windowHeight / 1.4);
+
+    image(ArtinaIdle, windowWidth / 4 * 3.3, windowHeight / 7, 550, 550);
+    textAlign(CENTER);
+    textSize(20);
+    fill(0, 0, 0);
+
+
 }
 
 function mouseClicked() {
@@ -396,20 +496,33 @@ function chargeIncrease() {
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
         let playerCharacter = playerCharacterTeam.characters[i];
         if (playerCharacter.alive === true) {
-            chargeCount = chargeCount + random(5, 50)
-            chargeCount = constrain(chargeCount, 0, 200)
+            chargeCount = chargeCount + random(5, 50);
+            chargeCount = constrain(chargeCount, 0, 200);
             roundOffChargeCount = chargeCount.toFixed();
-            roundOffChargeCount = constrain(roundOffChargeCount, 0, 200)
+            roundOffChargeCount = constrain(roundOffChargeCount, 0, 200);
         }
     }
 }
 
 function enemyTurnSwitch() {
+    // Switches the turn to the enemies turn and selects a random enemy that will attack
     state = `enemyTurn`
+    enemyTeam.attacker = random(enemyTeam.enemies)
+    // Resets the enemies position
+    for (let i = 0; i < enemyTeam.enemies.length; i++) {
+        let enemyCharacter = enemyTeam.enemies[i];
+        enemyCharacter.neutralPosition();
+    };
 }
 
 function playerTurnSwitch() {
+    // Switches the turn to the player's turn
     state = `playerTurn`
+    // Resets the enemies position
+    for (let i = 0; i < enemyTeam.enemies.length; i++) {
+        let enemyCharacter = enemyTeam.enemies[i];
+        enemyCharacter.neutralPosition();
+    };
 }
 
 
@@ -422,17 +535,19 @@ function gameInfo() {
 
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
-        roundOffEnemyLifeCount = enemyCharacter.lifeCount.toFixed();
-        roundOffEnemyLifeCount = constrain(roundOffEnemyLifeCount, 0, 600)
-        textAlign(CENTER);
-        textSize(62);
-        fill(225, 0, 0);
-        text(roundOffEnemyLifeCount, windowWidth / 8 * 7, windowHeight / 8);
+        if (enemyCharacter.alive, i === 0) {
+            roundOffEnemyLifeCount = enemyCharacter.lifeCount.toFixed();
+            roundOffEnemyLifeCount = constrain(roundOffEnemyLifeCount, 0, 600)
+            textAlign(CENTER);
+            textSize(62);
+            fill(225, 0, 0);
+            text(roundOffEnemyLifeCount, windowWidth / 8 * 7, windowHeight / 8);
+        }
     }
 
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
         let playerCharacter = playerCharacterTeam.characters[i];
-        textAlign(CENTER)
+        textAlign(CENTER);
         textSize(62);
         fill(100, 200, 50);
         text(playerCharacter.lifeCount, windowWidth / 8, windowHeight / 8);
