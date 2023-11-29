@@ -301,27 +301,27 @@ function draw() {
             if (enemyAttackCheck === `none`) {
                 let attackType = enemyCharacter.attackSelection();
 
-                // if (attackType === `simpleStrike`) {
-                //     enemyCharacter.simpleStrike()
-                //     setTimeout(playerTurnSwitch, 2000);
-                //     setTimeout(() => {
-                //         enemyCharacter.neutralPosition()
-                //     }, 2000);;
-                //     // Increases the player's charge count
-                //     chargeIncrease();
-                //     enemyAttackCheck = `attackType`
-                // }
+                if (attackType === `simpleStrike`) {
+                    enemyCharacter.simpleStrike()
+                    setTimeout(playerTurnSwitch, 2000);
+                    setTimeout(() => {
+                        enemyCharacter.neutralPosition()
+                    }, 2000);;
+                    // Increases the player's charge count
+                    chargeIncrease();
+                    enemyAttackCheck = `attackType`
+                }
 
-                // if (attackType === `angelicRay`) {
-                //     enemyCharacter.angelicRay()
-                //     setTimeout(playerTurnSwitch, 3500);
-                //     setTimeout(() => {
-                //         enemyCharacter.neutralPosition()
-                //     }, 3000);
-                //     // Increases the player's charge count
-                //     chargeIncrease();
-                //     enemyAttackCheck = `attackType`
-                // }
+                if (attackType === `angelicRay`) {
+                    enemyCharacter.angelicRay()
+                    setTimeout(playerTurnSwitch, 3500);
+                    setTimeout(() => {
+                        enemyCharacter.neutralPosition()
+                    }, 3000);
+                    // Increases the player's charge count
+                    chargeIncrease();
+                    enemyAttackCheck = `attackType`
+                }
 
                 if (attackType === `howToKillANetherworldPresident`) {
                     enemyCharacter.howToKillANetherworldPresident()

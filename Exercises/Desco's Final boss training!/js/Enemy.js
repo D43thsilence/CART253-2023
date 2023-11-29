@@ -8,6 +8,8 @@ class Enemy {
         this.neutralY = y;
         this.sizeX = enemyImagesSizeX;
         this.sizeY = enemyImagesSizeY;
+        this.neutralSizeX = 550
+        this.neutralSizeY = 550
         this.vx = 0;
         this.vy = 0;
         this.speed = 5;
@@ -63,32 +65,34 @@ class Enemy {
         this.x = this.neutralX;
         this.y = this.neutralY;
         this.image = this.idleImage
+        this.sizeX = this.neutralSizeX
+        this.sizeY = this.neutralSizeY
     }
 
 
     attackSelection() {
+        // Returns the a value that will be used in the script to initiate an attack from the enemy and adjust the timing for the turn switch.
+        // return `simpleStrike`
 
-        return `howToKillANetherworldPresident`
+        if (enemyTeam.attacker === enemyTeam.enemies[0]) {
+            return `simpleStrike`
+        }
 
-        // if (this.enemyName === `enemy1`) {
-        //     return `simpleStrike`
-        // }
+        if (enemyTeam.attacker === enemyTeam.enemies[1]) {
+            return `angelicRay`
+        }
 
-        // if (this.enemyName === `enemy2`) {
-        //     return `angelicRay`
-        // }
+        if (enemyTeam.attacker === enemyTeam.enemies[2]) {
+            return `howToKillANetherworldPresident`
+        }
 
-        // if (this.enemyName === `enemy3`) {
-        //     return `howToKillANetherworldPresident`
-        // }
+        if (enemyTeam.attacker === enemyTeam.enemies[3]) {
+            return `howToKillANetherworldPresident`
+        }
 
-        // if (this.enemyName === `enemy4`) {
-        //     return `simpleStrike`
-        // }
-
-        // if (this.enemyName === `enemy5`) {
-        //     return `simpleStrike`
-        // }
+        if (enemyTeam.attacker === enemyTeam.enemies[4]) {
+            return `howToKillANetherworldPresident`
+        }
 
 
         // Generates a random number and from that number the function decides what attack to use
@@ -142,12 +146,41 @@ class Enemy {
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
-            if (playerCharacter.alive) {
+            if (playerCharacter.alive, this.name === `enemy1`) {
                 playerCharacter.damaged()
                 this.x = playerCharacter.x + 100
                 this.y = playerCharacter.y - 30
                 playerCharacter.lifeCount = playerCharacter.lifeCount - 20
             }
+        }
+
+        // Arranges the x,y and size values for the animations of certain enemies
+        if (this.name === `enemy2`) {
+            this.x = windowWidth / 2
+            this.y = windowHeight / 3
+            this.sizeX = 1920
+            this.sizeY = 1080
+        }
+
+        if (this.name === `enemy3`) {
+            this.x = windowWidth / 2
+            this.y = windowHeight / 3
+            this.sizeX = 1920
+            this.sizeY = 1080
+        }
+
+        if (this.name === `enemy4`) {
+            this.x = windowWidth / 2
+            this.y = windowHeight / 3
+            this.sizeX = 1920
+            this.sizeY = 1080
+        }
+
+        if (this.name === `enemy5`) {
+            this.x = windowWidth / 2
+            this.y = windowHeight / 3
+            this.sizeX = 1920
+            this.sizeY = 1080
         }
     }
 
