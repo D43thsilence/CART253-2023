@@ -45,8 +45,8 @@ let DescoBeamCast;
 let descoBeamCastFrames;
 let DescoTrueDarkRelease;
 let descoTrueDarkReleaseFrames;
-let DescoHurt;
-let descoHurtFrames;
+let DescoDamaged;
+let descoDamagedFrames;
 
 
 // Sets up the variables required for Valvatorez's animations
@@ -60,17 +60,29 @@ let valvatorezDamagedFrames;
 let ArtinaIdle;
 let ArtinaAngelicRay;
 let artinaAngelicRayFrames;
+let ArtinaDamaged;
+let artinaDamagedFrames;
 
 // Sets up the variables required for Fenrich's animations
 let FenrichIdle;
 let FenrichAssasination;
 let fenrichAssasinationFrames;
+let FenrichDamaged;
+let fenrichDamagedFrames;
 
 // Sets up the variables required for Emizel's animations
 let EmizelIdle;
+let EmizelProofOfStrength;
+let emizelProofOfStrengthFrames
+let EmizelDamaged;
+let emizelDamagedFrames;
 
 // Sets up the variables required for Fuka's animations
 let FukaIdle;
+let FukaStrike;
+let fukaStrikeFrames;
+let FukaDamaged;
+let fukaDamagedFrames;
 
 // Sets up the variable required for the background
 let backgroundImage;
@@ -86,6 +98,7 @@ let enemyDamagedImages = [];
 
 // Sets up the variables used for the sounds
 let beamSFX;
+let slashSFX;
 
 // Sets up the initial game state
 let state = `title`;
@@ -102,34 +115,41 @@ function preload() {
     DescoBladeSwing = loadImage('assets/images/Desco/Desco Blade Strike.gif');
     DescoBeamCast = loadImage('assets/images/Desco/Desco Beam Cast.gif')
     DescoTrueDarkRelease = loadImage('assets/images/Desco/Desco True Dark Release.gif')
-    DescoHurt = loadImage('assets/images/Desco/Desco Hurt.gif');
+    DescoDamaged = loadImage('assets/images/Desco/Desco Damaged.gif');
     // Valvatorez's images
     ValvatorezIdle = loadImage('assets/images/Valvatorez/Valvatorez Idle.gif');
     ValvatorezStrike = loadImage('assets/images/Valvatorez/Valvatorez Strike.gif');
-    ValvatorezDamaged = loadImage('assets/images/Valvatorez/Valvatorez Damaged.png');
+    ValvatorezDamaged = loadImage('assets/images/Valvatorez/Valvatorez Damaged.gif');
     // Artina's images
     ArtinaIdle = loadImage('assets/images/Artina/Artina Idle.gif');
     ArtinaAngelicRay = loadImage('assets/images/Artina/Artina Angelic Ray.gif')
+    ArtinaDamaged = loadImage('assets/images/Artina/Artina Damaged.gif')
     // Fenrich's images
     FenrichIdle = loadImage('assets/images/Fenrich/Fenrich Idle.gif');
-    FenrichAssasination = loadImage('assets/images/Fenrich/Fenrich How to kill a Netherworld President.gif')
+    FenrichAssasination = loadImage('assets/images/Fenrich/Fenrich How to kill a Netherworld President.gif');
+    FenrichDamaged = loadImage('assets/images/Fenrich/Fenrich Damaged.gif');
     // Emizel's images
     EmizelIdle = loadImage('assets/images/Emizel/Emizel Idle.gif');
+    EmizelProofOfStrength = loadImage('assets/images/Emizel/Emizel proof of strength.gif');
+    EmizelDamaged = loadImage('assets/images/Emizel/Emizel Damaged.gif');
     // Fuka's images
     FukaIdle = loadImage('assets/images/Fuka/Fuka Idle.gif');
+    FukaStrike = loadImage('assets/images/Fuka/Fuka Strike.gif');
+    FukaDamaged = loadImage('assets/images/Fuka/Fuka Damaged.gif');
     // background image
     backgroundImage = loadImage('assets/images/Forest Path.png');
 
     // Enemy Images and their size values
-    enemyImages = [ValvatorezIdle, ArtinaIdle, EmizelIdle, FenrichIdle, FukaIdle];
+    enemyImages = [ValvatorezIdle, ArtinaIdle, EmizelIdle, FukaIdle, FenrichIdle];
     enemyImagesSizeX = [550, 550, 550, 550, 550];
     enemyImagesSizeY = [550, 550, 550, 550, 550];
-    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, ValvatorezStrike, FenrichAssasination, FenrichAssasination]
-    enemyDamagedImages = [ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged, ValvatorezDamaged]
+    enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, EmizelProofOfStrength, FukaStrike, FenrichAssasination,]
+    enemyDamagedImages = [ValvatorezDamaged, ArtinaDamaged, EmizelDamaged, FukaDamaged, FenrichDamaged]
 
 
-    // All sounds
+    // Loads all sounds
     beamSFX = loadSound('assets/sounds/BeamShot.wav')
+    slashSFX = loadSound('assets/sounds/SlashHit.wav')
 
 }
 
@@ -140,13 +160,13 @@ function preload() {
 */
 function setup() {
     // Creates the canvas
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(1600, 900);
 
     // Sets the variables for the player character's creation
     for (let i = 0; i < playerCharacterTeam.numPlayers; i++) {
         // Assign variables for the arguments
-        let x = windowWidth / 4;
-        let y = windowHeight / 4 * 3;
+        let x = windowWidth / 5;
+        let y = windowHeight / 5 * 3;
 
         // Create the player character 
         let playercharacter = new PlayerCharacter(x, y);
@@ -157,8 +177,8 @@ function setup() {
     // Sets the variables for the enemy character's creation
     for (let i = 0; i < enemyTeam.numEnemies; i++) {
         // Assign variables for the arguments
-        let x = windowWidth / 4 * 2.5 + i * 120;
-        let y = windowHeight / 4 * 3 - i * 20;
+        let x = windowWidth / 5 * 2.5 + i * 120;
+        let y = windowHeight / 5 * 3 - i * 20;
 
         // Create the enemy characters 
         let enemyCharacter = new Enemy(x, y, enemyImagesSizeX[i], enemyImagesSizeY[i], enemyImages[i], enemyAttackImages[i], enemyDamagedImages[i], `enemy${i + 1}`);
@@ -166,22 +186,32 @@ function setup() {
         enemyTeam.enemies.push(enemyCharacter);
     }
 
-    // Frame count for Desco's animations
+    // Frame count for Desco's animations, used to reset the animations
     descoSwingFrames = DescoSwing.numFrames();
-    descoHurtFrames = DescoHurt.numFrames();
+    descoDamagedFrames = DescoDamaged.numFrames();
     descoBladeSwingFrames = DescoBladeSwing.numFrames();
     descoBeamCastFrames = DescoBeamCast.numFrames();
     descoTrueDarkReleaseFrames = DescoTrueDarkRelease.numFrames();
 
-    // Frame count for Valvatorez's animations
+    // Frame count for Valvatorez's animations, used to reset the animations
     valvatorezStrikeFrames = ValvatorezStrike.numFrames();
     valvatorezDamagedFrames = ValvatorezDamaged.numFrames();
 
-    // Frame count for Artina's animations
+    // Frame count for Artina's animations, used to reset the animations
     artinaAngelicRayFrames = ArtinaAngelicRay.numFrames();
+    artinaDamagedFrames = ArtinaDamaged.numFrames();
 
+    // Frame count for Fenrich's animations, used to reset the animations
     fenrichAssasinationFrames = FenrichAssasination.numFrames();
-    // fenrichDamagedFrames = FenrichDamaged.numFrames()
+    fenrichDamagedFrames = FenrichDamaged.numFrames();
+
+    // Frame count for Emizel's animations, used to reset the animations
+    emizelProofOfStrengthFrames = EmizelProofOfStrength.numFrames();
+    emizelDamagedFrames = EmizelDamaged.numFrames();
+
+    // Frame count for Fuka's animations, used to reset the animations
+    fukaStrikeFrames = FukaStrike.numFrames();
+    fukaDamagedFrames = FukaDamaged.numFrames();
 
 
 
@@ -267,7 +297,7 @@ function draw() {
 
             }
         }
-        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches stat if one of the game's end conditions are met
+        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches state if one of the game's end conditions are met
         gameInfo()
         gameEndConditions()
 
@@ -292,131 +322,96 @@ function draw() {
             }
         }
 
-        // Draws the enemy character and allows them to attack
-        // for (let i = 0; i < enemyTeam.enemies.length; i++) {
+        // Selects the enemy the enemy character that will attack during the enemies turn.
         let enemyCharacter = enemyTeam.attacker;
         if (enemyCharacter.alive) {
-            // enemyCharacter.display();
 
+            // Selects the which attack the enemies will use
             if (enemyAttackCheck === `none`) {
                 let attackType = enemyCharacter.attackSelection();
 
+                // The following "if" statements play the attack animations and time the turn switch in order to let the enemies' attack animation play out completely
                 if (attackType === `simpleStrike`) {
+                    // Plays the enemy's attack animation
                     enemyCharacter.simpleStrike()
+
+                    // Resets the enemy to neutral and switches turn
                     setTimeout(playerTurnSwitch, 2000);
                     setTimeout(() => {
                         enemyCharacter.neutralPosition()
-                    }, 2000);;
+                    }, 2000);
+
                     // Increases the player's charge count
                     chargeIncrease();
                     enemyAttackCheck = `attackType`
                 }
 
                 if (attackType === `angelicRay`) {
+                    // Plays the enemy's attack animation
                     enemyCharacter.angelicRay()
+
+                    // Resets the enemy to neutral and switches turn
                     setTimeout(playerTurnSwitch, 3500);
                     setTimeout(() => {
                         enemyCharacter.neutralPosition()
                     }, 3000);
+
+                    // Increases the player's charge count
+                    chargeIncrease();
+                    enemyAttackCheck = `attackType`
+                }
+
+                if (attackType === `EmizelProofOfStrength`) {
+                    // Plays the enemy's attack animation
+                    enemyCharacter.EmizelProofOfStrength()
+
+                    // Resets the enemy to neutral and switches turn
+                    setTimeout(playerTurnSwitch, 3500);
+                    setTimeout(() => {
+                        enemyCharacter.neutralPosition()
+                    }, 3000);
+
                     // Increases the player's charge count
                     chargeIncrease();
                     enemyAttackCheck = `attackType`
                 }
 
                 if (attackType === `howToKillANetherworldPresident`) {
+                    // Plays the enemy's attack animation
                     enemyCharacter.howToKillANetherworldPresident()
+
+                    // Resets the enemy to neutral and switches turn
                     setTimeout(playerTurnSwitch, 5200);
                     setTimeout(() => {
                         enemyCharacter.neutralPosition()
                     }, 4900);
+
                     // Increases the player's charge count
                     chargeIncrease();
                     enemyAttackCheck = `attackType`
-                    console.log(`hello`)
                 }
+
+                if (attackType === `FukaStrike`) {
+                    // Plays the enemy's attack animation
+                    enemyCharacter.FukaStrike()
+
+                    // Resets the enemy to neutral and switches turn
+                    setTimeout(playerTurnSwitch, 2000);
+                    setTimeout(() => {
+                        enemyCharacter.neutralPosition()
+                    }, 2000);
+
+                    // Increases the player's charge count
+                    chargeIncrease();
+                    enemyAttackCheck = `attackType`
+                }
+
             }
         }
 
-        // if (enemyCharacter.alive, enemyName === `enemy2`) {
-
-        //     if (enemyAttackCheck === `none`) {
-        //         let attackType = enemyCharacter.attackSelection();
-
-        //         if (attackType === `simpleStrike`) {
-        //             enemyCharacter.simpleStrike()
-        //             setTimeout(playerTurnSwitch, 3500);
-        //             setTimeout(() => {
-        //                 enemyCharacter.neutralPosition()
-        //             }, 3000);
-        //             // Increases the player's charge count
-        //             chargeIncrease();
-        //             enemyAttackCheck = `attackType`
-        //         }
-        //     }
-        // }
-
-        // if (enemyCharacter.alive, enemyName === `enemy3`) {
-
-        //     if (enemyAttackCheck === `none`) {
-        //         let attackType = enemyCharacter.attackSelection();
-
-        //         if (attackType === `simpleStrike`) {
-        //             enemyCharacter.simpleStrike()
-        //             setTimeout(playerTurnSwitch, 2000);
-        //             setTimeout(() => {
-        //                 enemyCharacter.neutralPosition()
-        //             }, 2000);
-        //             // Increases the player's charge count
-        //             chargeIncrease();
-        //             enemyAttackCheck = `attackType`
-        //         }
-        //     }
-        // }
-
-        // if (enemyCharacter.alive, enemyName === `enemy4`) {
-
-        //     if (enemyAttackCheck === `none`) {
-        //         let attackType = enemyCharacter.attackSelection();
-
-        //         if (attackType === `simpleStrike`) {
-        //             enemyCharacter.simpleStrike()
-        //             setTimeout(playerTurnSwitch, 5200);
-        //             setTimeout(() => {
-        //                 enemyCharacter.neutralPosition()
-        //             }, 4900);
-        //             // Increases the player's charge count
-        //             chargeIncrease();
-        //             enemyAttackCheck = `attackType`
-        //             console.log(`hello`)
-        //         }
-        //     }
-        // }
-
-        // if (enemyCharacter.alive, enemyName === `enemy5`) {
-
-        //     if (enemyAttackCheck === `none`) {
-        //         let attackType = enemyCharacter.attackSelection();
-
-        //         if (attackType === `simpleStrike`) {
-        //             enemyCharacter.simpleStrike()
-        //             setTimeout(playerTurnSwitch, 2000);
-        //             setTimeout(() => {
-        //                 enemyCharacter.neutralPosition()
-        //             }, 2000);
-        //             // Increases the player's charge count
-        //             chargeIncrease();
-        //             enemyAttackCheck = `attackType`
-        //         }
-        //     }
-        // }
-
-
-
-        // }
-
+        // Displays the enemies
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
-
             if (enemyCharacter.alive) {
                 enemyCharacter.display();
             }
@@ -449,7 +444,7 @@ function titleScreen() {
     textAlign(CENTER);
     textSize(62);
     fill(0);
-    text(`Desco's Final Boss Training!`, windowWidth / 2, windowHeight / 2);
+    text(`Desco's Final Boss Training!`, 800, 450);
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
@@ -463,20 +458,21 @@ function titleScreen() {
 
     // Displays Desco on the title screen
     imageMode(CENTER)
-    image(DescoIdle, windowWidth / 7.5, windowHeight / 3.1, 500, 500);
+    image(DescoIdle, 200, windowHeight / 3.1, 500, 500);
     textAlign(CENTER);
     textSize(20);
     fill(0, 0, 0);
-    text(`This is Desco.`, windowWidth / 7, windowHeight / 2);
+    text(`This is Desco.`, 210, windowHeight / 2);
 
     // Displays Valvatorez on the title screen
-    image(ValvatorezIdle, windowWidth / 4 * 3.3, windowHeight / 2.3, 550, 550);
+    image(ValvatorezIdle, 1300, 150, 550, 550);
     textAlign(CENTER);
     textSize(20);
     fill(0, 0, 0);
     text(`These are your opponents.`, windowWidth / 4 * 3.33, windowHeight / 1.4);
 
-    image(ArtinaIdle, windowWidth / 4 * 3.3, windowHeight / 7, 550, 550);
+    // Displays Artina on the title screen
+    image(ArtinaIdle, 1500, windowHeight / 7, 550, 550);
     textAlign(CENTER);
     textSize(20);
     fill(0, 0, 0);
@@ -518,6 +514,11 @@ function enemyTurnSwitch() {
 function playerTurnSwitch() {
     // Switches the turn to the player's turn
     state = `playerTurn`
+    // Resets the player's position
+    for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+        let playerCharacter = playerCharacterTeam.characters[i];
+        playerCharacter.neutralPosition()
+    }
     // Resets the enemies position
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
@@ -541,7 +542,7 @@ function gameInfo() {
             textAlign(CENTER);
             textSize(62);
             fill(225, 0, 0);
-            text(roundOffEnemyLifeCount, windowWidth / 8 * 7, windowHeight / 8);
+            text(roundOffEnemyLifeCount, windowWidth / 8 * 6, windowHeight / 8);
         }
     }
 

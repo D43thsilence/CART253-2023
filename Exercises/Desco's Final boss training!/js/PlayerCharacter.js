@@ -18,7 +18,7 @@ class PlayerCharacter {
         this.bladeStrikeImage = DescoBladeSwing;
         this.castImage = DescoBeamCast;
         this.darkReleaseImage = DescoTrueDarkRelease;
-        this.damagedImage = DescoHurt;
+        this.damagedImage = DescoDamaged;
         this.image = this.idleImage;
     }
 
@@ -35,10 +35,10 @@ class PlayerCharacter {
             }, 2000);
         }
 
-        if (DescoHurt.getCurrentFrame() === descoHurtFrames - 1) {
-            DescoHurt.pause();
+        if (DescoDamaged.getCurrentFrame() === descoDamagedFrames - 1) {
+            DescoDamaged.pause();
             setTimeout(() => {
-                DescoHurt.setFrame(0)
+                DescoDamaged.setFrame(0)
             }, 2000);
         }
 
@@ -67,11 +67,12 @@ class PlayerCharacter {
     }
 
     neutralPosition() {
-        this.x = windowWidth / 4;
-        this.y = windowHeight / 4 * 3;
+        this.image = this.idleImage
+        this.x = windowWidth / 5;
+        this.y = windowHeight / 5 * 3;
         this.sizeX = 500
         this.sizeY = 500
-        this.image = this.idleImage
+        console.log(`hello`)
     }
 
 
@@ -104,7 +105,7 @@ class PlayerCharacter {
     }
 
     simpleSwing() {
-        // Plays the animation for Desco's simple swing attack and deduced the selected amount of life points to the enemy
+        // Plays the animation for Desco's simple swing attack and deduced the written amount of life points to the enemy
         this.image = this.simpleSwingImage
         DescoSwing.play()
 
@@ -112,11 +113,9 @@ class PlayerCharacter {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
                 this.x = enemyCharacter.neutralX - 120
-                enemyCharacter.damaged()
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
-                chargeIncrease()
-            }
-            if (enemyCharacter.alive) {
+                setTimeout(() => {
+                    enemyCharacter.damaged()
+                }, 900);
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
                 chargeIncrease()
             }
@@ -124,19 +123,25 @@ class PlayerCharacter {
     }
 
     finalBossArises() {
+        // Plays the animation and sound for Desco's Final Boss Arises attack and deduces the written amount of life points to the enemy
         DescoBeamCast.play()
         this.x = windowWidth / 2
         this.y = windowHeight / 3
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.castImage
-
-        beamSFX.play()
+        // Plays the sound with correct timing
+        setTimeout(() => {
+            beamSFX.play()
+        }, 500);
 
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
-                enemyCharacter.damaged()
+                setTimeout(() => {
+                    // Plays the enemy damaged animation with correct timing
+                    enemyCharacter.damaged()
+                }, 500);
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 40
             }
         }
@@ -144,27 +149,33 @@ class PlayerCharacter {
     }
 
     trueGodlyWeapon() {
+        // Plays the animation for Desco's True Godly Weapon attack and deduces the written amount of life points to the enemy
         DescoBladeSwing.play()
         this.x = windowWidth / 2
         this.y = windowHeight / 3
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.bladeStrikeImage
+        setTimeout(() => {
+            slashSFX.play()
+        }, 1000);
 
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
-                enemyCharacter.damaged()
+                setTimeout(() => {
+                    enemyCharacter.damaged()
+                }, 11000);
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 70
             }
         }
     }
 
     trueDarkRelease() {
-
+        // Plays the animation for Desco's True Dark Release attack and deduces the written amount of life points to the enemy
         DescoTrueDarkRelease.play();
-        this.x = windowWidth / 2;
-        this.y = windowHeight / 2;
+        this.x = 800;
+        this.y = 450;
         this.sizeX = 1920;
         this.sizeY = 1080;
         this.image = this.darkReleaseImage;
@@ -172,6 +183,10 @@ class PlayerCharacter {
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
+                setTimeout(() => {
+                    enemyCharacter.damaged()
+                }, 900);
+                // This attack's damage scales off of the player's charge count and spends it all. A higher charge count makes this attack deal more damage.
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - chargeCount * 0.2
                 chargeCount = 0
             }
@@ -179,21 +194,15 @@ class PlayerCharacter {
     }
 
     damaged() {
-        // if (attackType === `simpleStrike`) {
-        //     setTimeout(() => {
-        //         this.image = this.damagedImage
-        //     }, 100)
-
-        //     setTimeout(() => {
-        //         this.neutralPosition
-        //     }, 2000);
-        // }
+        // Plays Desco's (the player) damage animation
+        this.image = this.damagedImage
+        DescoDamaged.play()
     }
 
     defeated() {
+        // Checks if Desco (the player) is alive and if not, changes their alive state to reflect their defeat.
         if (this.lifeCount <= 0) {
             this.alive === false
         }
-        // console.log(this.alive)
     }
 }

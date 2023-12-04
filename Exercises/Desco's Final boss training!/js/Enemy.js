@@ -8,71 +8,115 @@ class Enemy {
         this.neutralY = y;
         this.sizeX = enemyImagesSizeX;
         this.sizeY = enemyImagesSizeY;
-        this.neutralSizeX = 550
-        this.neutralSizeY = 550
-        this.vx = 0;
-        this.vy = 0;
-        this.speed = 5;
-        this.aX = 0;
-        this.aY = 0;
+        this.neutralSizeX = 550;
+        this.neutralSizeY = 550;
         this.acceleration = 2;
-        // Determines which attack the enemy decides to use
-        this.weakAttack = 0.3;
-        this.strongAttack = 0.6;
-        this.powerfulAttack = 0.9;
-        this.ultimateAttack = 1;
         this.lifeCount = 600
         this.alive = true;
-        this.idleImage = enemyIdleImage
-        this.attackImage = enemyAttackImage
-        this.damagedImage = enemyDamagedImage
-        this.ArtinaAttack = ArtinaAngelicRay
-        this.FenrichAttack = FenrichAssasination
-        this.image = this.idleImage
-        this.name = enemyName
+        this.idleImage = enemyIdleImage;
+        this.attackImage = enemyAttackImage;
+        this.damagedImage = enemyDamagedImage;
+        this.ArtinaAttack = ArtinaAngelicRay;
+        this.FenrichAttack = FenrichAssasination;
+        this.EmizelAttack = EmizelProofOfStrength;
+        this.FukaAttack = FukaStrike;
+        this.image = this.idleImage;
+        this.name = enemyName;
 
     }
 
-    // display() draws the enemy onto the canvas
+    // display() draws the enemy onto the canvas and resets animations when needed
     display() {
+        // Draws the enemies onto the canvas
         imageMode(CENTER)
         image(this.image, this.x, this.y, this.sizeX, this.sizeY);
 
+        // Resets the enemies attack and damage animations when they reach their frame count in order to allow them to be played correctly multiple times
         if (ValvatorezStrike.getCurrentFrame() === valvatorezStrikeFrames - 1) {
             ValvatorezStrike.pause();
             setTimeout(() => {
-                ValvatorezStrike.setFrame(0)
+                ValvatorezStrike.setFrame(0);
             }, 2000);
         }
 
         if (ArtinaAngelicRay.getCurrentFrame() === artinaAngelicRayFrames - 1) {
             ArtinaAngelicRay.pause();
             setTimeout(() => {
-                ArtinaAngelicRay.setFrame(0)
+                ArtinaAngelicRay.setFrame(0);
             }, 2000);
         }
 
         if (FenrichAssasination.getCurrentFrame() === fenrichAssasinationFrames - 1) {
             FenrichAssasination.pause();
             setTimeout(() => {
-                FenrichAssasination.setFrame(0)
+                FenrichAssasination.setFrame(0);
             }, 2000);
         }
+
+        if (EmizelProofOfStrength.getCurrentFrame() === emizelProofOfStrengthFrames - 1) {
+            EmizelProofOfStrength.pause();
+            setTimeout(() => {
+                EmizelProofOfStrength.setFrame(0);
+            }, 2000);
+        }
+
+        if (FukaStrike.getCurrentFrame() === fukaStrikeFrames - 1) {
+            FukaStrike.pause();
+            setTimeout(() => {
+                FukaStrike.setFrame(0);
+            }, 2000);
+        }
+
+        if (ValvatorezDamaged.getCurrentFrame() === valvatorezDamagedFrames - 1) {
+            ValvatorezDamaged.pause();
+            setTimeout(() => {
+                ValvatorezDamaged.setFrame(0);
+            }, 2000);
+        }
+
+        if (ArtinaDamaged.getCurrentFrame() === artinaDamagedFrames - 1) {
+            ArtinaDamaged.pause();
+            setTimeout(() => {
+                ArtinaDamaged.setFrame(0);
+            }, 2000);
+        }
+
+        if (FenrichDamaged.getCurrentFrame() === fenrichDamagedFrames - 1) {
+            FenrichDamaged.pause();
+            setTimeout(() => {
+                FenrichDamaged.setFrame(0);
+            }, 2000);
+        }
+
+        if (EmizelDamaged.getCurrentFrame() === emizelDamagedFrames - 1) {
+            EmizelDamaged.pause();
+            setTimeout(() => {
+                EmizelDamaged.setFrame(0);
+            }, 2000);
+        }
+
+        if (FukaDamaged.getCurrentFrame() === fukaDamagedFrames - 1) {
+            FukaDamaged.pause();
+            setTimeout(() => {
+                FukaDamaged.setFrame(0);
+            }, 2000);
+        }
+
+
     }
 
 
     neutralPosition() {
         this.x = this.neutralX;
         this.y = this.neutralY;
-        this.image = this.idleImage
-        this.sizeX = this.neutralSizeX
-        this.sizeY = this.neutralSizeY
+        this.image = this.idleImage;
+        this.sizeX = this.neutralSizeX;
+        this.sizeY = this.neutralSizeY;
     }
 
 
     attackSelection() {
         // Returns the a value that will be used in the script to initiate an attack from the enemy and adjust the timing for the turn switch.
-        // return `simpleStrike`
 
         if (enemyTeam.attacker === enemyTeam.enemies[0]) {
             return `simpleStrike`
@@ -83,47 +127,26 @@ class Enemy {
         }
 
         if (enemyTeam.attacker === enemyTeam.enemies[2]) {
-            return `howToKillANetherworldPresident`
+            return `EmizelProofOfStrength`
         }
 
         if (enemyTeam.attacker === enemyTeam.enemies[3]) {
-            return `howToKillANetherworldPresident`
+            return `FukaStrike`
         }
 
         if (enemyTeam.attacker === enemyTeam.enemies[4]) {
             return `howToKillANetherworldPresident`
         }
 
-
-        // Generates a random number and from that number the function decides what attack to use
-        // let r = random(0, 0.9);
-        // if (r >= 0, r <= this.weakAttack) {
-        //     this.simpleStrike()
-        //     return `simpleStrike`
-        // }
-
-        // else if (r > this.weakAttack, r <= this.strongAttack) {
-        //     this.angelicRay()
-        //     return `angelicRay`
-        // }
-
-        // else if (r > this.strongAttack, r <= this.powerfulAttack) {
-        //     this.howToKillANetherworldPresident()
-        //     return `howToKillANetherworldPresident`
-        // }
-
-        // else if (r > this.powerfulAttack, r <= this.ultimateAttack) {
-        //     this.teamComboAttack()
-        //     return `teamComboAttack`
-        // }
-
-        // else {
-        //     return `none`
-        // }
     }
 
     damaged() {
         this.image = this.damagedImage
+        ValvatorezDamaged.play()
+        ArtinaDamaged.play()
+        EmizelDamaged.play()
+        FenrichDamaged.play()
+        FukaDamaged.play()
         setTimeout(() => {
             this.neutralPosition
         }, 2000);
@@ -137,9 +160,8 @@ class Enemy {
 
 
     simpleStrike() {
-        // Plays Valvatorez's strike animation
+        // Plays corresponding attack animation
         this.image = this.attackImage
-        // ValvatorezStrike.play();
         this.image.play()
 
         // Moves Valvatorez (the enemy) towards Desco (the player) and reduces Desco's (the player) life points
@@ -153,35 +175,6 @@ class Enemy {
                 playerCharacter.lifeCount = playerCharacter.lifeCount - 20
             }
         }
-
-        // Arranges the x,y and size values for the animations of certain enemies
-        if (this.name === `enemy2`) {
-            this.x = windowWidth / 2
-            this.y = windowHeight / 3
-            this.sizeX = 1920
-            this.sizeY = 1080
-        }
-
-        if (this.name === `enemy3`) {
-            this.x = windowWidth / 2
-            this.y = windowHeight / 3
-            this.sizeX = 1920
-            this.sizeY = 1080
-        }
-
-        if (this.name === `enemy4`) {
-            this.x = windowWidth / 2
-            this.y = windowHeight / 3
-            this.sizeX = 1920
-            this.sizeY = 1080
-        }
-
-        if (this.name === `enemy5`) {
-            this.x = windowWidth / 2
-            this.y = windowHeight / 3
-            this.sizeX = 1920
-            this.sizeY = 1080
-        }
     }
 
     angelicRay() {
@@ -192,11 +185,11 @@ class Enemy {
         // this.image = this.attackImage
         // ArtinaAngelicRay.play();
 
-        this.x = windowWidth / 2
-        this.y = windowHeight / 3
+        this.x = 800
+        this.y = 450
         this.sizeX = 1920
         this.sizeY = 1080
-        this.image = this.ArtinaAttack
+        this.image = this.attackImage
         ArtinaAngelicRay.play()
 
 
@@ -211,16 +204,36 @@ class Enemy {
         }
     }
 
+    EmizelProofOfStrength() {
+
+        this.x = 800
+        this.y = 450
+        this.sizeX = 1600
+        this.sizeY = 900
+        this.image = this.attackImage
+        EmizelProofOfStrength.play()
+
+        for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+            let playerCharacter = playerCharacterTeam.characters[i];
+
+            if (playerCharacter.alive) {
+                playerCharacter.damaged()
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 60
+            }
+        }
+
+    }
+
     howToKillANetherworldPresident() {
 
         // this.image = this.attackImage.FenrichAssasination
         // FenrichAssasination.play()
 
-        this.x = windowWidth / 2
-        this.y = windowHeight / 2
-        this.sizeX = 1920
-        this.sizeY = 1080
-        this.image = this.FenrichAttack
+        this.x = 800
+        this.y = 450
+        this.sizeX = 1600
+        this.sizeY = 900
+        this.image = this.attackImage
         FenrichAssasination.play()
 
 
@@ -230,6 +243,23 @@ class Enemy {
             if (playerCharacter.alive) {
                 playerCharacter.damaged()
                 playerCharacter.lifeCount = playerCharacter.lifeCount - 70
+            }
+        }
+    }
+
+    FukaStrike() {
+        this.image = this.attackImage
+        FukaStrike.play()
+
+        // Moves Fuka (an enemy) towards Desco (the player) and reduces Desco's (the player) life points
+        for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
+            let playerCharacter = playerCharacterTeam.characters[i];
+
+            if (playerCharacter.alive, this.name === `enemy5`) {
+                setTimeout(playerCharacter.damaged(), 3)
+                this.x = playerCharacter.x + 150
+                this.y = playerCharacter.y
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 20
             }
         }
     }
