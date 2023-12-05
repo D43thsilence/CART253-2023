@@ -10,7 +10,6 @@ class Enemy {
         this.sizeY = enemyImagesSizeY;
         this.neutralSizeX = 550;
         this.neutralSizeY = 550;
-        this.acceleration = 2;
         this.lifeCount = 600
         this.alive = true;
         this.idleImage = enemyIdleImage;
@@ -141,6 +140,7 @@ class Enemy {
     }
 
     damaged() {
+        // Plays the enemies damage animations
         this.image = this.damagedImage
         ValvatorezDamaged.play()
         ArtinaDamaged.play()
@@ -153,6 +153,7 @@ class Enemy {
     }
 
     defeated() {
+        // Checks if the enemies are alive and if not, changes their alive state to reflect their defeat.
         if (this.lifeCount <= 0) {
             this.alive === false
         }
@@ -160,65 +161,83 @@ class Enemy {
 
 
     simpleStrike() {
-        // Plays corresponding attack animation
-        this.image = this.attackImage
-        this.image.play()
+        // Plays Valvatorez's (an enemy) attack animation
+        this.image = this.attackImage;
+        this.image.play();
 
-        // Moves Valvatorez (the enemy) towards Desco (the player) and reduces Desco's (the player) life points
+        // Plays the sound effect with correct timing
+        setTimeout(() =>
+            strikeSFX.play(),
+            300);
+
+        // Moves Valvatorez (an enemy) towards Desco (the player) and reduces Desco's (the player) life points
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive, this.name === `enemy1`) {
-                playerCharacter.damaged()
-                this.x = playerCharacter.x + 100
-                this.y = playerCharacter.y - 30
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 20
+                // Plays the player's damaged animation with correct timing
+                setTimeout(() =>
+                    playerCharacter.damaged(),
+                    300);
+
+                // Moves the enemy to the player
+                this.x = playerCharacter.x + 100;
+                this.y = playerCharacter.y - 30;
+
+                // Reduces the player's life points
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 20;
             }
         }
     }
 
     angelicRay() {
 
-        // this.image = this.attackImage.ArtinaAngelicRay
-        // ArtinaAngelicRay.play()
+        this.x = width / 2;
+        this.y = 198;
+        this.sizeX = 1600;
+        this.sizeY = 900;
+        this.image = this.attackImage;
+        ArtinaAngelicRay.play();
 
-        // this.image = this.attackImage
-        // ArtinaAngelicRay.play();
-
-        this.x = 800
-        this.y = 450
-        this.sizeX = 1920
-        this.sizeY = 1080
-        this.image = this.attackImage
-        ArtinaAngelicRay.play()
-
-
+        setTimeout(() =>
+            beamSFX.play(),
+            900);
 
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
-                playerCharacter.damaged()
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 50
+                setTimeout(() =>
+                    playerCharacter.damaged(),
+                    1200);
+
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 40;
             }
         }
     }
 
     EmizelProofOfStrength() {
 
-        this.x = 800
-        this.y = 450
-        this.sizeX = 1600
-        this.sizeY = 900
-        this.image = this.attackImage
-        EmizelProofOfStrength.play()
+        this.x = width / 2;
+        this.y = 198;
+        this.sizeX = 1600;
+        this.sizeY = 900;
+        this.image = this.attackImage;
+        EmizelProofOfStrength.play();
+
+        setTimeout(() =>
+            beamSFX.play(),
+            1200);
 
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
-                playerCharacter.damaged()
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 60
+                setTimeout(() =>
+                    playerCharacter.damaged(),
+                    1200);
+
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 50;
             }
         }
 
@@ -226,23 +245,26 @@ class Enemy {
 
     howToKillANetherworldPresident() {
 
-        // this.image = this.attackImage.FenrichAssasination
-        // FenrichAssasination.play()
+        this.x = width / 2;
+        this.y = 198;
+        this.sizeX = 1600;
+        this.sizeY = 900;
+        this.image = this.attackImage;
+        FenrichAssasination.play();
 
-        this.x = 800
-        this.y = 450
-        this.sizeX = 1600
-        this.sizeY = 900
-        this.image = this.attackImage
-        FenrichAssasination.play()
-
+        setTimeout(() =>
+            slashSFX.play(),
+            3700);
 
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
             if (playerCharacter.alive) {
-                playerCharacter.damaged()
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 70
+                setTimeout(() =>
+                    playerCharacter.damaged(),
+                    3700);
+
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 70;
             }
         }
     }
@@ -251,15 +273,22 @@ class Enemy {
         this.image = this.attackImage
         FukaStrike.play()
 
+        setTimeout(() =>
+            strikeSFX.play(),
+            300);
+
         // Moves Fuka (an enemy) towards Desco (the player) and reduces Desco's (the player) life points
         for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
             let playerCharacter = playerCharacterTeam.characters[i];
 
-            if (playerCharacter.alive, this.name === `enemy5`) {
-                setTimeout(playerCharacter.damaged(), 3)
-                this.x = playerCharacter.x + 150
-                this.y = playerCharacter.y
-                playerCharacter.lifeCount = playerCharacter.lifeCount - 20
+            if (playerCharacter.alive, this.name === `enemy4`) {
+                setTimeout(() =>
+                    playerCharacter.damaged(),
+                    300);
+
+                this.x = playerCharacter.x + 150;
+                this.y = playerCharacter.y;
+                playerCharacter.lifeCount = playerCharacter.lifeCount - 30;
             }
         }
     }

@@ -84,13 +84,12 @@ let fukaStrikeFrames;
 let FukaDamaged;
 let fukaDamagedFrames;
 
-// Sets up the variable required for the background
+// Sets up the variables required for the title screen image and the background
+let titleScreenImage;
 let backgroundImage;
 
 // Sets up the variables used to assign the images and the appropriate sizes for the enemies
 let enemyImages = [];
-// let enemyImagesX = [];
-// let enemyImagesY = [];
 let enemyImagesSizeX = [];
 let enemyImagesSizeY = [];
 let enemyAttackImages = [];
@@ -99,6 +98,11 @@ let enemyDamagedImages = [];
 // Sets up the variables used for the sounds
 let beamSFX;
 let slashSFX;
+let strikeSFX;
+let explodeSFX;
+let gameLoseSFX;
+let gameWinSFX;
+let bgMusic;
 
 // Sets up the initial game state
 let state = `title`;
@@ -136,7 +140,8 @@ function preload() {
     FukaIdle = loadImage('assets/images/Fuka/Fuka Idle.gif');
     FukaStrike = loadImage('assets/images/Fuka/Fuka Strike.gif');
     FukaDamaged = loadImage('assets/images/Fuka/Fuka Damaged.gif');
-    // background image
+    // title screen image and background image
+    titleScreenImage = loadImage('assets/images/Desco Training program intro text.png');
     backgroundImage = loadImage('assets/images/Forest Path.png');
 
     // Enemy Images and their size values
@@ -150,6 +155,11 @@ function preload() {
     // Loads all sounds
     beamSFX = loadSound('assets/sounds/BeamShot.wav')
     slashSFX = loadSound('assets/sounds/SlashHit.wav')
+    strikeSFX = loadSound('assets/sounds/StrikeHit.wav')
+    explodeSFX = loadSound('assets/sounds/ExplodeHit.wav')
+    gameLoseSFX = loadSound('assets/sounds/GameLose.wav')
+    gameWinSFX = loadSound('assets/sounds/GameWin.wav')
+    bgMusic = loadSound('assets/sounds/Across The Darkness.wav')
 
 }
 
@@ -160,7 +170,7 @@ function preload() {
 */
 function setup() {
     // Creates the canvas
-    createCanvas(1600, 900);
+    createCanvas(1280, 650);
 
     // Sets the variables for the player character's creation
     for (let i = 0; i < playerCharacterTeam.numPlayers; i++) {
@@ -177,7 +187,7 @@ function setup() {
     // Sets the variables for the enemy character's creation
     for (let i = 0; i < enemyTeam.numEnemies; i++) {
         // Assign variables for the arguments
-        let x = windowWidth / 5 * 2.5 + i * 120;
+        let x = windowWidth / 5 * 2.3 + i * 120;
         let y = windowHeight / 5 * 3 - i * 20;
 
         // Create the enemy characters 
@@ -351,7 +361,7 @@ function draw() {
                     enemyCharacter.angelicRay()
 
                     // Resets the enemy to neutral and switches turn
-                    setTimeout(playerTurnSwitch, 3500);
+                    setTimeout(playerTurnSwitch, 3700);
                     setTimeout(() => {
                         enemyCharacter.neutralPosition()
                     }, 3000);
@@ -366,7 +376,7 @@ function draw() {
                     enemyCharacter.EmizelProofOfStrength()
 
                     // Resets the enemy to neutral and switches turn
-                    setTimeout(playerTurnSwitch, 3500);
+                    setTimeout(playerTurnSwitch, 3700);
                     setTimeout(() => {
                         enemyCharacter.neutralPosition()
                     }, 3000);
@@ -439,22 +449,19 @@ function draw() {
 
 function titleScreen() {
     // Draws the title screen
-    background(0, 200, 225)
-    // textFont(`Playpen Sans`);
-    textAlign(CENTER);
-    textSize(62);
-    fill(0);
-    text(`Desco's Final Boss Training!`, 800, 450);
+    background(250, 235, 215)
+    image(titleScreenImage, width / 2, height / 3, 650, 650);
     fill(0, 0, 0);
     textAlign(CENTER);
     textSize(20);
-    text(`Use the arrow keys to execute attacks.`, windowWidth / 2, windowHeight / 1.6);
-    text(` Left for a simple strike, right for a beam attack, up for a crushing blade strike and down for a powerful skill that consumes the yellow charge count.`, windowWidth / 2, windowHeight / 1.5)
+    text(`Use the arrow keys to execute attacks.`, width / 2, height / 1.28);
+    textSize(18);
+    text(` Left for a simple strike, right for a beam attack, up for a crushing blade strike and down for a powerful skill that consumes the yellow charge count.`, width / 2, height / 1.2)
     fill(0, 0, 0);
     textSize(30);
-    text(`Click to start!`, windowWidth / 2, windowHeight / 1.4);
+    text(`Click to start!`, width / 2, height / 1.35);
     textSize(10);
-    text(`All characters and sprites belong to NIS America/Japan. Animations done by me (Malcolm).`, windowWidth / 2, windowHeight / 1.3);
+    text(`All characters and sprites belong to NIS America/Japan (Disgaea 4). Sound effects belong to SNK. Animations done by me (Malcolm).`, width / 2, height / 1.1);
 
     // Displays Desco on the title screen
     imageMode(CENTER)
@@ -462,20 +469,47 @@ function titleScreen() {
     textAlign(CENTER);
     textSize(20);
     fill(0, 0, 0);
-    text(`This is Desco.`, 210, windowHeight / 2);
+    text(`This is Desco!`, 210, windowHeight / 1.8);
+    textSize(16);
+    text(`She wants to become a final boss. 
+    This training could help her reach that goal.`, 210, windowHeight / 1.7);
 
     // Displays Valvatorez on the title screen
-    image(ValvatorezIdle, 1300, 150, 550, 550);
+    image(ValvatorezIdle, 1000, 100, 450, 450);
     textAlign(CENTER);
     textSize(20);
     fill(0, 0, 0);
-    text(`These are your opponents.`, windowWidth / 4 * 3.33, windowHeight / 1.4);
+    text(`These are your opponents!`, 1080, windowHeight / 1.6);
+    textSize(16);
+    text(`Valvatorez`, 990, 210);
 
     // Displays Artina on the title screen
-    image(ArtinaIdle, 1500, windowHeight / 7, 550, 550);
+    image(ArtinaIdle, 1100, 100, 450, 450);
     textAlign(CENTER);
-    textSize(20);
+    textSize(16);
     fill(0, 0, 0);
+    text(`Artina`, 1100, 210);
+
+    // Displays Emizel on the title screen
+    image(EmizelIdle, 1230, 100, 450, 450);
+    textAlign(CENTER);
+    textSize(16);
+    fill(0, 0, 0);
+    text(`Emizel`, 1200, 210);
+
+    // Displays Fuka on the title screen
+    image(FukaIdle, 1000, 300, 450, 450);
+    textAlign(CENTER);
+    textSize(16);
+    fill(0, 0, 0);
+    text(`Fuka`, 1000, 400);
+
+    // Displays Fenrich on the title screen
+    image(FenrichIdle, 1150, 320, 450, 450);
+    textAlign(CENTER);
+    textSize(16);
+    fill(0, 0, 0);
+    text(`Fenrich`, 1150, 400);
 
 
 }
@@ -484,7 +518,13 @@ function mouseClicked() {
     // Initiates the game
     if (state === `title`) {
         state = `playerTurn`;
-        // gameStartSFX.play();
+        playBgMusic()
+    }
+}
+
+function playBgMusic() {
+    if (!bgMusic.isPlaying()) {
+        bgMusic.loop();
     }
 }
 
@@ -532,7 +572,7 @@ function gameInfo() {
     textAlign(CENTER)
     textSize(62);
     fill(240, 240, 150);
-    text(roundOffChargeCount, windowWidth / 8 * 3, windowHeight / 8);
+    text(roundOffChargeCount, windowWidth / 8 * 1.8, windowHeight / 8);
 
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
@@ -584,9 +624,11 @@ function gameOver() {
     // Draws the end screen
     textAlign(CENTER);
     textSize(65);
-    fill(0, 0, 0);
-    text(`You are defeated.`, windowWidth / 2, windowHeight / 2);
-    // gameLoseSFX.play();
+    fill(255, 255, 255);
+    text(`You are defeated. 
+    Train Harder!`, width / 2, height / 2);
+    gameLoseSFX.play();
+    bgMusic.stop()
     noLoop();
 }
 
@@ -594,8 +636,10 @@ function gameComplete() {
     // Draws victory screen
     textAlign(CENTER);
     textSize(65);
-    fill(0, 0, 0);
-    text(`You are the victor!`, windowWidth / 2, windowHeight / 2);
-    // gameWinSFX.play();
+    fill(255, 255, 255);
+    text(`You are the victor! 
+    You have the potential of a Final Boss!`, width / 2, height / 2);
+    gameWinSFX.play();
+    bgMusic.stop()
     noLoop();
 }

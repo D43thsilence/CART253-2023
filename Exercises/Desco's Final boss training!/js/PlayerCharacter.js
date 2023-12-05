@@ -109,14 +109,25 @@ class PlayerCharacter {
         this.image = this.simpleSwingImage
         DescoSwing.play()
 
+        // Plays the sound effect with correct timing
+        setTimeout(() =>
+            slashSFX.play(),
+            900);
+
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive, i === 0) {
+                // Moves the player to the enemy
                 this.x = enemyCharacter.neutralX - 120
+                // Plays the enemy damaged animation with correct timing
                 setTimeout(() => {
                     enemyCharacter.damaged()
                 }, 900);
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 20
+
+                // Reduces the enemy life points
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 30
+
+                // Increases the player's charge count. This is the only attack that allows the player to increase it manually besides getting hit.
                 chargeIncrease()
             }
         }
@@ -130,7 +141,8 @@ class PlayerCharacter {
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.castImage
-        // Plays the sound with correct timing
+
+        // Plays the sound effect with correct timing
         setTimeout(() => {
             beamSFX.play()
         }, 500);
@@ -142,7 +154,7 @@ class PlayerCharacter {
                     // Plays the enemy damaged animation with correct timing
                     enemyCharacter.damaged()
                 }, 500);
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 40
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - 60
             }
         }
 
@@ -156,6 +168,8 @@ class PlayerCharacter {
         this.sizeX = 1920
         this.sizeY = 1080
         this.image = this.bladeStrikeImage
+
+        // Plays the sound effect with correct timing
         setTimeout(() => {
             slashSFX.play()
         }, 1000);
@@ -165,7 +179,7 @@ class PlayerCharacter {
             if (enemyCharacter.alive) {
                 setTimeout(() => {
                     enemyCharacter.damaged()
-                }, 11000);
+                }, 1000);
                 enemyCharacter.lifeCount = enemyCharacter.lifeCount - 70
             }
         }
@@ -180,14 +194,21 @@ class PlayerCharacter {
         this.sizeY = 1080;
         this.image = this.darkReleaseImage;
 
+        // Plays the sound effect with correct timing
+        setTimeout(() => {
+            explodeSFX.play()
+        }, 3200);
+
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
             let enemyCharacter = enemyTeam.enemies[i];
             if (enemyCharacter.alive) {
+                // Plays the enemy damaged animation with correct timing
                 setTimeout(() => {
                     enemyCharacter.damaged()
-                }, 900);
+                }, 3200);
+
                 // This attack's damage scales off of the player's charge count and spends it all. A higher charge count makes this attack deal more damage.
-                enemyCharacter.lifeCount = enemyCharacter.lifeCount - chargeCount * 0.2
+                enemyCharacter.lifeCount = enemyCharacter.lifeCount - chargeCount
                 chargeCount = 0
             }
         }
