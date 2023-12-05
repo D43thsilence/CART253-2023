@@ -107,8 +107,6 @@ let bgMusic;
 // Sets up the initial game state
 let state = `title`;
 
-
-
 /**
  * Preloads all images and sounds required for the program
 */
@@ -151,7 +149,6 @@ function preload() {
     enemyAttackImages = [ValvatorezStrike, ArtinaAngelicRay, EmizelProofOfStrength, FukaStrike, FenrichAssasination,]
     enemyDamagedImages = [ValvatorezDamaged, ArtinaDamaged, EmizelDamaged, FukaDamaged, FenrichDamaged]
 
-
     // Loads all sounds
     beamSFX = loadSound('assets/sounds/BeamShot.wav')
     slashSFX = loadSound('assets/sounds/SlashHit.wav')
@@ -162,7 +159,6 @@ function preload() {
     bgMusic = loadSound('assets/sounds/Across The Darkness.wav')
 
 }
-
 
 /**
  * Description of setup
@@ -222,9 +218,6 @@ function setup() {
     // Frame count for Fuka's animations, used to reset the animations
     fukaStrikeFrames = FukaStrike.numFrames();
     fukaDamagedFrames = FukaDamaged.numFrames();
-
-
-
 }
 
 
@@ -232,23 +225,18 @@ function setup() {
  * Description of draw()
 */
 function draw() {
-
-    console.log(state)
-    console.log(enemyTeam.attacker)
-
     // Draws the title screen
     titleScreen();
 
+    // Manages what happens during the player's turn
     if (state === `playerTurn`) {
 
         // Draws the background
         imageMode(CENTER);
         image(backgroundImage, width / 2, height / 2, width, height);
 
-        // Resets the enemyAttackCheck value to allow the enemy to attack agan once it will be their turn
+        // Resets the enemyAttackCheck value to allow the enemy to attack again once it will be their turn
         enemyAttackCheck = `none`;
-
-
 
         // Draws the enemy character
         for (let i = 0; i < enemyTeam.enemies.length; i++) {
@@ -272,7 +260,11 @@ function draw() {
 
                     // The following "if" statements time the turn switch in order to let the player's attack animation play out completely
                     if (attackType == `simpleSwing`) {
+
+                        // Times the switch to the enemies' turn
                         setTimeout(enemyTurnSwitch, 2000);
+
+                        // Returns the player to neutral
                         setTimeout(() => {
                             playerCharacter.neutralPosition()
                         }, 2000);
@@ -310,9 +302,9 @@ function draw() {
         // Displays the information relevant to the game such as health on both sides and the player's charge count and switches state if one of the game's end conditions are met
         gameInfo()
         gameEndConditions()
-
     }
 
+    // Manages what happens during the enemies' turn
     else if (state === `enemyTurn`) {
 
         // Draws the background
@@ -415,7 +407,6 @@ function draw() {
                     chargeIncrease();
                     enemyAttackCheck = `attackType`
                 }
-
             }
         }
 
@@ -427,15 +418,10 @@ function draw() {
             }
         }
 
-
-        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches stat if one of the game's end conditions are met
+        // Displays the information relevant to the game such as health on both sides and the player's charge count and switches state if one of the game's end conditions are met
         gameInfo();
         gameEndConditions();
-
     }
-
-
-
 
     // Draws the end screens
     if (state === `endScreen`) {
@@ -529,6 +515,7 @@ function playBgMusic() {
 }
 
 function chargeIncrease() {
+    // Increases the player's charge count by a random value when it is called
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
         let playerCharacter = playerCharacterTeam.characters[i];
         if (playerCharacter.alive === true) {
@@ -568,12 +555,13 @@ function playerTurnSwitch() {
 
 
 function gameInfo() {
-    // Writes the lifeCount of the player, the enemy and the player's chargeCount
+    // Writes the lifeCount of the player's charge count
     textAlign(CENTER)
     textSize(62);
     fill(240, 240, 150);
     text(roundOffChargeCount, windowWidth / 8 * 1.8, windowHeight / 8);
 
+    // Writes the enemies life count
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
         if (enemyCharacter.alive, i === 0) {
@@ -586,6 +574,7 @@ function gameInfo() {
         }
     }
 
+    // Writes the player's life count
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
         let playerCharacter = playerCharacterTeam.characters[i];
         textAlign(CENTER);
@@ -595,8 +584,9 @@ function gameInfo() {
     }
 }
 
+// Checks if the any game end condition has been met and changes the game state accordingly
 function gameEndConditions() {
-    // Checks if the any game end condition has been met and changes the game state accordingly
+    // Checks if the enemies are defeated
     for (let i = 0; i < enemyTeam.enemies.length; i++) {
         let enemyCharacter = enemyTeam.enemies[i];
 
@@ -608,6 +598,7 @@ function gameEndConditions() {
         }
     }
 
+    // Checks if the player is defeated
     for (let i = 0; i < playerCharacterTeam.characters.length; i++) {
         let playerCharacter = playerCharacterTeam.characters[i];
         if (playerCharacter.alive === false) {

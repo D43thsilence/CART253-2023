@@ -5,12 +5,6 @@ class PlayerCharacter {
         this.y = y;
         this.sizeX = 500;
         this.sizeY = 500;
-        this.vx = 0;
-        this.vy = 0;
-        this.speed = 5;
-        this.aX = 0;
-        this.aY = 0;
-        this.acceleration = 2;
         this.alive = true;
         this.lifeCount = 400;
         this.idleImage = DescoIdle;
@@ -25,7 +19,6 @@ class PlayerCharacter {
     // display() draws the player onto the canvas
     display() {
         image(this.image, this.x, this.y, this.sizeX, this.sizeY);
-
 
         // Resets Desco's animations to their first frames after the neutral position reset
         if (DescoSwing.getCurrentFrame() === descoSwingFrames - 1) {
@@ -62,8 +55,6 @@ class PlayerCharacter {
                 DescoTrueDarkRelease.setFrame(0)
             }, 2000);
         }
-
-
     }
 
     neutralPosition() {
@@ -72,7 +63,6 @@ class PlayerCharacter {
         this.y = windowHeight / 5 * 3;
         this.sizeX = 500
         this.sizeY = 500
-        console.log(`hello`)
     }
 
 

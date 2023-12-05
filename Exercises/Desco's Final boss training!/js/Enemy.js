@@ -21,7 +21,6 @@ class Enemy {
         this.FukaAttack = FukaStrike;
         this.image = this.idleImage;
         this.name = enemyName;
-
     }
 
     // display() draws the enemy onto the canvas and resets animations when needed
@@ -104,7 +103,7 @@ class Enemy {
 
     }
 
-
+    // Returns the enemies to their neutral position and size after they perform an attack
     neutralPosition() {
         this.x = this.neutralX;
         this.y = this.neutralY;
@@ -159,7 +158,7 @@ class Enemy {
         }
     }
 
-
+    // This is the function that executes Valvatorez's attack
     simpleStrike() {
         // Plays Valvatorez's (an enemy) attack animation
         this.image = this.attackImage;
@@ -190,6 +189,7 @@ class Enemy {
         }
     }
 
+    // This is the function that executes Artina's attack
     angelicRay() {
 
         this.x = width / 2;
@@ -216,6 +216,7 @@ class Enemy {
         }
     }
 
+    // This is the function that executes Emizel's attack
     EmizelProofOfStrength() {
 
         this.x = width / 2;
@@ -243,6 +244,7 @@ class Enemy {
 
     }
 
+    // This is the function that executes Fenrich's attack
     howToKillANetherworldPresident() {
 
         this.x = width / 2;
@@ -269,6 +271,7 @@ class Enemy {
         }
     }
 
+    // This is the function that executes Fuka's attack
     FukaStrike() {
         this.image = this.attackImage
         FukaStrike.play()
