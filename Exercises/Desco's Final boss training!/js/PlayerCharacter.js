@@ -178,10 +178,10 @@ class PlayerCharacter {
     trueDarkRelease() {
         // Plays the animation for Desco's True Dark Release attack and deduces the written amount of life points to the enemy
         DescoTrueDarkRelease.play();
-        this.x = 800;
-        this.y = 450;
-        this.sizeX = 1920;
-        this.sizeY = 1080;
+        this.x = width / 2;
+        this.y = 198;
+        this.sizeX = 1600;
+        this.sizeY = 900;
         this.image = this.darkReleaseImage;
 
         // Plays the sound effect with correct timing
